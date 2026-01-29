@@ -296,9 +296,10 @@
                     <button type="button" class="button_color_alba me-2" id="siguienteBtn">SIGUIENTE</button>
                 </div>-->
                 <div class="d-flex justify-content-center mt-4">
-                    <button type="submit" class="button_color_alba me-2" id="Añadir_CV" disabled>0 / 1</button>
+                    <button type="button" class="button_color_alba me-2" id="Añadir_CV" disabled>0 / 1</button>
                     <button type="button" class="button_color_alba me-2" id="Eliminar_CV" disabled>ELIMINAR</button>
-                    <button type="reset" class="button_color_alba  me-2" id="limpiar_cv" disabled>LIMPIAR</button>
+                    <button type="button" class="button_color_alba me-2" id="editar" >EDITAR</button>
+                    <button type="button" class="button_color_alba  me-2" id="limpiar_cv" disabled>LIMPIAR</button>
                 </div>
         </div>
         
@@ -834,7 +835,9 @@
 
     </div>
 </form>
+ 
 <script>
+
 
     function controlSwitch(id,valor,html){
         let sw=document.getElementById(id);
@@ -847,6 +850,10 @@
         $('#' + html).val(valor);
     }
 
+
+
+
+    
     function clearForm(formulario){
         const div =document.getElementById(formulario)
         //selecciono todos los inputs,slects y textareas
@@ -855,10 +862,12 @@
         campos.forEach(campo =>{
             switch(campo.type){
                 case "checkbox":
+                    campo.checked = false;
+
                     break;
 
                 case "radio":
-                    campo.checked=false;//desmarca los checkbox/radio
+                    campo.radio=false;//desmarca los checkbox/radio
                     break;
 
                 case "number":
@@ -876,10 +885,11 @@
                 default:
                     campo.value="";//limpia texto y selects
                     campo.selectedIndex= 0;//para los selects,vuelve al originl
-                    document.getElementById('permisionario').style.display='none';// OCULTAMOS todas las secciones posibles
-                    document.getElementById('contratoOasignacion').style.display='none';
-                    document.getElementById('usuario').style.display='none';
-                    
+                    if (formulario=="controles_volumetricos"){
+                        document.getElementById('permisionario').style.display='none';// OCULTAMOS todas las secciones posibles
+                        document.getElementById('contratoOasignacion').style.display='none';
+                        document.getElementById('usuario').style.display='none';
+                    }
                     break;
                 }
         })
@@ -888,6 +898,7 @@
 
 
     const select_cv = document.getElementById("productoSelect");
+    let idCVActual = null;
     select_cv.addEventListener("change",function(){
         var csrfToken = $('input[name="csrf_token"]').val();
         
@@ -901,10 +912,11 @@
             data:formData,
             type:'POST',
             success:function(response){
-                if(response.actividad && response.actividad.length ){
+                if(response.actividad && Array.isArray(response.actividad) && response.actividad.length ){
                         contador_cv=1;
 
                         const cv = response.actividad[0];
+                            idCVActual = cv.Id_CV;
                             $("#RfcContribuyente").val(cv.RfcContribuyente);
                             $("#RfcRepresentantelegal").val(cv.RfcContribuyente);
                             $("#RfcProveedor").val(cv.RfcContribuyente);
@@ -933,9 +945,10 @@
                             controlSwitch("check_dispensarios", cv.NumeroDispensarios,"numero_dispensarios");
 
                         }else{
-                            console.error("No se encontraron datos para rellenar el formulario CV");
- 
+                            //console.error("No se encontraron datos para rellenar el formulario CV");
+                            alert(`No se encontraron datos para ${formData.actividad}. Favor de registrar datos para ${formData.actividad}.`);
 
+                            idCVActual= null;
                             contador_cv=0;
                             clearForm("controles_volumetricos");
                             inicializarProductoSelect();
@@ -952,9 +965,13 @@
 
     });
 
-</script>
 
-<script>
+
+
+
+
+
+
 
         // Lista de IDs de los checkbox y sus campos
     const pairs = [
@@ -1011,6 +1028,7 @@
         );
 
         const excluirIds = [
+            "No_rfc_proveedores",
             "productoproductoSelect",
             "terminalSelect",
             "medidoresSelect",
@@ -1257,10 +1275,13 @@
     
     document.getElementById('limpiar_cv').addEventListener('click',function(){
         cv = [];
-        productos = [];
-        medicion = [];
-        tanques = [];
-        console.log("Cancelado con exito");
+        contador_cv = 0;
+        clearForm("controles_volumetricos")
+        //productos = [];
+        //medicion = [];
+        //tanques = [];
+        alert("Formulario limpiado con exito.");
+
     });
 
 
@@ -2172,7 +2193,8 @@
                 },
                 data: JSON.stringify({
                     formulario: "CV",
-                    data: payloadCV
+                    data: payloadCV,
+                    proceso:"add"
                 }),
                 contentType: "application/json",    
                  beforeSend:function(){
@@ -2181,13 +2203,14 @@
                 success:function(response){
 
                     $("#loader-row").hide();
-                    if(response){
+                    if(response.estatus){
                         contador_cv++;
                         actualizarEstado();
-
-                        alert("CV creado con éxito");
+                        idCVActual = response.id
+                        alert("Datos añadidos con exito.");
                     }else{
-                        alert("Error al registrar datos de cv");
+                        alert("Error al añadir datos de cv.");
+                        idCVActual =null;
                     }
                     
                 },
@@ -2198,15 +2221,49 @@
 
     delete_cv.addEventListener('click',function(e){
         e.preventDefault();
-
+        /*
         if (contador_cv > 0) {
             contador_cv--;
             console.log("Lógica para eliminar");
         }
 
         actualizarEstado();
-        
-    });
+        */
+
+        $.ajax({
+                url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
+                type:"POST",
+                headers:{
+                    'X-CSRFToken':csrfToken
+                },
+                data: JSON.stringify({
+                    formulario: "CV",
+                    proceso:"delete",
+                    id:idCVActual
+                }),
+                contentType: "application/json",    
+                 beforeSend:function(){
+                    $("#loader-row").show();
+
+                },
+                success:function(response){
+
+                    $("#loader-row").hide();
+                    if(response.estatus){
+                        contador_cv--;
+                        idCVActual =null;
+                        actualizarEstado();
+                        clearForm("controles_volumetricos");
+
+                        alert("Datos eliminados con exito.");
+                    }else{
+                        alert("Error al eliminar datos de CV");
+                    }
+                    
+                },
+                 
+            })
+        });
 
 
 

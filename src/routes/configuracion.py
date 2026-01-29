@@ -55,25 +55,40 @@ def configuracion():
         payload = request.get_json(silent=True)
         if not payload:
                 return jsonify({"error": "JSON inválido"}), 400
-
+        
         formulario = payload.get("formulario")
-        data = payload.get("data")
+        data = payload.get("data") 
+        id = int(payload.get('id', 0))
+        proceso = payload.get("proceso")
+        print("Payload recibido:", payload)
+        print("Proceso:", proceso)
+        print("ID dato"+str(id))
         if formulario == "CV":
+                cv_config = scaizen_cv_funtions.Cv_configuration()
+                print("todo bien")
 
+                if proceso =="add":
+                    add_data_result = cv_config.Add_cv(data)            
+                    logging.info(f"CV recibido: {data}")
+                    logging.info(f"Resultado de add: {add_data_result}")
+                    logging.info(f"ID CV creado: {add_data_result.Id_CV}")
 
+                    
+                    if add_data_result:
+                        return jsonify({"estatus": True,"id":add_data_result.Id_CV})
+                    ##return jsonify({"estatus": False, "mensaje": "Error al agregar CV"}), 400
 
-            cv_config = scaizen_cv_funtions.Cv_configuration()
-            cv_config.Add_cv(data)            
-            print("CV recibido correctamente")
-            print("ID O INFORMACION: "+str(data))
-            print("informacion:"+str(cv_config.cv_Configuration))
-
-            # 👉 Aquí va:
+                elif proceso =="delete":
+                    print("ingrese a delete")
+                    delete_data_result = cv_config.Delete_cv(id)            
+                    if delete_data_result:
+                        return jsonify({"estatus": True})
+                    ##return jsonify({"estatus": False, "mensaje": "Error al eliminar CV"}), 400        
+             # 👉 Aquí va:
             # - validación
             # - guardado en DB
             # - generación XML
 
-            return jsonify({"ok": True})
         
         return jsonify({"error": "Formulario no reconocido"}), 400
     else:

@@ -149,12 +149,12 @@ class ControlesVolumetricos(Base):
         return result_data if result_data else None
         """
     @classmethod
-    def add(cls,Temp_id, version, rfc_contribuyente, rfc_representante_legal, rfc_proveedor, rfc_proveedores,
+    def add(cls, version, rfc_contribuyente, rfc_representante_legal, rfc_proveedor, rfc_proveedores,
             tipo_caracter, modalidad_permiso, num_permiso, num_contrato_o_asignacion, instalacion_almacen_gas_natural,
             clave_instalacion, descripcion_instalacion, geolocalizacion_latitud, geolocalizacion_longitud,
             numero_pozos, numero_tanques, numero_ductos_entrada_salida,numero_ductos_transporte_distribucion, numero_dispensarios, tipo=None):
         nuevo_control = cls(
-            Id_CV  =Temp_id,
+
             Version=version,
             RfcContribuyente=rfc_contribuyente,
             RfcRepresentanteLegal=rfc_representante_legal,
@@ -180,7 +180,29 @@ class ControlesVolumetricos(Base):
         
         result_data = add_to_table(nuevo_control)
         return result_data if result_data else None
-        
+
+    @classmethod
+    def delete(cls, id):
+        session = SessionLocal()
+        try:
+            record = session.query(cls).filter_by(Id_CV=id).first()  # Filtro correcto
+            if not record:
+                return False  # No existe el registro
+
+            session.delete(record)
+            session.commit()
+            return True  # Eliminación exitosa
+
+        except Exception as e:
+            session.rollback()
+            logging.error(f"Error al eliminar el registro Id_CV={id}: {e}")
+            return False
+
+        finally:
+            session.close()
+
+
+
     @classmethod
     def select_by_id(cls, id_cv):
         consulta = None

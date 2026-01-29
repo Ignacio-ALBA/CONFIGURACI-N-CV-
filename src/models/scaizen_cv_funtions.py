@@ -906,7 +906,38 @@ class DailyReportFuntions():
 class Cv_configuration():
     def __init__(self):
         self.cv_Configuration = None
-    
+
+    def Select_cv(dato):
+            data_type= cv.ControlesVolumetricos.select_type(dato)
+            data = []
+
+            if data_type:
+                data = [{'Id_CV':cv.Id_CV,
+                         'Version':cv.Version,
+                         'RfcContribuyente':cv.RfcContribuyente,
+                         'RfcRepresentanteLegal':cv.RfcRepresentanteLegal,
+                         'RfcProveedor':cv.RfcProveedor,
+                         'RfcProveedores':cv.RfcProveedores,
+                         'TipoCaracter':cv.TipoCaracter,
+                         'ModalidadPermiso':cv.ModalidadPermiso,
+                         'NumPermiso':cv.NumPermiso,
+                         'NumContratoOAsignacion':cv.NumContratoOAsignacion,
+                         'InstalacionAlmacenGasNatural':cv.InstalacionAlmacenGasNatural,
+                         'ClaveInstalacion':cv.ClaveInstalacion,
+
+                         'DescripcionInstalacion':cv.DescripcionInstalacion,
+                         'GeolocalizacionLatitud':cv.GeolocalizacionLatitud,
+                         'GeolocalizacionLongitud':cv.GeolocalizacionLongitud,
+                         'NumeroPozos':cv.NumeroPozos,
+                         'NumeroTanques':cv.NumeroTanques,
+                         'NumeroDuctosEntradaSalida':cv.NumeroDuctosEntradaSalida,
+                         'NumeroDuctosTransporteDistribucion':cv.NumeroDuctosTransporteDistribucion,
+                         'NumeroDispensarios':cv.NumeroDispensarios,
+                         'Tipo':cv.Tipo,
+                         }for cv in data_type]
+                return data
+
+
     def Add_cv(self,data):
             Actividad = data.get("Actividad")
             Version = data.get("Version")
@@ -938,39 +969,14 @@ class Cv_configuration():
             NumeroDispensario=data.get("NumeroDispensario")
             #FechaYHoraCorte=data.get("FechaYHoraCorte")
 
-            self.cv_Configuration = cv.ControlesVolumetricos.add(
-                3,Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+            result = cv.ControlesVolumetricos.add(
+                Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
                 TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
                 ClaveInstalacion,DescripcionInstalacion,
                 GeolocalizacionLatitud,GeolocalizacionLongitud,
                 NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
                 )
-    def Select_cv(dato):
-            data_type= cv.ControlesVolumetricos.select_type(dato)
-            data = []
-
-            if data_type:
-                data = [{'Id_CV':cv.Id_CV,
-                         'Version':cv.Version,
-                         'RfcContribuyente':cv.RfcContribuyente,
-                         'RfcRepresentanteLegal':cv.RfcRepresentanteLegal,
-                         'RfcProveedor':cv.RfcProveedor,
-                         'RfcProveedores':cv.RfcProveedores,
-                         'TipoCaracter':cv.TipoCaracter,
-                         'ModalidadPermiso':cv.ModalidadPermiso,
-                         'NumPermiso':cv.NumPermiso,
-                         'NumContratoOAsignacion':cv.NumContratoOAsignacion,
-                         'InstalacionAlmacenGasNatural':cv.InstalacionAlmacenGasNatural,
-                         'ClaveInstalacion':cv.ClaveInstalacion,
-
-                         'DescripcionInstalacion':cv.DescripcionInstalacion,
-                         'GeolocalizacionLatitud':cv.GeolocalizacionLatitud,
-                         'GeolocalizacionLongitud':cv.GeolocalizacionLongitud,
-                         'NumeroPozos':cv.NumeroPozos,
-                         'NumeroTanques':cv.NumeroTanques,
-                         'NumeroDuctosEntradaSalida':cv.NumeroDuctosEntradaSalida,
-                         'NumeroDuctosTransporteDistribucion':cv.NumeroDuctosTransporteDistribucion,
-                         'NumeroDispensarios':cv.NumeroDispensarios,
-                         'Tipo':cv.Tipo,
-                         }for cv in data_type]
-                return data
+            return result
+    def Delete_cv(self,data):
+        result = cv.ControlesVolumetricos.delete(data)
+        return result   
