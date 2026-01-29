@@ -1,0 +1,21 @@
+body, html {
+height: 100%;
+margin: 0;
+}
+
+.container {
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100vh;
+background-image: url('/static/img/scaizen-logo.png'); /* Reemplaza 'ruta_de_tu_imagen.jpg' con la ruta correcta de tu
+imagen */
+background-size: 10%; /* Ajusta según tus necesidades para cubrir completamente el contenedor */
+background-position: center; /* Ajusta según tus necesidades para centrar la imagen */
+background-repeat: no-repeat;
+}
+
+.content {
+text-align: center;
+color:black;
+}

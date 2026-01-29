@@ -1,0 +1,16 @@
+table{
+    border-collapse: separate; /* Asegúrate de que border-spacing se aplique */
+    border-spacing: 6px; /* Espacio entre celdas */
+}
+th{
+    background-color: #212529;
+    color: white;
+}
+td{
+    background-color: #DCDCDC;
+}
+
+th, td{
+    border-radius: 5px;
+    font-size: 14px;
+}

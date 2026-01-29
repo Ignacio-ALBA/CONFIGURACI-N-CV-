@@ -1,0 +1,909 @@
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  background: url('/static/img/cv_imagen_2.jpeg') no-repeat center center fixed; /* Reemplaza 'ruta_de_la_imagen.jpg' con la ruta real de tu imagen */
+  background-size: cover; /* Cubre toda la altura y anchura de la página */
+  margin: 0; /* Elimina el margen predeterminado del cuerpo */
+  padding: 0; /* Elimina el relleno predeterminado del cuerpo */
+  animation: changeBackground 15s infinite;/*Permite añadir animaciones de transici´n*/
+  /*overflow-y: auto;*/
+  overflow-y: hidden; /* Agrega una barra de desplazamiento vertical */
+
+}
+/*Es de la barra de desplazamiento vertical*/
+.scrollable-div {
+  overflow-y: scroll; /* Agrega una barra de desplazamiento vertical */
+  height: 200px; /* Define una altura para el div */
+  /* También puedes definir un ancho si lo deseas */
+}
+
+@keyframes changeBackground {
+0% {
+    background-image: url('/static/img/cv_imagen_2.jpeg');
+}
+33% {
+    background-image: url('/static/img/cv_imagen_1.jpeg');
+}
+66% {
+    background-image: url('/static/img/cv_imagen_1.jpeg');
+}
+100% {
+    background-image: url('/static/img/cv_imagen_2.jpeg');
+}
+}
+
+/* label color */
+.input-field label {
+  color: #565656;
+}
+
+/* label focus color */
+.input-field input[type=text]:focus+label {
+  color: #000;
+}
+
+/* label underline focus color */
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid #000;
+  box-shadow: 0 1px 0 0 #000;
+}
+
+/* icon prefix focus color */
+.input-field .prefix{
+  color: #565656;
+}
+.input-field .prefix.active {
+  color: green;
+}
+
+.gauge {
+  width: 100%;
+  max-width: 250px;
+  font-family: "Roboto", sans-serif;
+  font-size: 28px;
+  color: #000;
+}
+
+.gauge__body {
+  width: 100%;
+  height: 0;
+  padding-bottom: 50%;
+  background: #b4c0be;
+  position: relative;
+  border-top-left-radius: 100% 200%;
+  border-top-right-radius: 100% 200%;
+  overflow: hidden;
+}
+
+.gauge__fill {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: inherit;
+  height: 100%;
+  background: #009578;
+  transform-origin: center top;
+  transform: rotate(0.25turn);
+  transition: transform 0.2s ease-out;
+}
+
+.gauge__cover {
+  width: 75%;
+  height: 150%;
+  background: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* Text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 25%;
+  box-sizing: border-box;
+}
+hr {
+  border: 1px solid black; /* Establece un borde negro */
+  margin: 20px 0; /* Agrega espacio arriba y abajo del <hr> */
+}
+.alert{
+  background: #ffdb9b;
+  padding: 20px 40px;
+  min-width: 420px;
+  position: absolute;
+  right: 0px;
+  top: 10px;
+  overflow: hidden;
+  border-radius: 4px;
+  border-left: 8px solid #ffa502;
+}
+.alert .show{
+  animation: show_slide 1s ease forwards;
+}
+
+@keyframes show_slide {
+  0%{
+    transform: translateX(100%);
+  }
+  40%{
+    transform: translateX(-10%);
+  }
+  80%{
+    transform: translateX(0%);
+  }
+  100%{
+    transform: translate(-10px);
+  }
+}
+.alert.hide{
+  display: none;
+}
+
+.alert .fa-exclamation-circle{
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ce8500;
+  font-size: 30px;
+}
+.alert .msg{
+  padding: 0 20px;
+  font-size: 18px;
+  color: #ce8500;
+}
+
+.alert .close-btn{
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #ffd080;
+  padding: 20px 18px;
+  cursor: pointer;
+}  
+.close-btn:hover{
+  background: #ffc766;
+}
+.close-btn .fa-times{
+  color: #ce8500;
+  font-size:  22px;
+  line-height: 40px;
+}
+.close-btn {
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: red; /* Cambia el color cuando se pasa el ratón sobre el botón */
+}
+
+
+.nav-pills li a:hover{ /*dar color al pasar por los span */
+  background-color: #009578;
+}
+.nav-item {
+  width: 200px; /* Ajusta el valor según tus necesidades */
+}
+
+/*Del navbar*/
+/* Clase personalizada para la barra de navegación */
+.sidebar {
+width: 210px; /* Ajusta el ancho según lo necesites */
+}
+
+
+
+/* Estilos del contenedor principal */
+.container {
+display: flex;
+align-items: left;
+justify-content: left;
+min-height: 100vh;
+height: 100vh; /* Esto asegura que el contenedor ocupe al menos toda la altura de la pantalla */
+margin: 0 auto; 
+padding: 0px;
+max-width: 1200px;
+}
+.container_table {
+display: flex;
+align-items: flex-start; /* Alinea los elementos al principio del contenedor */
+justify-content: flex-start; /* Alinea los elementos al principio del contenedor horizontalmente */
+height: 100vh; /* Asegura que el contenedor tenga al menos la altura de la ventana */
+width: 100%; /* Asegura que el contenedor ocupe todo el ancho disponible */
+padding: 20px; /* Espacio interno del contenedor */
+background-color: #dcdcdc; /* Color de fondo del contenedor */
+box-sizing: border-box; /* Incluye padding y borde en el cálculo del ancho total */
+margin: 0; /* Elimina los márgenes externos para que el contenedor ocupe todo el ancho */
+overflow-y: scroll;
+}
+
+/* Estilos del cuadro */
+.center-box {
+width: 990vw; /* Ancho del cuadro en porcentaje del ancho de la ventana */
+max-width: 1100px; /* Ancho máximo para evitar que el cuadro se haga demasiado grande */
+height: auto; /* La altura se ajustará automáticamente según el contenido */
+padding: 20px;
+border: 1px solid #ccc;
+background-color: #f9fafc;
+
+border-radius: 8px;/*sombreado del texto*/
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+gap: 1rem; /* Espacio entre los elementos del formulario */
+
+}
+
+.center-box form {
+  /* Hace que el formulario ocupe todo el ancho del cuadro */
+display: block;
+justify-content: space-between;
+gap: 1rem; /* Espacio entre los elementos del formulario */
+width: 100%; /* Hace que el formulario ocupe todo el ancho del cuadro */
+}
+
+
+.table{
+font-size: 11px;
+}
+
+th{
+
+font-size: 12px; /* Tamaño de fuente deseado */
+
+}
+th, td {
+text-align: center;
+padding: 8px;  
+
+}
+td {
+max-width: 150px; /* Ajusta según sea necesario */
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+text-align: left;
+
+}
+.label-primary,
+.badge-primary {
+background-color: #1ab394;
+color: #FFFFFF;
+}
+.label-success,
+.badge-success {
+background-color: #1c84c6;
+color: #FFFFFF;
+}
+
+.titulo{
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+  font-weight: bold;
+  display: inline-block;
+}
+
+
+
+#range-bar {
+position: absolute;
+height: 5px;
+background-color: rgba(0, 0, 255, 0.5); /* Barra de rango transparente */
+z-index: 1;
+}
+
+
+
+#datepicker_start,
+#datepicker_end {
+  width: 200px; /* Ancho ajustado según tus necesidades */
+  height: 30px; /* Altura ajustada según tus necesidades */
+  font-size: 14px; /* Tamaño de fuente ajustado según tus necesidades */
+} 
+
+/*:::Boton-Modal:::*/
+.boton-modal{
+padding: 40px;
+background-color: #fff;
+}
+.boton-modal label{
+padding: 10px 15px;
+background-color: #5488a3;
+color: #fff;
+border-radius: 4px;
+cursor: pointer;
+transition: all 300ms ease;
+}
+.boton-modal label:hover{
+background-color: #185E83;
+}
+/*:::Fin Boton-Modal:::*/
+
+
+/*:::Ventana Modal:::*/
+#btn-modal{
+display: none;
+}
+.container-modal{
+width: 100%;
+height: 100vh;
+position: fixed;
+top: 0; left: 0;
+background-color: rgba(144, 148, 150, 0.8);
+display: none;
+justify-content: center;
+align-items: center;
+z-index: 100;
+}
+#btn-modal:checked ~ .container-modal{
+display: flex;
+}
+.content-modal{
+width: 100%;
+max-width: 400px;
+padding: 20px;
+background-color: #fff;
+border-radius: 4px;
+}
+.content-modal h2{
+margin-bottom: 15px;
+}
+.content-modal p{
+padding: 15px 0px;
+border-top: 1px solid #dbdbdb;
+border-bottom: 1px solid #dbdbdb;
+}
+.content-modal .btn-cerrar{
+width: 100%;
+margin-top: 15px;
+display: flex;
+justify-content: flex-end;
+}
+.content-modal .btn-cerrar label{
+padding: 7px 10px;
+background-color: #5488a3;
+color: #fff;
+border-radius: 4px;
+cursor: pointer;
+transition: all 300ms ease;
+}
+.content-modal .btn-cerrar label:hover{
+background-color:#185E83;
+}
+.cerrar-modal{
+width:100%;
+height: 100vh;
+position: absolute;
+top:0; left: 0;
+z-index: -1;
+}
+@media screen and (max-width:800px) {
+.content-modal{
+    width: 90%;
+}
+}
+/*:::Fin Ventana Modal:::*/
+
+
+
+.b-r-xl {
+-webkit-border-radius: 24px;
+-moz-border-radius: 24px;
+border-radius: 34px;
+}
+
+.btn-white {
+color: inherit;
+background: white;
+border: 1px solid #e7eaec;
+}
+.btn-sm {
+font-size: .8rem;
+}  
+#copyright {
+text-align: center;
+padding: 5px;
+background-color: #19abfa;
+color: #f1f1f1;
+font-size: 10px;
+width: 90%; /* Cambia este valor al ancho deseado */
+
+}
+
+
+
+.ulpgcds-pager {
+display: flex;
+align-items: center; /* Centra verticalmente los elementos */
+justify-content: space-between; /* Espacio uniforme entre los elementos */
+background-color: #ffffff; /* Fondo blanco */
+color:#000000;
+width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+height: 50px; /* Altura consistente */
+font-family: Arial, sans-serif; /* Fuente consistente */
+font-size: 80%; /* Tamaño de fuente consistente */
+text-indent: 10px; /* Mueve el texto 10px hacia la derecha */
+box-sizing: border-box; /* Incluye padding y borde en el cálculo del ancho total */
+padding: 0 10px; /* Espaciado interno */
+border-top: 1px solid #dcdcdc; /* Borde superior ligero */
+border-bottom: 1px solid #dcdcdc; /* Borde inferior ligero */
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/*Este es un switch*/
+/*
+.switch {
+position: relative;
+display: inline-block;
+width: 60px; /* Cambia el ancho del switch 
+height: 20px; /* Cambia la altura del switch 
+}
+
+
+.switch label {
+position: absolute;
+cursor: pointer;
+top: 0;
+left: 0;
+right: 0;
+bottom: 0;
+background-color: grey; /* Color de fondo cuando está apagado 
+border-radius: 34px; /* Forma redondeada 
+transition: background-color 0.4s;
+}
+
+.switch label:after {
+content: '';
+position: absolute;
+width: 20px;/* Cambia el ancho del círculo 
+height: 20px;/* Cambia la altura del círculo 
+border-radius: 50%;
+background-color: white; /* Color del círculo 
+top: 1px;/* Ajusta la posición vertical del círculo 
+left: 4px;/* Ajusta la posición horizontal del círculo 
+transition: transform 0.4s;
+}
+
+.switch input:checked + label {
+background-color: rgb(60, 156, 211); /* Color de fondo cuando está encendido 
+}
+
+.switch input:checked + label:after {
+transform: translateX(35px); /* Mueve el círculo a la posición de encendido 
+}
+*/
+
+/*.pagination-link.current-page {
+background-color: #007bff; Color de fondo azul para la página actual
+color: #fff;  Color de texto blanco para la página actual 
+border-radius: 5px;  Bordes redondeados para resaltar 
+padding: 5px 10px;  Espaciado interno para mejorar la apariencia 
+}*/
+
+
+
+/*Botones de informe_tanques*/
+.button-spacing {
+margin-left: 20px;
+}
+
+.typing-indicator {
+width: 60px;
+height: 30px;
+position: relative;
+z-index: 4;
+margin: 0 auto; /* Centra horizontalmente */
+
+}
+
+.typing-circle {
+width: 8px;
+height: 8px;
+position: absolute;
+border-radius: 50%;
+background-color: #000;
+left: 15%;
+transform-origin: 50%;
+animation: typing-circle7124 0.5s alternate infinite ease;
+}
+
+@keyframes typing-circle7124 {
+0% {
+  top: 20px;
+  height: 5px;
+  border-radius: 50px 50px 25px 25px;
+  transform: scaleX(1.7);
+}
+
+40% {
+  height: 8px;
+  border-radius: 50%;
+  transform: scaleX(1);
+}
+
+100% {
+  top: 0%;
+}
+}
+
+.typing-circle:nth-child(2) {
+left: 45%;
+animation-delay: 0.2s;
+}
+
+.typing-circle:nth-child(3) {
+left: auto;
+right: 15%;
+animation-delay: 0.3s;
+}
+
+.typing-shadow {
+width: 5px;
+height: 4px;
+border-radius: 50%;
+background-color: rgba(0, 0, 0, 0.2);
+position: absolute;
+top: 30px;
+transform-origin: 50%;
+z-index: 3;
+left: 15%;
+filter: blur(1px);
+animation: typing-shadow046 0.5s alternate infinite ease;
+}
+
+@keyframes typing-shadow046 {
+0% {
+  transform: scaleX(1.5);
+}
+
+40% {
+  transform: scaleX(1);
+  opacity: 0.7;
+}
+
+100% {
+  transform: scaleX(0.2);
+  opacity: 0.4;
+}
+}
+
+.typing-shadow:nth-child(4) {
+left: 45%;
+animation-delay: 0.2s;
+}
+
+.typing-shadow:nth-child(5) {
+left: auto;
+right: 15%;
+animation-delay: 0.3s;
+}
+
+
+
+
+
+                                  /*Contenedor de la pagina*/
+/* Contenedor de la paginación */
+.pagination-container {
+display: flex;
+justify-content: center;
+align-items: center;
+width: 100%; /* Ajustado para ocupar todo el ancho */
+height: 50px; /* Altura consistente con .ulpgcds-pager */
+padding: 1px;
+box-sizing: border-box;
+background-color: #ffffff; /* Color de fondo blanco sólido */
+font-family: Arial, sans-serif; /* Fuente consistente con .ulpgcds-pager */
+font-size: 12px; /* Tamaño de fuente consistente con .ulpgcds-pager */
+border-top: 1px solid #dcdcdc; /* Borde superior ligero para definir el contenedor */
+border-bottom: 1px solid #dcdcdc; /* Borde inferior ligero para definir el contenedor */
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+.pagination-container a,
+.pagination-container span {
+display: inline-flex; /* Prueba con inline-flex para ver si afecta el problema */
+justify-content: center; /* Centra horizontalmente el contenido del botón */
+align-items: center; /* Centra verticalmente el contenido del botón */
+padding: 5px; /* Simplifica el padding */
+margin: 0 5px;
+text-decoration: none;
+color: #000000; /* Color de texto negro */
+border: 1px solid #828181; /* Color de borde gris claro */
+border-radius: 4px;
+background-color: #f8f9fa; /* Fondo gris claro */
+font-size: 80%; /* Tamaño de fuente consistente */
+line-height: 1.5; /* Altura de línea consistente */
+text-align: center; /* Asegura que el texto esté centrado */
+}
+
+/* Botón de la página actual */
+.pagination-container .pagination-current {
+background-color: #007bff; /* Color de fondo azul */
+color: #ffffff; /* Color de texto blanco */
+border: 1px solid #000000; /* Borde azul */
+font-weight: bold;
+}
+
+/* Botones de primera y última página */
+.pagination-container a:first-child,
+.pagination-container a:last-child {
+background-color: #ffffff; /* Fondo blanco */
+color: #007bff; /* Color de texto azul */
+border-color: #000000; /* Borde azul */
+}
+
+/* Botones de navegación */
+.pagination-container a:hover {
+background-color: #0056b3; /* Fondo azul oscuro */
+color: #ffffff; /* Color de texto blanco */
+border-color: #000000; /* Borde azul oscuro */
+}
+
+/* Deshabilitar enlaces si la página es la primera o la última */
+.pagination-container .disabled {
+pointer-events: none;
+color: #6c757d; /* Color de texto gris */
+border-color: #6c757d; /* Borde gris */
+background-color: #f8f9fa; /* Fondo gris claro */
+}
+.formulario{
+background-color: #f8f9fa; /* Fondo color gris claro */
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 10px; /* Espaciado interno */
+border-radius: 5px; /* Bordes redondeados opcionales */
+height: auto;
+width: auto;
+}
+
+.formulario_alta {
+background-color: #f8f9fa; /* Fondo color gris claro */
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+padding: 20px; /* Espaciado interno */
+border-radius: 5px; /* Bordes redondeados opcionales */
+width: 90%; /* Ancho en porcentaje */
+max-width: 600px; /* Ancho máximo */
+margin: 0; /* Elimina el centrado horizontal */
+text-transform: uppercase; /* Convierte todo el texto a mayúsculas */
+font-size: 12px;
+}
+
+.formulario_alta label {
+text-align: left; /* Alinea el texto de las etiquetas a la izquierda */
+display: block; /* Asegura que las etiquetas se comporten como bloques */
+}
+
+.formulario_alta input, .formulario_alta select, .formulario_alta textarea {
+text-align: left; /* Alinea el texto dentro de los campos de entrada a la izquierda */
+}
+      /* Asegúrate de que el <select> no esté oculto por CSS */
+#transport,#proveedor,#cliente,#producto,#cantidad_programada,#autotanque,#Costo,#información,#password,#password_confirm {
+        width: 400px;
+        height: 30px;
+        font-size:12px;
+ }
+
+ .date_pickers{
+  width: 400px;
+  height: 30px;
+  font-size:12px;
+}
+
+.options_input, #transport1{
+width: 300px;
+height: 30px;
+font-size:12px;
+
+}
+
+
+.texto-negro {
+color: black;
+}
+
+
+/*botones*/
+.btn-confirm {
+background-color: transparent !important;/* Verde brillante */
+color: #368047;
+border: 1px solid #368047; /* Borde verde para coincidir con el fondo */
+border-radius: 4px; /* Bordes redondeados */
+padding: 8px 16px; /* Espaciado interno ajustado para un mejor aspecto */
+font-size: 16px; /* Tamaño de fuente */
+cursor: pointer; /* Cursor de mano */
+transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra de caja */
+}
+
+.btn-confirm:hover {
+background-color: #0d8127; /* Verde más oscuro en hover */
+border-color: #1e7e34; /* Borde verde más oscuro en hover */
+}
+
+
+.btn-confirm:active {
+transform: scale(1.05); /* Efecto de expansión al hacer clic */
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer clic */
+}
+
+
+
+
+.btn-reset {
+
+background-color: transparent !important; /* Azul brillante */
+color:#007bff;
+border: 1px solid #007bff; /* Borde azul para coincidir con el fondo */
+border-radius: 4px; /* Bordes redondeados */
+padding: 8px 16px; /* Espaciado interno ajustado para un mejor aspecto */
+font-size: 16px; /* Tamaño de fuente */
+cursor: pointer; /* Cursor de mano */
+transition: background-color 0.3s ease, border-color 0.3s ease; /* Transición suave */
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra de caja */
+}
+
+.btn-reset:hover {
+background-color: #0056b3; /* Azul más oscuro en hover */
+border-color: #004085; /* Borde azul más oscuro en hover */
+}
+
+.btn-reset:active {
+transform: scale(1.05); /* Efecto de expansión al hacer clic */
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer clic */
+}
+
+
+/*Espacio en el navbar*/
+.submenu-indented {
+margin-left: 2rem; /* Ajusta este valor según el grado de desplazamiento que desees */
+}
+
+
+
+
+/*Boton reiniciar*/
+.btn-icon-restart {
+background-color: transparent !important; /* Sin fondo para que solo se vea el ícono */
+border: none; /* Elimina el borde */
+cursor: pointer; /* Cambia el cursor al pasar por encima */
+font-size: 12px; /* Tamaño del ícono (puedes ajustar esto) */
+color: #f85d5d; /* Color del ícono */
+transition: color 0.3s ease; /* Transición para el color */
+padding: 10px; /* Espaciado interno para aumentar el área clicable */
+border-radius: 8px; /* Bordes redondeados opcionales */
+}
+
+
+
+.btn-icon-restart:hover {
+color: #f3f0f0; /* Color al pasar el ratón por encima */
+background-color: #ff0000;
+}
+
+.btn-icon-restart:active {
+transform: scale(1.05); /* Efecto de expansión al hacer clic */
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa al hacer clic */
+}
+
+
+/*.editar{
+background-color: transparent !important;  Azul más oscuro en hover 
+border-radius: 8px;  Bordes redondeados opcionales 
+border:solid 1px;
+color:#000000;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); Sombra de caja 
+transition: color 0.3s ease; Transición para el color 
+height: 30px;
+border-color:#1872cc;
+
+}
+
+.editar:hover{
+background-color: #0069d1;  Azul más oscuro en hover 
+}
+
+
+.editar:active {
+transform: scale(1.05);  Efecto de expansión al hacer clic 
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); Sombra más intensa al hacer clic 
+}*/
+
+
+/*
+.eliminar {
+background-color: transparent !important; Sin fondo 
+border-radius: 8px;  Bordes redondeados 
+border: solid 1px #f36f5e;  Color del borde 
+color: #000000;  Color del texto 
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  Sombra de caja 
+font-size: 12px;  Tamaño de la fuente 
+height: 30px;  Altura del botón 
+transition: background-color 0.3s, transform 0.2s;  Efecto de transición 
+}
+
+.eliminar:hover {
+background-color: #e2250c; Fondo al pasar el mouse 
+}
+
+.eliminar:active {
+transform: scale(1.05); Efecto de expansión al hacer clic 
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);  Sombra más intensa al hacer clic 
+}
+
+*/
+
+
+
+/* Estilo para el fondo del modal */
+.custom-modal-content {
+background-color: transparent !important; /* Quitar el fondo blanco */
+border: none; /* Opcional: Quitar el borde si lo deseas */
+box-shadow: none; /* Opcional: Quitar la sombra del modal */
+}
+
+/* Estilo para el contenedor del modal si deseas agregar un borde */
+.custom-modal-dialog {
+border: 1px solid #000; /* Cambia el color y grosor del borde según tu preferencia */
+}
+button:focus {
+outline: 2px solid transparent; /* Un contorno transparente */
+}
+
+
+
+.no-color {
+background-color: transparent !important;
+color: inherit !important;
+border: none !important;
+} 
+
+.btn {
+background-color: transparent !important; /* Sin fondo */
+color: inherit !important; /* Hereda el color del texto */
+border: none !important; /* Sin borde */
+padding: 10px 20px; /* Espaciado interno */
+font-size: 16px; /* Tamaño de fuente */
+border-radius: 5px; /* Bordes redondeados */
+cursor: pointer; /* Cambia el cursor al pasar el mouse */
+transition: background-color 0.3s, color 0.3s, transform 0.2s; /* Efecto de transición */
+}
+
+.btn:hover {
+background-color: rgba(0, 0, 0, 0.1); /* Fondo al pasar el mouse */
+color: #000; /* Cambiar color de texto al pasar el mouse */
+}
+
+.btn:focus {
+outline: none; /* Elimina el contorno */
+background-color: transparent !important; /* Sin fondo */
+color: #000; /* Cambia el color de texto */
+}
+
+.btn:active {
+transform: scale(1.05); /* Efecto de expansión al hacer clic */
+box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra al hacer clic */
+}
+
+.formulario_bts{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.btn.select-small {
+  width: 190px;
+  height: 30px;
+  font-size: 12px;
+  padding: 2px 6px !important;
+  align-items: center;
+  margin-right: 15px;
+
+}

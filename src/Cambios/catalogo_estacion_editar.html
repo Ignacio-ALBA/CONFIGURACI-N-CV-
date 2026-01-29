@@ -1,0 +1,324 @@
+{% extends 'scaizen.html' %}
+{% block title %} EDITAR ESTACIÓN DE SERVICIO   
+{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn" style="margin-right: 10px;">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+        </button>
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">EDITAR ESTACIÓN DE SERVICIO</label>
+            <p class="dir_vista">Catalogo/Estación Servicio Editar</p>
+        </div>
+      </div>  
+</div>
+
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <hr class="text-black d-none d-sm-block" />
+    <div class="formulario_alta">
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="codigo">Código interno:</label>
+            <div class="col-10">
+                <input type="text" id="codigo" name="codigo" class="form-control" placeholder="ej. 0021" required>
+                <div id="codigo-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="Permiso">Permiso CRE:</label>
+            <div class="col-10">
+                <input type="text" id="Permiso" name="Permiso" class="form-control"
+                      required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="estacion">Número de estación:</label>
+            <div class="col-10">
+                <input type="number" id="estacion" name="estacion" class="form-control" placeholder="" required min="0">
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="comercial">Nombre comercial:</label>
+            <div class="col-10">
+                <input type="text" id="comercial" name="comercial" class="form-control" placeholder=""
+                    required>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="RFC">RFC:</label>
+            <div class="col-10">
+                <input type="text" id="RFC" name="RFC" class="form-control " placeholder=""
+                    required  >
+                <div id="rfc-error" class="text-danger" style="display: none;"></div>
+
+             </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="regimen">Régimen fiscal::</label>
+            <div class="col-10">
+                <input type="text" id="regimen" name="regimen" class="form-control " placeholder=""
+                    required  >
+             </div>
+             <label id="regimen-error" class="text-danger" style="display: none;"></label>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="gerente">Nombre del gerente:</label>
+            <div class="col-10">
+                <input type="text" id="gerente" name="gerente" class="form-control" placeholder="">
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="Direccion">Dirección:</label>
+            <div class="col-10">
+                <input type="text" id="Direccion" name="direccion" class="form-control">
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="cod_pos">Código postal:</label>
+            <div class="col-10">
+                <input type="text" id="cod_pos" name="cod_pos" class="form-control" placeholder="" required>
+                <div id="cod_pos-error" class="text-danger" style="display: none;"></div>
+                <div id="cod_pos-error_length" class="text-danger" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="Telefono">Teléfono:</label>
+            <div class="col-10">
+                <input type="text" id="Telefono" name="telefono" class="form-control" placeholder="" required>
+                <div id="tel-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="Email">Email:</label>
+            <div class="col-10">
+                <input type="email" id="Email" name="email" class="form-control" placeholder="" required>
+                <div id="email-error" class="text-danger" style="display: none;"></div>
+            </div>
+        </div>
+ 
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="informacion">Información adicional:</label>
+            <div class="col-10">
+                <textarea id="informacion" style="width: 100%; height: 70px; resize: none;" name="informacion"
+                    class="form-control" placeholder=""></textarea>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" id="crearorden" class="button_color_alba" >
+                Editar registro
+            </button>
+            <button type="reset" class="button_color_alba">
+                Limpiar
+            </button>
+        </div>
+    </div>
+</form> 
+ 
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+    // Recuperar el parámetro id de la URL
+    var urlParams = new URLSearchParams(window.location.search.split('?')[1]);
+    var actualizar = urlParams.get('id');
+    console.log("ID Cliente:", actualizar);
+
+    // Obtener el token CSRF
+    var csrfToken = $('input[name="csrf_token"]').val();
+    console.log("CSRF Token:", csrfToken);
+
+    // Configurar los datos del formulario
+    var formData = {
+        'csrf_token': csrfToken,
+        'actualizar': actualizar
+    };
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+        url: "{{ url_for('app_scaizen.catalogo_estacion_editar') }}",
+        data: formData,
+        type: 'POST',
+        success: function(response) {
+            console.log(response.datos_estacion_especifico)
+            if (response.datos_estacion_especifico && response.datos_estacion_especifico.length) {
+                const cliente = response.datos_estacion_especifico[0];
+                $("#codigo").val(cliente.codigo);
+                $("#Permiso").val(cliente.permiso_cre);
+                $("#estacion").val(cliente.numero_estacion);
+                $("#comercial").val(cliente.nombre_comercial);
+                $("#RFC").val(cliente.rfc);
+                $("#regimen").val(cliente.regimen);
+                $("#gerente").val(cliente.gerente);
+                $("#Direccion").val(cliente.direccion);
+                $("#cod_pos").val(cliente.cod_pos);
+                $("#Telefono").val(cliente.telefono);
+                $("#Email").val(cliente.email);
+                $("#informacion").val(cliente.informacion);
+ 
+            } else {
+                console.error("No se encontraron datos de la estacion.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+        }
+    });
+});
+</script>
+
+
+
+
+
+
+
+<script>
+ $(document).ready(function () {
+    // Submit form via AJAX
+    $("#cargasForm").submit(function (event) {
+        event.preventDefault();
+        var urlParams = new URLSearchParams(window.location.search.split('?')[1]);
+        var actualizar_id = urlParams.get('id');
+        const editar = "editar"
+        const csrfToken = $("input[name='csrf_token']").val().trim();
+        const codigo = $("#codigo").val().trim();  
+        if (isNaN(codigo) || codigo === "") {
+                 $("#codigo-error").text("Debe ingresar un numéro.").show();        
+                return;
+            }else{
+                $("#codigo-error").hide();
+            }
+        const Permiso = $("#Permiso").val().trim();
+        const estacion = $("#estacion").val().trim();
+        const comercial = $("#comercial").val().trim();
+        const rfc = $("#RFC").val().trim();
+        if (!isValidRFC(rfc)){
+                $("#rfc-error").text("RFC no válido").show();
+                return;
+
+        }else{
+                $("#rfc-error").hide();
+        }
+        const regimen =$("#regimen").val().trim(); 
+        const gerente =$("#gerente").val().trim(); 
+        const direccion = $("#Direccion").val().trim();
+        const cod_pos = $("#cod_pos").val().trim();
+        if (isNaN(cod_pos) || cod_pos === "") {
+                $("#cod_pos-error").text("El codigo postal debe ser numérico.").show();
+                return;
+            }else{
+                $("#cod_pos-error").hide();
+            }
+            if (!/^\d{5}$/.test(cod_pos)) { // Verificar que el codigo tenga exactamente 5 dígitos
+                $("#cod_pos-error_length").text("El codigo postal debe contener exactamente 5 dígitos.").show();
+                return;
+            }else{
+                $("#cod_pos-error_length").hide();
+            }
+
+        const telefono = $("#Telefono").val().trim();
+        if (isNaN(telefono) || telefono === "") {
+                $("#tel-error_length").text("El telefono debe ser numérico.").show();
+                return;
+            }else{
+                $("#tel-error").hide();
+            }
+            if (!/^\d{10}$/.test(telefono)) { // Verificar que el teléfono tenga exactamente 10 dígitos
+                $("#tel-error_length").text("El teléfono debe contener exactamente 10 dígitos numéricos.").show();
+                return;
+            }else{
+                $("#tel-error_length").hide();
+            }
+        const email = $("#Email").val().trim(); // Obtener el email aquí
+        const validExtensions = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov|es|mx)$/i;
+        if (!validExtensions.test(email)) {
+            $("#email-error").text("El email debe terminar en '.com', '.net', '.org', '.edu' o '.gov'.").show();
+            return; // Detener el envío del formulario
+        } else {
+            $("#email-error").hide();
+        }
+        // Gather form data
+        var formData = {
+            csrf_token: csrfToken,
+            codigo: $("#codigo").val().trim(),
+            Permiso: $("#Permiso").val().trim(),
+            estacion: $("#estacion").val().trim(),
+            comercial: $("#comercial").val().trim(),
+            RFC: $("#RFC").val().trim(),
+            regimen: $("#regimen").val().trim(),
+            gerente: $("#gerente").val().trim(),
+            direccion: $("#Direccion").val().trim(),
+            cod_pos: $("#cod_pos").val().trim(),
+            telefono: $("#Telefono").val().trim(),
+            email:email,
+            informacion: $("#informacion").val().trim(),
+            csrf_token: $("input[name='csrf_token']").val().trim(),
+            editar: editar,
+            actualizar_id:actualizar_id
+
+        };
+        console.log(formData);
+        
+
+
+        // Send AJAX request
+        $.ajax({
+            url: "{{ url_for('app_scaizen.catalogo_estacion_editar') }}",
+            type: "POST",
+            headers: {
+                    'X-CSRFToken': csrfToken  // Incluir el token CSRF como un encabezado
+                },
+            data: formData,
+            
+            beforeSend: function () {
+                // Show loader or do something before sending the request
+                $("#loader-row").show();
+            },
+            success: function (response) {
+                // Handle success response
+                $("#loader-row").hide();
+                if (response && response.estatus) {
+                    var url = "{{ url_for('app_scaizen.catalogo_estacion_consultar' ) }}";
+
+                    window.location.href = url;
+                    alert("Estación actualizado con éxito");
+                    $("#cargasForm")[0].reset(); // Reset form after successful submission
+                } else {
+                    alert("Error al actualizar estación");
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle error response
+                $("#loader-row").hide();
+                console.error("Error en la solicitud AJAX:", error);
+                alert("Hubo un problema al añadir la estación. Por favor, inténtelo de nuevo.");
+            }
+        });
+    });
+    function isValidRFC(rfc) {
+                const rfcRegex = /^[A-Z]{3,4}\d{6}[A-Z0-9]{3}$/; // Acepta 3 o 4 letras
+                return rfcRegex.test(rfc.toUpperCase());
+    } 
+});
+</script>
+
+{% endblock %}

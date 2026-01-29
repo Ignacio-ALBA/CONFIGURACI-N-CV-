@@ -1,0 +1,293 @@
+{% extends 'scaizen.html' %}
+{% block title %}      Editar cliente
+{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn" style="margin-right: 10px;">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+        </button>
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">Editar cliente</label>
+            <p class="dir_vista">Catalogo/Cliente Editar</p>
+        </div>
+      </div>  
+</div>
+
+
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <div class="formulario_alta">
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="codigo">Código interno:</label>
+            <div class="col-10">
+              <input type="text" id="codigo" name="codigo" class="form-control texto-negro" placeholder="ej. 0021" required pattern="[0-9]{1,10}">
+              <div id="codigo-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="nombre_comercial">Nombre comercial:</label>
+            <div class="col-10">
+                <input type="text" id="nombre_comercial" name="nombre_comercial" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="razon">Razón Social:</label>
+            <div class="col-10">
+                <input type="text" id="razon" name="razon" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="rfc">RFC:</label>
+            <div class="col-10">
+              <input type="text" id="rfc" name="rfc" class="form-control " placeholder=""  required>
+              <div id="rfc-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="regimen">Régimen fiscal:</label>
+            <div class="col-10">
+              <input type="text" id="regimen" name="regimen" class="form-control " placeholder=""  required>
+              <div id="regimen-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="direccion">Dirección:</label>
+            <div class="col-10">
+                <input type="text" id="direccion" name="direccion" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="cod_pos">Código postal:</label>
+            <div class="col-10">
+              <input type="number" id="cod_pos" name="cod_pos" class="form-control texto-negro" placeholder="" required>
+              <div id="cod_pos-error" class="text-danger" style="display: none;"></div>
+              <div id="cod_pos-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="telefono">Teléfono:</label>
+            <div class="col-10">
+              <input type="tel" id="telefono" name="telefono" class="form-control texto-negro" placeholder="" required>
+              <div id="tel-error" class="text-danger" style="display: none;"></div>
+              <div id="tel-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="email">Email:</label>
+            <div class="col-10">
+              <input type="email" id="email" name="email" class="form-control texto-negro" placeholder="" required>
+              <div id="email-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="informacion">Información adicional:</label>
+            <div class="col-10">
+                <textarea id="informacion" name="informacion" style="width: 100%; height: 70px; resize: none;" class="form-control texto-negro" placeholder=""></textarea>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit" id="crearorden" class="button_color_alba">
+                Editar registro        </button>
+            
+                <button type="button" id="limpiar" class="button_color_alba">Limpiar</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function goBack() {
+      window.history.back();
+    }
+</script>
+<script>
+    $(document).ready(function () {
+    // Recuperar el parámetro id de la URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var actualizar = urlParams.get('id');
+    console.log("ID Cliente:", actualizar);
+
+    // Obtener el token CSRF
+    var csrfToken = $('input[name="csrf_token"]').val();
+    console.log("CSRF Token:", csrfToken);
+
+    // Configurar los datos del formulario
+    var formData = {
+        'csrf_token': csrfToken,
+        'actualizar': actualizar
+    };
+
+    // Realizar la solicitud AJAX
+    $.ajax({
+        url: "{{ url_for('app_scaizen.catalogo_cliente_editar') }}",
+        data: formData,
+        type: 'POST',
+        success: function(response) {
+            console.log(response.datos_cliente_especifico)
+            if (response.datos_cliente_especifico && response.datos_cliente_especifico.length) {
+                const cliente = response.datos_cliente_especifico[0];
+                $("#codigo").val(cliente.codigo);
+                $("#nombre_comercial").val(cliente.nombre_comercial);
+                $("#razon").val(cliente.razon);
+                $("#rfc").val(cliente.rfc);
+                $("#regimen").val(cliente.regimen);
+                $("#direccion").val(cliente.direccion);
+                $("#cod_pos").val(cliente.cod_pos);
+                $("#telefono").val(cliente.telefono);
+                $("#email").val(cliente.email);
+                $("#informacion").val(cliente.informacion);
+            } else {
+                console.error("No se encontraron datos del cliente.");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+        }
+    });
+});
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#cargasForm").submit(function (event) {
+            event.preventDefault();
+            var urlParams = new URLSearchParams(window.location.search);
+            var actualizar_id = urlParams.get('id');
+            const codigo = $("#codigo").val().trim();
+            
+            if (isNaN(codigo) || codigo === "") {
+                 $("#codigo-error").text("Debe ingresar un numéro.").show();
+                return;
+            }else{
+                $("#codigo-error").hide();
+            }
+
+            const nombre_comercial = $("#nombre_comercial").val().trim();
+            const razon = $("#razon").val().trim();
+            const rfc = $("#rfc").val().trim();
+            const regimen = $("#regimen").val().trim();
+            const direccion = $("#direccion").val().trim();
+            const cod_pos = $("#cod_pos").val().trim();
+            const telefono = $("#telefono").val().trim();
+            if (!isValidRFC(rfc)){
+                $("#rfc-error").text("RFC no válido").show();
+                return;
+
+            }else{
+                $("#rfc-error").hide();
+            }
+            
+            
+            if (isNaN(telefono) || telefono === "") {
+                $("#tel-error").text("El telefono debe ser numérico.").show();
+                return;
+            }else{
+                $("#tel-error").hide();
+            }
+            if (!/^\d{10}$/.test(telefono)) { // Verificar que el teléfono tenga exactamente 10 dígitos
+                $("#tel-error_length").text("El teléfono debe contener exactamente 10 dígitos numéricos.").show();
+                return;
+            }else{
+                $("#tel-error_length").hide();
+            }
+
+            if (isNaN(cod_pos) || cod_pos === "") {
+                $("#cod_pos-error").text("El C.P. debe ser numérico.").show();
+                return;
+            }else{
+                $("#cod_pos-error").hide();
+            }
+            if (!/^\d{5}$/.test(cod_pos)) { // Verificar que el C.P. tenga exactamente 5 dígitos
+                $("#cod_pos-error").text("El C.P debe contener exactamente 5 dígitos.").show();
+                return;
+            }else{
+                $("#cod_pos-error").hide();
+            }
+
+            const email = $("#email").val().trim(); // Obtener el email aquí
+                const validExtensions = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|org|edu|gov|es|mx)$/i;
+                if (!validExtensions.test(email)) {
+                    $("#email-error").text("El email debe terminar en '.com', '.net', '.org', '.edu' o '.gov'.").show();
+                    return; // Detener el envío del formulario
+                } else {
+                    $("#email-error").hide();
+                }
+            const informacion = $("#informacion").val().trim();
+            const csrfToken = $("input[name='csrf_token']").val().trim();
+            const editar = "editar"
+            $.ajax({
+                url: "{{ url_for('app_scaizen.catalogo_cliente_editar') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': csrfToken  // Incluir el token CSRF como un encabezado
+                },
+                data: {
+                    csrf_token: csrfToken,
+                    codigo: codigo,
+                    nombre_comercial: nombre_comercial,
+                    razon: razon,
+                    rfc: rfc,
+                    regimen: regimen,
+                    direccion: direccion,
+                    cod_pos: cod_pos,
+                    telefono: telefono,
+                    email: email,
+                    informacion: informacion,
+                    editar:editar,
+                    actualizar_id:actualizar_id
+                },
+                beforeSend: function () {
+                    // Mostrar loader u otra acción antes de enviar la solicitud
+                    $("#loader-row").show();
+                },
+                success: function (response) {
+                    $("#loader-row").hide();
+                    if (response && response.estatus) {
+                        var url = "{{ url_for('app_scaizen.catalogo_cliente_consultar' ) }}";
+
+                        window.location.href = url;
+                        alert("Cliente actualizado con éxito");
+                        $("#codigo-error, #rfc-error, #tel-error, #tel-error_length, #email-error").hide();
+
+                        $("#cargasForm")[0].reset(); // Resetear el formulario después de enviar con éxito
+                    } else {
+                        alert("Error al actualizar cliente");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#loader-row").hide();
+                    console.error("Error en la solicitud AJAX:", error);
+                    alert("Hubo un problema al actualizar al cliente. Por favor, intente de nuevo.");
+                }
+            });
+            function isValidRFC(rfc) {
+                const rfcRegex = /^[A-Z]{3,4}\d{6}[A-Z0-9]{3}$/; // Acepta 3 o 4 letras
+                return rfcRegex.test(rfc.toUpperCase());
+            }  
+        });
+        
+    // Limpiar el formulario y ocultar errores al presionar el botón LIMPIAR
+    $("#limpiar").click(function () {
+        $("#codigo-error, #rfc-error, #tel-error, #tel-error_length, #email-error").hide();
+        $("#cargasForm")[0].reset();
+    });
+    });
+</script>
+
+{% endblock %}

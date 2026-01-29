@@ -1,0 +1,231 @@
+{% extends 'scaizen.html' %}
+{% block title %}Alta de cliente{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <label class="titulo" style="text-transform: uppercase; display: block; text-align: left;">Alta de cliente</label>
+    <p class="dir_vista">Catalogo/Cliente Alta</p>
+</div>
+
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <div class="formulario_alta">
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="codigo">Código interno:</label>
+            <div class="col-10">
+                <input type="text" id="codigo" name="codigo" class="form-control texto-negro" placeholder="ej. 0021" required>
+                <div id="codigo-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="nombre_comercial">Nombre comercial:</label>
+            <div class="col-10">
+                <input type="text" id="nombre_comercial" name="nombre_comercial" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="razon">Razón Social:</label>
+            <div class="col-10">
+                <input type="text" id="razon" name="razon" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="rfc">RFC:</label>
+            <div class="col-10">
+              <input type="text" id="rfc" name="rfc" class="form-control " placeholder=""  required>
+              <div id="rfc-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="regimen">Régimen fiscal:</label>
+            <div class="col-10">
+              <input type="text" id="regimen" name="regimen" class="form-control " placeholder=""  required>
+              <div id="regimen-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="direccion">Dirección:</label>
+            <div class="col-10">
+                <input type="text" id="direccion" name="direccion" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="cod_pos">Código postal:</label>
+            <div class="col-10">
+              <input type="number" id="cod_pos" name="cod_pos" class="form-control texto-negro" placeholder="" required>
+              <div id="cod_pos-error" class="text-danger" style="display: none;"></div>
+              <div id="cod_pos-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="telefono">Teléfono:</label>
+            <div class="col-10">
+              <input type="tel" id="telefono" name="telefono" class="form-control texto-negro" placeholder="" required>
+              <div id="tel-error" class="text-danger" style="display: none;"></div>
+              <div id="tel-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="email">Email:</label>
+            <div class="col-10">
+              <input type="email" id="email" name="email" class="form-control texto-negro" placeholder="" required>
+              <div id="email-error" class="text-danger" style="display: none;"></div>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="informacion">Información adicional:</label>
+            <div class="col-10">
+                <textarea id="informacion" style="width: 100%; height: 70px; resize: none;" name="informacion" class="form-control texto-negro" placeholder=""></textarea>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <!--<button type="submit"  class="btn-confirm  texto-negro" >-->
+                <button type="submit"  class="button_color_alba" >
+                ALTA DE REGISTRO        </button>
+            
+                <!--<button type="button" id="limpiar" class="btn-reset texto-negro">-->
+                    <button type="button" id="limpiar" class="button_color_alba">
+                    LIMPIAR</button>
+
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#cargasForm").submit(function (event) {
+            event.preventDefault();
+
+            const codigo = $("#codigo").val().trim();
+            if (isNaN(codigo) || codigo === "") {
+                 $("#codigo-error").text("Debe ingresar un numéro.").show();
+                return;
+            }else{
+                $("#codigo-error").hide();
+            }
+            const nombre_comercial = $("#nombre_comercial").val().trim();
+            const razon = $("#razon").val().trim();
+            const rfc = $("#rfc").val().trim();
+            const regimen = $("#regimen").val().trim();
+            const direccion = $("#direccion").val().trim();
+            const cod_pos = $("#cod_pos").val().trim();
+            const telefono = $("#telefono").val().trim();
+            if (!isValidRFC(rfc)){
+                $("#rfc-error").text("RFC no válido").show();
+                return;
+            }else{
+                $("#rfc-error").hide();
+            }
+            
+            
+            if (isNaN(telefono) || telefono === "") {
+                $("#tel-error").text("El telefono debe ser numérico.").show();
+                return;
+            }else{
+                $("#tel-error").hide();
+            }
+            if (!/^\d{10}$/.test(telefono)) { // Verificar que el teléfono tenga exactamente 10 dígitos
+                $("#tel-error_length").text("El teléfono debe contener exactamente 10 dígitos numéricos.").show();
+                return;
+            }else{
+                $("#tel-error_length").hide();
+            }
+
+            if (isNaN(cod_pos) || cod_pos === "") {
+                $("#cod_pos-error").text("El C.P. debe ser numérico.").show();
+                return;
+            }else{
+                $("#cod_pos-error").hide();
+            }
+            if (!/^\d{5}$/.test(cod_pos)) { // Verificar que el C.P. tenga exactamente 5 dígitos
+                $("#cod_pos-error").text("El C.P debe contener exactamente 5 dígitos.").show();
+                return;
+            }else{
+                $("#cod_pos-error").hide();
+            }
+
+            const email = $("#email").val().trim();
+            // Verificar si el email termina en '.com'
+            
+            if (
+                !email.endsWith('.com') &&
+                !email.endsWith('.net') &&
+                !email.endsWith('.org') &&
+                !email.endsWith('.com.mx')
+            ) {
+                $("#email-error").text("El email debe terminar en '.com', '.net', '.org' o '.com.mx'.").show();
+                return; // Detener el envío del formulario
+            } else {
+                $("#email-error").hide();
+            }
+            const informacion = $("#informacion").val().trim();
+            const csrfToken = $("input[name='csrf_token']").val().trim();
+
+            $.ajax({
+                url: "{{ url_for('app_scaizen.catalogo_cliente_alta') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': csrfToken  // Incluir el token CSRF como un encabezado
+                },
+                data: {
+                    csrf_token: csrfToken,
+                    codigo: codigo,
+                    nombre_comercial: nombre_comercial,
+                    razon: razon,
+                    rfc: rfc,
+                    regimen: regimen,
+                    direccion: direccion,
+                    cod_pos: cod_pos,
+                    telefono: telefono,
+                    email: email,
+                    informacion: informacion
+                },
+                beforeSend: function () {
+                    // Mostrar loader u otra acción antes de enviar la solicitud
+                    $("#loader-row").show();
+                },
+                success: function (response) {
+                    $("#loader-row").hide();
+                    if (response && response.estatus) {
+                        alert("Cliente guardado con éxito");
+                        $("#codigo-error, #rfc-error, #tel-error, #tel-error_length, #email-error").hide();
+
+                        $("#cargasForm")[0].reset(); // Resetear el formulario después de enviar con éxito
+                    } else {
+                        alert("Error al registrar cliente");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#loader-row").hide();
+                    console.error("Error en la solicitud AJAX:", error);
+                    alert("Hubo un problema al añadir al cliente. Por favor, intente de nuevo.");
+                }
+            });
+            function isValidRFC(rfc) {
+                const rfcRegex = /^[A-Z]{3,4}\d{6}[A-Z0-9]{3}$/; // Acepta 3 o 4 letras
+                return rfcRegex.test(rfc.toUpperCase());
+            } 
+
+
+        });
+            // Limpiar el formulario y ocultar errores al presionar el botón LIMPIAR
+        $("#limpiar").click(function () {
+            $("#codigo-error, #rfc-error, #tel-error, #tel-error_length, #email-error").hide();
+            $("#cargasForm")[0].reset();
+        });
+    });
+</script>
+
+{% endblock %}

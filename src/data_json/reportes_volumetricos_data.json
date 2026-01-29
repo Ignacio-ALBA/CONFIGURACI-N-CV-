@@ -1,0 +1,164 @@
+{
+    "productos": 
+      {
+        "diesel":{
+            "clave_producto": "PR03",
+            "descripcion_producto": "Diésel",
+            "subproductos": {
+                "diesel":{
+                    "clave_subproducto": "SP18",
+                    "descripcion_subproducto": "Diésel automotriz",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                },
+                "DiselMarino":{
+                    "clave_subproducto": "SP19",
+                    "descripcion_subproducto": "Diésel marino",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                },
+                "if0380":{
+                    "clave_subproducto": "SP22",
+                    "descripcion_subproducto": "IFO380",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                },
+                "DieselIndustrial":{
+                    "clave_subproducto": "SP23",
+                    "descripcion_subproducto": "Diésel industrial",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                },
+                "duba":{
+                    "clave_subproducto": "SP24",
+                    "descripcion_subproducto": "Diésel de Ultra Bajo Azufre (DUBA)",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                },
+                "DiselAgricola":{
+                    "clave_subproducto": "SP25",
+                    "descripcion_subproducto": "Diésel agrícola",
+                    "unidad_medida": "UM03",
+                    "descripcion_unidad_medida": "Litro(s)"
+                }
+            }
+      },
+      "gasolina":{
+        "clave_producto": "PR07",
+        "descripcion_producto": "Gasolina",
+        "subproductos": {
+          "regular":{
+            "clave_subproducto": "SP16",
+            "descripcion_subproducto": "Gasolina regular menor a 91 octanos",
+            "unidad_medida": "UM03",
+            "descripcion_unidad_medida": "Litro(s)"
+          },
+          "premium":{
+            "clave_subproducto": "SP17",
+            "descripcion_subproducto": "Gasolina premium mayor o igual a 91 octanos",
+            "unidad_medida": "UM03",
+            "descripcion_unidad_medida": "Litro(s)"
+          }
+        }
+      },
+      "petroleo":{
+        "clave_producto": "PR08",
+        "descripcion_producto": "Petróleo",
+        "subproductos": {
+          "SuperLigeroD":{
+            "clave_subproducto": "SP1",
+            "descripcion_subproducto": "Súper-ligero/Dulce",
+            "unidad_medida": "UM01",
+            "descripcion_unidad_medida": "Barril(es)"
+          },
+          "SuperLigeroSA":{
+            "clave_subproducto": "SP2",
+            "descripcion_subproducto": "Súper-ligero/Semi-amargo",
+            "unidad_medida": "UM01",
+            "descripcion_unidad_medida": "Barril(es)"
+          },
+          "SuperLigeroA":{
+            "clave_subproducto": "SP3",
+            "descripcion_subproducto": "Súper-ligero/Amargo",
+            "unidad_medida": "UM01",
+            "descripcion_unidad_medida": "Barril(es)"
+          },
+          "LigeroD":{
+            "clave_subproducto": "SP4",
+            "descripcion_subproducto": "Ligero/Dulce",
+            "unidad_medida": "UM01",
+            "descripcion_unidad_medida": "Barril(es)"
+          }
+
+        }
+      },
+      "gasnatural":{
+        "clave_producto": "PR09",
+        "descripcion_producto": "Gas Natural",
+        "subproductos": {
+          "GasNaturalV":{
+            "clave_subproducto": "SP27",
+            "descripcion_subproducto": "Gas natural vehicular comprimido",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "GasNaturalC":{
+            "clave_subproducto": "SP28",
+            "descripcion_subproducto": "Gas natural comprimido",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "GasNaturalL":{
+            "clave_subproducto": "SP29",
+            "descripcion_subproducto": "Gas natural licuado",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "LGasNatural":{
+            "clave_subproducto": "SP37",
+            "descripcion_subproducto": "Líquidos del gas natural",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "GasNaturalSP":{
+            "clave_subproducto": "SP38",
+            "descripcion_subproducto": "Gas natural sin procesar",
+            "unidad_medida": "UM02",
+            "descripcion_unidad_medida": "Pie(s) cúbico(s)"
+          },
+          "GasNaturalP":{
+            "clave_subproducto": "SP41 ",
+            "descripcion_subproducto": "Gas natural procesado",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "Metano":{
+            "clave_subproducto": "SP42",
+            "descripcion_subproducto": "Metano",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "Butano":{
+            "clave_subproducto": "SP43",
+            "descripcion_subproducto": "Butano",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "Etano":{
+            "clave_subproducto": "SP44 ",
+            "descripcion_subproducto": "Etano",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          },
+          "GasolinaN":{
+            "clave_subproducto": "SP47 ",
+            "descripcion_subproducto": "Gasolina natural",
+            "unidad_medida": "UM04",
+            "descripcion_unidad_medida": "Metro(s) cúbico(s)"
+          }
+        }
+      }
+    
+  }
+}
+  

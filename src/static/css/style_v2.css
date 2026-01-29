@@ -1,0 +1,95 @@
+table{
+    border-collapse: separate; /* Asegúrate de que border-spacing se aplique */
+    border-spacing: 6px; /* Espacio entre celdas */
+}
+th{
+    background-color: #212529;
+    color: white;
+}
+td{
+    background-color: #DCDCDC;
+}
+
+th, td{
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.div_label_producto{
+    display:flex; 
+    align-items: center; 
+    justify-content: center; 
+    color:#f6f6f6;
+    height: auto; 
+    width: auto;
+    border-radius: 20px;
+    padding: 5px;
+}
+
+.button_color_alba{
+    display: flex;
+    background-color: #122B49;
+    height: 30px;
+    width: 100%;
+    border-radius: 10px;
+    border-style: none;
+    margin-bottom:5px; 
+    color: white; 
+    align-items: center; 
+    justify-content: center;
+    font-weight: bold;
+}
+
+
+
+.button_color_alba2{
+    display: flex;
+    background-color: rgba(0, 0, 0, 0);
+    height: 30px;
+    width: 100%;
+    border-radius: 10px;
+    border: solid 3px #122B49;
+    margin-bottom:5px; 
+    color: #122B49; 
+    align-items: center; 
+    font-weight: bold;
+    justify-content: center;
+}
+
+.dir_vista{
+    margin-left: 10px;
+    margin-bottom: 0px;
+    font-weight: bold;
+    color:#122B49;
+}
+
+.div_perms{
+    /*background-color: #212529;*/
+    color: black;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 3px 5px;
+    border-radius: 15px;
+    text-align: left;
+    margin-right: 5px;
+    height: auto;
+    word-wrap: break-word;   /* Rompe las palabras largas si es necesario */
+    overflow-wrap: break-word;
+    
+}
+
+.contenedor_perms {
+    display: grid; /* Activar grid */
+    grid-template-columns: repeat(5, 1fr); /* 3 columnas de igual ancho */
+    gap: 3px; /* Espacio entre los elementos */
+    max-width: 100%;
+}
+
+
+
+.div_perm_item{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+    margin-bottom: 10px;
+}
