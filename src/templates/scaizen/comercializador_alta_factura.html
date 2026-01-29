@@ -1,0 +1,1679 @@
+{% extends 'scaizen.html' %}
+{% block title %}Alta de Compras{% endblock %}
+{% block tables %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.3/css/select.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+<!-- (Opcional) Tema adicional -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+<!-- Bootstrap 4 JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<div class="formulario">
+    <label class="titulo">Alta de Nueva Factura</label><br />
+    <p class="dir_vista">Comercializador/Nueva Factura</p>
+</div>
+
+<form id="cargasForm" method="POST">
+    <hr class="text-black d-none d-sm-block" />
+    <div class="">
+        <!-- aqui va el html para la factura -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <!--   cfdi Emisor -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Factura
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-12 col-md-6">
+                                    <p class="form-group">
+                                        <label class="control-label">Serie:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblSerie" name="lblSerie" type="text" value="A" autocomplete="off">
+                                    </p>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="form-group">
+                                        <label class="control-label">Folio:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblFolio" name="lblFolio" type="text" value="1" autocomplete="off">
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--   cfdi Emisor -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Emisor
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="alert alert-primary fade show" role="alert">
+                                        <strong></strong> <a href="">Agrega un Emisor Existente en Sistema.</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-12">
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="form-group">
+                                        <label class="control-label">R.F.C.:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblRfcEmisor" name="lblRfcEmisor" type="text" value="" required>
+                                    </p>
+                                    <p class="form-group">
+                                        <label class="control-label ">Razón Social:</label>
+                                        <input class="form-control input-sm text-box single-line" id="razonSocialEmisor" name="razonSocialEmisor" type="text" value="" required>
+                                    </p>
+
+                                </div>
+                                <div class="col-12 col-md-6">
+
+                                    <div class="form-group">
+                                        <label class="control-label">Regimen Fiscal:</label>
+                                        <select class="form-control input-sm" name="regimenFiscalEmisor" id="regimenFiscalEmisor">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="601">601 - General de Ley Personas Morales</option>
+                                            <option value="603">603 -Personas Morales con Fines no Lucrativos</option>
+                                            <option value="605">605 -Sueldos y Salarios e Ingresos Asimilados a Salarios</option>
+                                            <option value="606">606 -Arrendamiento</option>
+                                            <option value="607">607 -Régimen de Enajenación o Adquisición de Bienes</option>
+                                            <option value="608">608 -Demás ingresos</option>
+                                            <option value="610">610 -Residentes en el Extranjero sin Establecimiento Permanente en México</option>
+                                            <option value="611">611 -Ingresos por Dividendos (socios y accionistas)</option>
+                                            <option value="612">612 -Personas Físicas con Actividades Empresariales y Profesionales</option>
+                                            <option value="614">614 -Ingresos por intereses</option>
+                                            <option value="615">615 -Régimen de los ingresos por obtención de premios</option>
+                                            <option value="616">616 -Sin obligaciones fiscales</option>
+                                            <option value="620">620 -Sociedades Cooperativas de Producción que optan por diferir sus ingresos</option>
+                                            <option value="621">621 -Incorporación Fiscal</option>
+                                            <option value="622">622 -Actividades Agrícolas, Ganaderas, Silvícolas y Pesqueras</option>
+                                            <option value="623">623 -Opcional para Grupos de Sociedades</option>
+                                            <option value="624">624 -Coordinados</option>
+                                            <option value="625">625 -Régimen de las Actividades Empresariales con ingresos a través de Plataformas Tecnológicas</option>
+                                            <option value="626">626 -Régimen Simplificado de Confianza</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label class="control-label">Tipo de Comprobante:</label>
+                                            <select class="form-control input-sm" name="tipoComprobanteEmisor" id="tipoComprobanteEmisor">
+                                                <option value="0">Seleccione una opción</option>
+                                                <option value="E">E - Egreso</option>
+                                                <option value="I">I -Ingresos</option>
+                                                <option value="T">T -Traslado</option>
+                                                <option value="N">N -Nómina</option>
+                                                <option value="P">P -Pago</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--   cfdi Receptor -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Receptor
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <p class="form-group">
+                                        <label class="control-label">R.F.C.:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblRfcReceptor" name="lblRfcReceptor" type="text" value="SOHM7509289MA" autocomplete="off" required>
+                                    </p>
+                                    <p class="form-group">
+                                        <label class="control-label ">Razón Social:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblRazonReceptor" name="lblRazonReceptor" type="text" value="Receptor de prueba" autocomplete="off">
+                                    </p>
+                                    <div class="form-group">
+                                        <label class="control-label">No de registro de identidad fiscal:</label>
+                                        <input class="form-control input-sm text-box single-line" id="NumRegIdTrib" name="NumRegIdTrib" type="text" value="" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Residencia Fiscal:</label>
+                                        <select class="form-control input-sm" name="selectResidenciaFiscal" id="selectResidenciaFiscal">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="AFG">Afganistán</option>
+                                            <option value="ALA">Islas Åland</option>
+                                            <option value="ALB">Albania</option>
+                                            <option value="DEU">Alemania</option>
+                                            <option value="AND">Andorra</option>
+                                            <option value="AGO">Angola</option>
+                                            <option value="AIA">Anguila</option>
+                                            <option value="ATA">Antártida</option>
+                                            <option value="ATG">Antigua y Barbuda</option>
+                                            <option value="SAU">Arabia Saudita</option>
+                                            <option value="DZA">Argelia</option>
+                                            <option value="ARG">Argentina</option>
+                                            <option value="ARM">Armenia</option>
+                                            <option value="ABW">Aruba</option>
+                                            <option value="AUS">Australia</option>
+                                            <option value="AUT">Austria</option>
+                                            <option value="AZE">Azerbaiyán</option>
+                                            <option value="BHS">Bahamas (las)</option>
+                                            <option value="BGD">Bangladés</option>
+                                            <option value="BRB">Barbados</option>
+                                            <option value="BHR">Baréin</option>
+                                            <option value="BEL">Bélgica</option>
+                                            <option value="BLZ">Belice</option>
+                                            <option value="BEN">Benín</option>
+                                            <option value="BMU">Bermudas</option>
+                                            <option value="BLR">Bielorrusia</option>
+                                            <option value="MMR">Myanmar</option>
+                                            <option value="BOL">Bolivia, Estado Plurinacional de</option>
+                                            <option value="BIH">Bosnia y Herzegovina</option>
+                                            <option value="BWA">Botsuana</option>
+                                            <option value="BRA">Brasil</option>
+                                            <option value="BRN">Brunéi Darussalam</option>
+                                            <option value="BGR">Bulgaria</option>
+                                            <option value="BFA">Burkina Faso</option>
+                                            <option value="BDI">Burundi</option>
+                                            <option value="BTN">Bután</option>
+                                            <option value="CPV">Cabo Verde</option>
+                                            <option value="KHM">Camboya</option>
+                                            <option value="CMR">Camerún</option>
+                                            <option value="CAN">Canadá</option>
+                                            <option value="QAT">Catar</option>
+                                            <option value="BES">Bonaire, San Eustaquio y Saba</option>
+                                            <option value="TCD">Chad</option>
+                                            <option value="CHL">Chile</option>
+                                            <option value="CHN">China</option>
+                                            <option value="CYP">Chipre</option>
+                                            <option value="COL">Colombia</option>
+                                            <option value="COM">Comoras</option>
+                                            <option value="PRK">Corea (la República Democrática Popular de)</option>
+                                            <option value="KOR">Corea (la República de)</option>
+                                            <option value="CIV">Côte d'Ivoire</option>
+                                            <option value="CRI">Costa Rica</option>
+                                            <option value="HRV">Croacia</option>
+                                            <option value="CUB">Cuba</option>
+                                            <option value="CUW">Curaçao</option>
+                                            <option value="DNK">Dinamarca</option>
+                                            <option value="DMA">Dominica</option>
+                                            <option value="ECU">Ecuador</option>
+                                            <option value="EGY">Egipto</option>
+                                            <option value="SLV">El Salvador</option>
+                                            <option value="ARE">Emiratos Árabes Unidos (Los)</option>
+                                            <option value="ERI">Eritrea</option>
+                                            <option value="SVK">Eslovaquia</option>
+                                            <option value="SVN">Eslovenia</option>
+                                            <option value="ESP">España</option>
+                                            <option value="USA">Estados Unidos (los)</option>
+                                            <option value="EST">Estonia</option>
+                                            <option value="ETH">Etiopía</option>
+                                            <option value="PHL">Filipinas (las)</option>
+                                            <option value="FIN">Finlandia</option>
+                                            <option value="FJI">Fiyi</option>
+                                            <option value="FRA">Francia</option>
+                                            <option value="GAB">Gabón</option>
+                                            <option value="GMB">Gambia (La)</option>
+                                            <option value="GEO">Georgia</option>
+                                            <option value="GHA">Ghana</option>
+                                            <option value="GIB">Gibraltar</option>
+                                            <option value="GRD">Granada</option>
+                                            <option value="GRC">Grecia</option>
+                                            <option value="GRL">Groenlandia</option>
+                                            <option value="GLP">Guadalupe</option>
+                                            <option value="GUM">Guam</option>
+                                            <option value="GTM">Guatemala</option>
+                                            <option value="GUF">Guayana Francesa</option>
+                                            <option value="GGY">Guernsey</option>
+                                            <option value="GIN">Guinea</option>
+                                            <option value="GNB">Guinea-Bisáu</option>
+                                            <option value="GNQ">Guinea Ecuatorial</option>
+                                            <option value="GUY">Guyana</option>
+                                            <option value="HTI">Haití</option>
+                                            <option value="HND">Honduras</option>
+                                            <option value="HKG">Hong Kong</option>
+                                            <option value="HUN">Hungría</option>
+                                            <option value="IND">India</option>
+                                            <option value="IDN">Indonesia</option>
+                                            <option value="IRQ">Irak</option>
+                                            <option value="IRN">Irán (la República Islámica de)</option>
+                                            <option value="IRL">Irlanda</option>
+                                            <option value="BVT">Isla Bouvet</option>
+                                            <option value="IMN">Isla de Man</option>
+                                            <option value="CXR">Isla de Navidad</option>
+                                            <option value="NFK">Isla Norfolk</option>
+                                            <option value="ISL">Islandia</option>
+                                            <option value="CYM">Islas Caimán (las)</option>
+                                            <option value="CCK">Islas Cocos (Keeling)</option>
+                                            <option value="COK">Islas Cook (las)</option>
+                                            <option value="FRO">Islas Feroe (las)</option>
+                                            <option value="SGS">Georgia del sur y las islas sandwich del sur</option>
+                                            <option value="HMD">Isla Heard e Islas McDonald</option>
+                                            <option value="FLK">Islas Malvinas [Falkland] (las)</option>
+                                            <option value="MNP">Islas Marianas del Norte (las)</option>
+                                            <option value="MHL">Islas Marshall (las)</option>
+                                            <option value="PCN">Pitcairn</option>
+                                            <option value="SLB">Islas Salomón (las)</option>
+                                            <option value="TCA">Islas Turcas y Caicos (las)</option>
+                                            <option value="UMI">Islas de Ultramar Menores de Estados Unidos (las)</option>
+                                            <option value="VGB">Islas Vírgenes (Británicas)</option>
+                                            <option value="VIR">Islas Vírgenes (EE.UU.)</option>
+                                            <option value="ISR">Israel</option>
+                                            <option value="ITA">Italia</option>
+                                            <option value="JAM">Jamaica</option>
+                                            <option value="JPN">Japón</option>
+                                            <option value="JEY">Jersey</option>
+                                            <option value="JOR">Jordania</option>
+                                            <option value="KAZ">Kazajistán</option>
+                                            <option value="KEN">Kenia</option>
+                                            <option value="KGZ">Kirguistán</option>
+                                            <option value="KIR">Kiribati</option>
+                                            <option value="KWT">Kuwait</option>
+                                            <option value="LAO">Lao, (la) República Democrática Popular</option>
+                                            <option value="LSO">Lesoto</option>
+                                            <option value="LVA">Letonia</option>
+                                            <option value="LBN">Líbano</option>
+                                            <option value="LBR">Liberia</option>
+                                            <option value="LBY">Libia</option>
+                                            <option value="LIE">Liechtenstein</option>
+                                            <option value="LTU">Lituania</option>
+                                            <option value="LUX">Luxemburgo</option>
+                                            <option value="MAC">Macao</option>
+                                            <option value="MDG">Madagascar</option>
+                                            <option value="MYS">Malasia</option>
+                                            <option value="MWI">Malaui</option>
+                                            <option value="MDV">Maldivas</option>
+                                            <option value="MLI">Malí</option>
+                                            <option value="MLT">Malta</option>
+                                            <option value="MAR">Marruecos</option>
+                                            <option value="MTQ">Martinica</option>
+                                            <option value="MUS">Mauricio</option>
+                                            <option value="MRT">Mauritania</option>
+                                            <option value="MYT">Mayotte</option>
+                                            <option value="MEX" selected>México</option>
+                                            <option value="FSM">Micronesia (los Estados Federados de)</option>
+                                            <option value="MDA">Moldavia (la República de)</option>
+                                            <option value="MCO">Mónaco</option>
+                                            <option value="MNG">Mongolia</option>
+                                            <option value="MNE">Montenegro</option>
+                                            <option value="MSR">Montserrat</option>
+                                            <option value="MOZ">Mozambique</option>
+                                            <option value="NAM">Namibia</option>
+                                            <option value="NRU">Nauru</option>
+                                            <option value="NPL">Nepal</option>
+                                            <option value="NIC">Nicaragua</option>
+                                            <option value="NER">Níger (el)</option>
+                                            <option value="NGA">Nigeria</option>
+                                            <option value="NIU">Niue</option>
+                                            <option value="NOR">Noruega</option>
+                                            <option value="NCL">Nueva Caledonia</option>
+                                            <option value="NZL">Nueva Zelanda</option>
+                                            <option value="OMN">Omán</option>
+                                            <option value="NLD">Países Bajos (los)</option>
+                                            <option value="PAK">Pakistán</option>
+                                            <option value="PLW">Palaos</option>
+                                            <option value="PSE">Palestina, Estado de</option>
+                                            <option value="PAN">Panamá</option>
+                                            <option value="PNG">Papúa Nueva Guinea</option>
+                                            <option value="PRY">Paraguay</option>
+                                            <option value="PER">Perú</option>
+                                            <option value="PYF">Polinesia Francesa</option>
+                                            <option value="POL">Polonia</option>
+                                            <option value="PRT">Portugal</option>
+                                            <option value="PRI">Puerto Rico</option>
+                                            <option value="GBR">Reino Unido (el)</option>
+                                            <option value="CAF">República Centroafricana (la)</option>
+                                            <option value="CZE">República Checa (la)</option>
+                                            <option value="MKD">Macedonia (la antigua República Yugoslava de)</option>
+                                            <option value="COG">Congo</option>
+                                            <option value="COD">Congo (la República Democrática del)</option>
+                                            <option value="DOM">República Dominicana (la)</option>
+                                            <option value="REU">Reunión</option>
+                                            <option value="RWA">Ruanda</option>
+                                            <option value="ROU">Rumania</option>
+                                            <option value="RUS">Rusia, (la) Federación de</option>
+                                            <option value="ESH">Sahara Occidental</option>
+                                            <option value="WSM">Samoa</option>
+                                            <option value="ASM">Samoa Americana</option>
+                                            <option value="BLM">San Bartolomé</option>
+                                            <option value="KNA">San Cristóbal y Nieves</option>
+                                            <option value="SMR">San Marino</option>
+                                            <option value="MAF">San Martín (parte francesa)</option>
+                                            <option value="SPM">San Pedro y Miquelón</option>
+                                            <option value="VCT">San Vicente y las Granadinas</option>
+                                            <option value="SHN">Santa Helena, Ascensión y Tristán de Acuña</option>
+                                            <option value="LCA">Santa Lucía</option>
+                                            <option value="STP">Santo Tomé y Príncipe</option>
+                                            <option value="SEN">Senegal</option>
+                                            <option value="SRB">Serbia</option>
+                                            <option value="SYC">Seychelles</option>
+                                            <option value="SLE">Sierra leona</option>
+                                            <option value="SGP">Singapur</option>
+                                            <option value="SXM">Sint Maarten (parte holandesa)</option>
+                                            <option value="SYR">Siria, (la) República Árabe</option>
+                                            <option value="SOM">Somalia</option>
+                                            <option value="LKA">Sri Lanka</option>
+                                            <option value="SWZ">Suazilandia</option>
+                                            <option value="ZAF">Sudáfrica</option>
+                                            <option value="SDN">Sudán (el)</option>
+                                            <option value="SSD">Sudán del Sur</option>
+                                            <option value="SWE">Suecia</option>
+                                            <option value="CHE">Suiza</option>
+                                            <option value="SUR">Surinam</option>
+                                            <option value="SJM">Svalbard y Jan Mayen</option>
+                                            <option value="THA">Tailandia</option>
+                                            <option value="TWN">Taiwán (Provincia de China)</option>
+                                            <option value="TZA">Tanzania, República Unida de</option>
+                                            <option value="TJK">Tayikistán</option>
+                                            <option value="IOT">Territorio Británico del Océano Índico (el)</option>
+                                            <option value="ATF">Territorios Australes Franceses (los)</option>
+                                            <option value="TLS">Timor-Leste</option>
+                                            <option value="TGO">Togo</option>
+                                            <option value="TKL">Tokelau</option>
+                                            <option value="TON">Tonga</option>
+                                            <option value="TTO">Trinidad y Tobago</option>
+                                            <option value="TUN">Túnez</option>
+                                            <option value="TKM">Turkmenistán</option>
+                                            <option value="TUR">Turquía</option>
+                                            <option value="TUV">Tuvalu</option>
+                                            <option value="UKR">Ucrania</option>
+                                            <option value="UGA">Uganda</option>
+                                            <option value="URY">Uruguay</option>
+                                            <option value="UZB">Uzbekistán</option>
+                                            <option value="VUT">Vanuatu</option>
+                                            <option value="VAT">Santa Sede[Estado de la Ciudad del Vaticano] (la)</option>
+                                            <option value="VEN">Venezuela, República Bolivariana de</option>
+                                            <option value="VNM">Viet Nam</option>
+                                            <option value="WLF">Wallis y Futuna</option>
+                                            <option value="YEM">Yemen</option>
+                                            <option value="DJI">Yibuti</option>
+                                            <option value="ZMB">Zambia</option>
+                                            <option value="ZWE">Zimbabue</option>
+                                            <option value="ZZZ">Países no declarados</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <p class="form-group">
+                                        <label class="control-label">Código Postal:</label>
+                                        <input class="form-control input-sm text-box single-line" id="lblCustCodigoPostal" name="lblCustCodigoPostal" type="text" value="" autocomplete="off">
+                                    </p>
+                                    <div class="form-group">
+                                        <label class="control-label">Uso de CFDI:</label>
+                                        <select class="form-control input-sm" id="selectUsoCFDI">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="G01" selected>G01 - Adquisición de mercancias</option>
+                                            <option value="G02">G02 - Devoluciones, descuentos o bonificaciones</option>
+                                            <option value="G03">G03 - Gastos en general</option>
+                                            <option value="I01">I01 - Construcciones</option>
+                                            <option value="I02">I02 - Mobilario y equipo de oficina por inversiones</option>
+                                            <option value="I03">I03 - Equipo de transporte</option>
+                                            <option value="I04">I04 - Equipo de computo y accesorios</option>
+                                            <option value="I05">I05 - Dados, troqueles, moldes, matrices y herramental</option>
+                                            <option value="I06">I06 - Comunicaciones telefónicas</option>
+                                            <option value="I07">I07 - Comunicaciones satelitales</option>
+                                            <option value="I08">I08 - Otra maquinaria y equipo</option>
+                                            <option value="D01">D01 - Honorarios médicos, dentales y gastos hospitalarios.</option>
+                                            <option value="D02">D02 - Gastos médicos por incapacidad o discapacidad</option>
+                                            <option value="D03">D03 - Gastos funerales.</option>
+                                            <option value="D04">D04 - Donativos.</option>
+                                            <option value="D05">D05 - Intereses reales efectivamente pagados por créditos hipotecarios (casa habitación).</option>
+                                            <option value="D06">D06 - Aportaciones voluntarias al SAR.</option>
+                                            <option value="D07">D07 - Primas por seguros de gastos médicos.</option>
+                                            <option value="D08">D08 - Gastos de transportación escolar obligatoria.</option>
+                                            <option value="D09">D09 - Depósitos en cuentas para el ahorro, primas que tengan como base planes de pensiones.</option>
+                                            <option value="D10">D10 - Pagos por servicios educativos (colegiaturas)</option>
+                                            <option value="P01">P01 - Por definir</option>
+                                            <option value="S01">Sin efectos fiscales</option>
+                                            <option value="CP01">Pagos</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label">Email:</label>
+                                        <input class="form-control input-sm text-box single-line" id="emailReceptor" name="emailReceptor" type="text" value="" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--   cfdi relacionados -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Cfdi relacionados
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div id="nombre-error_cfdisRel" class="text-danger" style="display: none;"></div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="TipoRelacion_cfdi">Tipo de Relacion</label>
+                                        <select class="form-control input-sm" id="TipoRelacion_cfdi">
+                                            <option value="">Selecciona un tipo de relación</option>
+                                            <option value="01">01-Nota de crédito de los documentos relacionados</option>
+                                            <option value="02">02-Nota de débito de los documentos relacionados</option>
+                                            <option value="03">03-Devolución de mercancía sobre facturas o traslados previos</option>
+                                            <option value="04">04-Sustitución de los CFDI previos</option>
+                                            <option value="05">05-Traslados de mercancias facturados previamente</option>
+                                            <option value="06">06-Factura generada por los traslados previos</option>
+                                            <option value="07">07-CFDI por aplicación de anticipo</option>
+                                            <option value="08">08-Factura generada por pagos en parcialidades</option>
+                                            <option value="09">09-Factura generada por pagos diferidos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="UUID_cfdi">UUID</label>
+                                        <input type="text" class="form-control input-sm" id="UUID_cfdi">
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-primary btn-sm d-block ml-auto" id="btn_addCFDIRel">Agregar</button>
+
+                            <!---button type="button" class="btn btn-danger btn-sm pull-right" id="btn_RemCFDIRel">Eliminar
+                                Seleccionados</button--->
+                            <br>
+                            <table id="tbl_cfdiRel" class="table table-striped table-hover table-condensed dataTable no-footer" role="grid">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting_asc" tabindex="0">Tipo Relacion</th>
+                                        <th class="sorting" tabindex="0">UUID</th>
+                                        <th class="sorting" tabindex="0">Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Forma de pago
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-small">Método de pago:</label>
+                                        <select class="form-control input-sm" id="MetodoPago" required>
+                                            <option value="">Seleccione un método de pago</option>
+                                            <option value="PUE">PUE-Pago en una sola exhibición</option>
+                                            <option value="PPD">PPD-Pago en parcialidades o diferido</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        <label for="select" class="control-label text-small">Forma de pago:</label>
+                                        <select class="form-control input-sm" id="FormaPago" required>
+                                            <option value="">Seleccione una forma de pago</option>
+                                            <option value="01">01-Efectivo</option>
+                                            <option value="02">02-Cheque nominativo</option>
+                                            <option value="03">03-Transferencia electrónica de fondos</option>
+                                            <option value="04">04-Tarjeta de crédito</option>
+                                            <option value="05">05-Monedero electrónico</option>
+                                            <option value="06">06-Dinero electrónico</option>
+                                            <option value="08">08-Vales de despensa</option>
+                                            <option value="12">12-Dación en pago</option>
+                                            <option value="13">13-Pago por subrogación</option>
+                                            <option value="14">14-Pago por consignación</option>
+                                            <option value="15">15-Condonación</option>
+                                            <option value="17">17-Compensación</option>
+                                            <option value="23">23-Novación</option>
+                                            <option value="24">24-Confusión</option>
+                                            <option value="25">25-Remisión de deuda</option>
+                                            <option value="26">26-Prescripción o caducidad</option>
+                                            <option value="27">27-A satisfacción del acreedor</option>
+                                            <option value="28">28-Tarjeta de débito</option>
+                                            <option value="29">29-Tarjeta de servicios</option>
+                                            <option value="30">30-Aplicación de anticipos</option>
+                                            <option value="31">31-Intermediario pagos</option>
+                                            <option value="99">99-Por definir</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label class="control-label text-small">Condiciones de pago:</label>
+                                        <input id="CondicionesDePago" class="form-control input-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label for="select" class="control-label text-small">Moneda:</label>
+                                        <select class="form-control input-sm" id="Moneda">
+                                            <option value="MXN">MXN</option>
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="XXX">XXX</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-sm-6">
+                                    <div class="form-group">
+                                        <label class="control-label text-small">Tipo de cambio:</label>
+                                        <input id="TipoCambio" class="form-control input-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  Conceptos -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Conceptos
+                        </div>
+                        <div class="card-body">
+                            <form action="#" id="form_concepto" method="post" novalidate="novalidate">
+                                <div class="row">
+                                    <div class="form-group col-3 col-sm-3 col-md-2 col-lg-2" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_NoIdentificacion">ID:</label>
+                                        <input class="form-control input-sm text-box single-line" id="Conceptos_NoIdentificacion" name="Conceptos.NoIdentificacion" style="max-width: 100%;width: 100%;" type="text" value="">
+                                    </div>
+                                    <div class="form-group col-9 col-sm-9 col-md-4 col-lg-6" style="padding: 0 5px 0 5px;text-align: left;margin-bottom:5px">
+                                        <label class="control-label text-small" for="Conceptos_Descripcion">Descripción:</label>
+                                        <input class="form-control input-sm text-box single-line" data-val="true" alt="Descripción: Es requerido para precisar la descripción del bien o servicio.<br>" id="Conceptos_Descripcion" name="Conceptos.Descripcion" style="max-width: 100%;width: 100%;" type="text" value="Producto de ejemplo" required>
+                                    </div>
+                                    <div class="form-group col-6 col-sm-6 col-md-4 col-lg-2" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_ClaveProdServ" id="lblNoIdentificacion">Producto/Servicio:</label>
+                                        <input class="form-control input-sm text-box single-line" data-val="true" alt="Clave de Producto/Servicio: Es requerido y deben utilizar las claves del catálogo de productos y servicios.<br>" id="Conceptos_ClaveProdServ" name="Conceptos.ClaveProdServ" style="max-width: 100%;width: 100%;" type="text" value="83101800" required>
+                                    </div>
+                                    <div class="form-group col-6 col-sm-6 col-md-2 col-lg-2" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_ClaveUnidad" id="lblUnidad">Clave Unidad:</label>
+                                        <input class="form-control input-sm text-box single-line" data-val="true" alt="Unidad: Es requerido y deben utilizar las claves del catálogo de unidades.<br>" id="Conceptos_ClaveUnidad" name="Conceptos.ClaveUnidad" style="max-width: 100%;width: 100%;" type="text" value="MWH" required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-6 col-sm-3 col-md-3 col-lg-3" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_Unidad" id="lblUnidad1">Unidad:</label>
+                                        <input class="form-control input-sm text-box single-line" id="Conceptos_Unidad" name="Conceptos.Unidad" style="max-width: 100%;width: 100%;" type="text" value="">
+                                    </div>
+                                    <div class="form-group col-6 col-sm-3 col-md-3 col-lg-3" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_Cantidad">Cantidad:</label>
+                                        <input class="form-control input-sm text-box single-line" data-val="true" alt="Cantidad: Favor de ingresar un valor mayor que 0.01.<br>" data-val-range-max="2147483647" data-val-range-min="0.01" data-val-required="Cantidad: Es requerido para precisar la cantidad de bienes o servicios.<br>" id="Conceptos_Cantidad" name="Conceptos.Cantidad" style="max-width: 100%;width: 100%;" type="text" value="" required>
+                                    </div>
+                                    <div class="form-group col-6 col-sm-3 col-md-3 col-lg-3" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_ValorUnitario">ValorUnitario:</label>
+                                        <input class="form-control input-sm text-box single-line" data-val="true" data-val-number="The field Valor Unitario: must be a number." alt="Valor Unitario: Favor de ingresar un valor mayor que 0.01.<br>" data-val-range-max="2147483647" data-val-range-min="0.01" id="Conceptos_ValorUnitario" name="Conceptos.ValorUnitario" style="max-width: 100%;width: 100%;" type="text" value="" required>
+                                    </div>
+                                    <div class="form-group col-6 col-sm-3 col-md-3 col-lg-3" style="padding: 0 5px 0 5px;">
+                                        <label class="control-label text-small" for="Conceptos_Descuento">Descuento(%):</label>
+                                        <input class="form-control input-sm text-box single-line" id="Conceptos_Descuento" name="Conceptos.Descuento" style="max-width: 100%;width: 100%;" type="text" value="">
+                                    </div><br>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!--  Tabla de Impuestos -->
+                        <div class="row">
+                            <div class="col-1"> </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal_concepto_impuesto">
+                                    Agregar impuestos al concepto
+                                </button>
+                            </div>
+                            <div class="col-7">
+                                <div class="table-responsive">
+                                    <table id="tbl_conceptos_impuestos" class="table table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Tipo</th>
+                                                <th class="text-center">Impuesto</th>
+                                                <th class="text-center">Factor</th>
+                                                <th class="text-center">Tasa o cuota</th>
+                                                <th class="text-center">Eliminar</th> <!-- nueva columna -->
+                                            </tr>
+                                        </thead>
+                                        <tbody id="body_impuestos">
+                                        <tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-1"> </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-sm-8"></div>
+                            <div class="col-sm-3">
+                                <input id="btnAgregarArt" name="btnAgregarArt" type="button" class="btn btn-primary d-block ml-auto float-right" value="Agregar Concepto">
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <!-- tabla de conceptos-->
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-10">
+                                <div class="table-responsive">
+                                    <table id="tbl_conceptos" class="table table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Descripcion</th>
+                                                <th>Producto/Servicio</th>
+                                                <th>Clv. Unidad</th>
+                                                <th>Unidad</th>
+                                                <th>Cantidad</th>
+                                                <th>Valor Unitario</th>
+                                                <th>Importe</th>
+                                                <th>Descuento</th>
+                                                <th>Imp. Retenido</th>
+                                                <th>Imp. Trasladado</th>
+                                                <th>Total</th>
+                                                <th>Impuestos</th>
+                                                <th>Eliminar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                        <tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                        <br>
+                    </div>
+
+
+                    <!-- Modal impuestos para conceptos-->
+                    <div id="modal_concepto_impuesto" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background-color: rgba(255, 255, 255, 0) !important; max-height: 100%;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <!-- Fondo semi-transparente -->
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Impuestos</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <form id="form_impuestos">
+                                        <div class="form-row">
+                                            <div class="form-group col-md-6">
+                                                <label for="Conceptos_Impuesto_Tipo">Tipo:</label>
+                                                <select id="Conceptos_Impuesto_Tipo" name="Conceptos_Impuesto_Tipo" class="form-control" required>
+                                                    <option value="">Seleccionar una opción</option>
+                                                    <option value="T">Traslado</option>
+                                                    <option value="R">Retención</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label for="Conceptos_Impuesto_Clave">Impuesto:</label>
+                                                <select id="Conceptos_Impuesto_Clave" name="Conceptos_Impuesto_Clave" class="form-control" required>
+                                                    <option value="">Selecciona un elemento</option>
+                                                    <option value="001 - ISR">ISR</option>
+                                                    <option value="002 - IVA">IVA</option>
+                                                    <option value="003 - IEPS">IEPS</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label for="Conceptos_Impuesto_Factor">Factor:</label>
+                                                <select id="Conceptos_Impuesto_Factor" name="Conceptos_Impuesto_Factor" class="form-control" required>
+                                                    <option value="">Selecciona un elemento</option>
+                                                    <option value="Tasa">Tasa</option>
+                                                    <option value="Cuota">Cuota</option>
+                                                    <option value="Exento">Exento</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group col-md-6">
+                                                <label for="Conceptos_Impuesto_TasaCuota">Tasa o cuota:</label>
+                                                <input type="number" id="Conceptos_Impuesto_TasaCuota" name="Conceptos_Impuesto_TasaCuota" class="form-control" required>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <small id="nombre-error_impuestos" class="text-danger" style="display:none;"></small>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Terminar de agregar Impuestos</button>
+                                    <button type="button" class="btn btn-primary" id="btn_agregar_imp">Agregar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row">
+                        <div class="col-2">
+                            <input type="number" class="d-none" id="inputTasa">
+                            <input type="number" class="d-none" id="inputTotalPza">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-2">
+
+                            </div>
+                        </div>
+                        <table cellpadding="0" cellspacing="0" border="0" class="display compact table-responsive table-condensed" id="tableConceptos"></table>
+                    </div>
+
+
+                    <!-- Totales -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            Totales
+                        </div>
+
+                        <div class="card-body" id="divTotal">
+                            <div class="row">
+                                <div class="col-12 col-md-6">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <small> <label for="inputTotalLetra" class="control-label" style=" text-align: left !important"> <strong>Total con letra:</strong> </label></small><textarea class="form-control input-sm" rows="4" id="inputTotalLetra" disabled="" style="max-width:100%"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <small> <label class="control-label"><strong>Subtotal</strong></label></small><input id="inputSubtotal" class="form-control text-right input-sm" value="0.00" disabled="">
+                                        </div>
+                                        <div class="form-group">
+                                            <small> <label class="control-label"><strong>Descuento</strong></label></small><input id="inputDescuento" class="form-control text-right input-sm" value="0.00" disabled="">
+                                        </div>
+                                        <div class="form-group" id="divImpuestosTra">
+                                            <small> <label class="control-label"><strong>Total Impuestos Trasladados</strong></label></small><input id="inputImpTras" class="form-control text-right input-sm" value="0.00" disabled="">
+                                        </div>
+                                        <div class="form-group" id="divImpuestosRet">
+                                            <small> <label class="control-label"><strong>Total Impuestos Retenidos</strong></label></small><input id="inputImpRete" class="form-control text-right input-sm" value="0.00" disabled="">
+                                        </div>
+                                        <div class="form-group">
+                                            <small> <label class="control-label"><strong>Total</strong></label></small><input id="inputTotal" class="form-control text-right input-sm" value="0.00" disabled="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- controles -->
+                    <div class="card mb-3">
+                        <div class="card-body text-left ">
+                            <div class="row">
+                                <div class="col-6 col-md-6">
+                                </div>
+                                <div class="col-6 col-md-6">
+                                    <button type="button" class="btn btn-danger" id="btnProductive" data-act="1">Facturar</button>
+                                    <button type="button" class="btn btn-default" id="btnCancelar" data-act="1">Cancelar</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+
+
+
+        // inicializo la tabla de cfdis relacionados
+        var table_cR = $('#tbl_cfdiRel').DataTable({
+            columns: [
+                { data: 'TipoRelacion', title: 'Tipo de Relación' },
+                { data: 'UUID', title: 'UUID' },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    defaultContent: '<button class="btn btn-danger btn-sm btn-eliminar-rel">Eliminar</button>'
+                }
+            ]
+        });
+
+        // inicializo la tabla de impuestos
+        var table_cRImp = $('#tbl_conceptos_impuestos').DataTable({
+            columns: [
+                { data: 'Tipo', title: 'Tipo' },
+                { data: 'Impuesto', title: 'Impuesto' },
+                { data: 'Factor', title: 'Factor' },
+                { data: 'Tasa', title: 'Tasa o cuota' },
+                {
+                    data: null,
+                    orderable: false,
+                    searchable: false,
+                    defaultContent: '<button class="btn btn-danger btn-sm btn-eliminar">Eliminar</button>'
+                }
+            ]
+        });
+
+        //Elimina las columnas con el boton elimnar cfdis relacionados
+        $('#tbl_cfdiRel tbody').on('click', '.btn-eliminar-rel', function () {
+            var fila = table_cR.row($(this).parents('tr'));
+            fila.remove().draw(false);
+        });
+
+
+        $("#btn_addCFDIRel").click(function () {
+
+            const _tipUUID = $("#UUID_cfdi").val();
+            const _tipoRel = $("#TipoRelacion_cfdi").val();
+
+            if (_tipUUID == "" || _tipoRel == "") {
+                $("#nombre-error_cfdisRel").text("Se necesita el tipo de relación y el uuid para agregar un cfdi relacionado.").show();
+
+            } else {
+                // Agregar fila
+                table_cR.row.add({
+                    "TipoRelacion": _tipoRel,
+                    "UUID": _tipUUID
+                }).draw(false);
+
+                $("#UUID_cfdi").val("");
+                $("#TipoRelacion_cfdi").val("");
+                $("#nombre-error_cfdisRel").hide(); // Oculta el mensaje de error si estaba visible
+            }
+        });
+
+
+        // agrega impuestos a la tabla y hace validaciones
+        $("#btn_agregar_imp").off("click").on("click", function () {
+
+            const _tipo = $("#Conceptos_Impuesto_Tipo").val().trim();
+            const _impuesto = $("#Conceptos_Impuesto_Clave").val().trim();
+            const _factor = $("#Conceptos_Impuesto_Factor").val().trim();
+            const _tasa = $("#Conceptos_Impuesto_TasaCuota").val().trim();
+
+            if (_tipo == "" || _impuesto == "" || _factor == "" || _tasa == "") {
+                $("#nombre-error_impuestos").text("Se necesita llenar todos los campos de Impuestos.").show();
+
+            } else {
+                // Agregar fila
+                table_cRImp.row.add({
+                    "Tipo": _tipo,
+                    "Impuesto": _impuesto,
+                    "Factor": _factor,
+                    "Tasa": _tasa
+                }).draw(false);
+
+                $("#nombre-error_impuestos").hide();
+                $("#form_impuestos")[0].reset();
+                $("#modal_concepto_impuesto").modal('hide');
+
+
+
+
+            }
+        });
+
+        //Elimina las columnas con el boton elimnar impuestos
+        $('#tbl_conceptos_impuestos tbody').on('click', '.btn-eliminar', function () {
+            var fila = table_cRImp.row($(this).parents('tr'));
+            fila.remove().draw(false);
+        });
+
+        // pàra agregar conceptos
+        $("#btnAgregarArt").click(function () {
+
+            const campos = [
+                { id: "#Conceptos_NoIdentificacion", nombre: "No. Identificación" },
+                { id: "#Conceptos_Cantidad", nombre: "Cantidad" },
+                { id: "#Conceptos_Descripcion", nombre: "Descripcion" },
+                { id: "#Conceptos_ValorUnitario", nombre: "Valor Unitario" },
+                { id: "#Conceptos_Descuento", nombre: "Descuento" },
+                { id: "#Conceptos_ClaveProdServ", nombre: "Producto/Servicio" },
+                { id: "#Conceptos_ClaveUnidad", nombre: "Clv. Unidad" },
+                { id: "#Conceptos_Unidad", nombre: "Unidad" }   
+            ];
+
+            let camposVacios = [];
+   
+            campos.forEach(function (campo) {
+                const valor = $(campo.id).val();
+                if (valor == "") {
+                    camposVacios.push(campo.nombre);
+                    $(campo.id).addClass("is-invalid"); 
+                } else {
+                    $(campo.id).removeClass("is-invalid");
+                }
+            });
+
+            // Si hay campos vacíos, no continuar
+            if (camposVacios.length > 0) {
+                alert("Por favor llena los siguientes campos:\n- " + camposVacios.join("\n- "));
+                return;
+            }
+
+            const conceptosNoIdentificacion = $("#Conceptos_NoIdentificacion").val();
+            const conceptosCantidad = $("#Conceptos_Cantidad").val();
+            const conceptosDescripcion = $("#Conceptos_Descripcion").val();
+            const conceptosValorUnitario = $("#Conceptos_ValorUnitario").val();
+            const conceptosDescuento = $("#Conceptos_Descuento").val();
+            const conceptosClaveProdServ = $("#Conceptos_ClaveProdServ").val();
+            const conceptosClaveUnidad = $("#Conceptos_ClaveUnidad").val();
+            const conceptosUnidad = $("#Conceptos_Unidad").val();
+            console.log("mando a hacer los calculos");
+            var newConcepto = new Concepto(
+                conceptosNoIdentificacion,
+                conceptosCantidad,
+                conceptosDescripcion,
+                conceptosValorUnitario,
+                conceptosDescuento,
+                conceptosClaveProdServ,
+                conceptosClaveUnidad,
+                conceptosUnidad
+            );
+
+
+            let fila = '<tr>' +
+                '<td>' + newConcepto.conceptosNoIdentificacion + '</td>' +
+                '<td>' + newConcepto.conceptosDescripcion + '</td>' +
+                '<td>' + newConcepto.conceptosClaveProdServ + '</td>' +
+                '<td>' + newConcepto.conceptosClaveUnidad + '</td>' +
+                '<td>' + newConcepto.conceptosUnidad + '</td>' +
+                '<td>' + newConcepto.conceptosCantidad + '</td>' +
+                '<td>' + newConcepto.conceptosValorUnitario + '</td>' +
+                '<td>' + newConcepto.conceptosImporte + '</td>' +
+                '<td>' + newConcepto.conceptosDescuento + '</td>' +
+                '<td>' + newConcepto.totalRetencion + '</td>' +
+                '<td>' + newConcepto.totalTranslado + '</td>' +
+                '<td>' + newConcepto.Total + '</td>' +
+                '<td>' + newConcepto.ImpuestosT + '</td>' +
+                '<td><button class="btn btn-danger btn-sm btnEliminarFila">Eliminar</button></td></tr>';
+            $("#tbl_conceptos").append(fila);
+            actualizarImportes();
+            campos.forEach(function (campo) {
+                $(campo.id).val("").removeClass("is-invalid");
+            });
+
+            // Limpiar campos del impuesto (si aplica)
+            $("#Conceptos_Impuesto_Tipo").val("");
+            $("#Conceptos_Impuesto_Clave").val("");
+            $("#Conceptos_Impuesto_Factor").val("");
+            $("#Conceptos_Impuesto_TasaCuota").val("");
+            $("#tbl_conceptos_impuestos tbody").empty();
+        });
+
+        function Concepto(Id, Cantidad, Descripcion, PrecioU, Descuento, ClvProd, ClvUnidad, Unidad) {
+            this.conceptosNoIdentificacion = Id;
+            this.conceptosDescripcion = Descripcion;
+            this.conceptosClaveProdServ = ClvProd;
+            this.conceptosClaveUnidad = ClvUnidad;
+            this.conceptosUnidad = Unidad;
+            this.conceptosCantidad = Cantidad;
+            this.conceptosValorUnitario = PrecioU;
+            this.conceptosImporte = (this.conceptosCantidad * (this.conceptosValorUnitario)).toFixed(4);
+            var _temDes = Number(Descuento) / 100;
+            this.conceptosDescuento = (this.conceptosImporte * _temDes).toFixed(4);
+            var _tempBase = (this.conceptosImporte - this.conceptosDescuento).toFixed(4);
+            var _des = (Descuento == "") ? 0 : Descuento;
+            var imp_array = {
+                "Descuento": _des,
+                "Traslados": [],
+                "Retenciones": [],
+                "InformacionAduanera": [],
+                "CuentaPredial": [],
+                "ComplementoConcepto": [],
+                "Parte": []
+            };
+            //recorrer tabla de impuestos
+            var tbl_conceptos_impuestos = $('#tbl_conceptos_impuestos');
+
+            const _tipo = $("#Conceptos_Impuesto_Tipo").val().trim();
+            const _impuesto = $("#Conceptos_Impuesto_Clave").val().trim();
+            const _factor = $("#Conceptos_Impuesto_Factor").val().trim();
+            const _tasa = $("#Conceptos_Impuesto_TasaCuota").val().trim();
+
+            var rows = $("#body_impuestos > tr");
+            var totalTrans = 0;
+            var total_ieps = 0
+            var totalReten = 0;
+            $.each(rows, function (index, row) {
+                var cells = $(row).find("td");
+                var tipo = $(cells[0]).text();
+                var clave_nombre = $(cells[1]).text().split('-');
+                var clave = clave_nombre[0].trim();
+                var nombre = clave_nombre[1].trim();
+                var factor = $(cells[2]).text();
+                var tasa = $(cells[3]).text();
+                if (tipo == "T") {
+                    if (clave == "003") { //si el tipo de impuesto es ieps
+                        var TasaOCuota = (Number(tasa) / 100);
+                        var claveimpuesto = clave;
+                        var tipofactor = factor;
+                        var nombre = "";
+                        var impues = nombre;
+                        var Importe = Number(_tempBase) * Number(TasaOCuota);
+                        totalTrans += Importe;
+                        imp_array.Traslados.push({
+                            "Base": _tempBase,
+                            "Impuesto": claveimpuesto,
+                            "TipoFactor": tipofactor,
+                            "TasaOCuota": (TasaOCuota).toFixed(6),
+                            "Importe": Importe.toFixed(4)
+                        });
+                        total_ieps += Number(Importe);
+                    } else { //si es iva
+                        var base = Number(_tempBase) + Number(total_ieps);
+                        var TasaOCuota = (Number(tasa) / 100);
+                        var claveimpuesto = clave;
+                        var tipofactor = factor;
+                        var nombre = "";
+                        var impues = nombre;
+                        var Importe = Number(base) * Number(TasaOCuota);
+                        totalTrans += Importe;
+                        imp_array.Traslados.push({
+                            "Base": base.toFixed(4),
+                            "Impuesto": claveimpuesto,
+                            "TipoFactor": tipofactor,
+                            "TasaOCuota": (TasaOCuota).toFixed(6),
+                            "Importe": Importe.toFixed(4)
+                        });
+                    }
+                } else { //R
+                    var TasaOCuota = (Number(_tempBase) / 100);
+                    var claveimpuesto = clave;
+                    var tipofactor = factor;
+                    var nombre = "";
+                    var impues = nombre;
+                    var Importe = Number(_tempBase) * Number(TasaOCuota);
+                    totalReten += Importe;
+                    imp_array.Retenciones.push({
+                        "Base": _tempBase,
+                        "Impuesto": claveimpuesto,
+                        "TipoFactor": tipofactor,
+                        "TasaOCuota": (TasaOCuota).toFixed(6),
+                        "Importe": Importe.toFixed(4)
+                    });
+                }
+            });
+            this.totalTranslado = Number(totalTrans).toFixed(4);
+            this.totalRetencion = Number(totalReten).toFixed(4);
+            this.ImpuestosT = JSON.stringify(imp_array);
+            console.log("salida this.ImpuestosT", this.ImpuestosT);
+            this.Total = _tempBase;
+        }
+
+
+
+        $(document).on('click', '.btnEliminarFila', function () {
+            $(this).closest('tr').remove(); 
+        });
+
+        function actualizarImportes() {
+
+            var table = $('#tbl_conceptos').DataTable();
+            var subtotal = 0;
+            var descuento = 0;
+            var impRete = 0;
+            var impTras = 0;
+            var total = 0;
+            $("#inputTotalLetra").text("");
+            if (table.rows().count() > 0) {
+                subtotal = table.column(7).data().reduce(function (a, b) {
+                    return Number(a) + Number(b);
+                });
+                descuento = table.column(8).data().reduce(function (a, b) {
+                    return Number(a) + Number(b);
+                });
+                impRete = table.column(9).data().reduce(function (a, b) {
+                    return Number(a) + Number(b);
+                });
+                impTras = table.column(10).data().reduce(function (a, b) {
+                    return Number(a) + Number(b);
+                });
+                total = table.column(11).data().reduce(function (a, b) {
+                    return Number(a) + Number(b);
+                });
+            }
+            $('#inputSubtotal').val(Number(subtotal).toFixed(2));
+            $('#inputDescuento').val(Number(descuento).toFixed(2));
+            $('#inputImpRete').val(Number(impRete).toFixed(2));
+            $('#inputImpTras').val(Number(impTras).toFixed(2));
+            $('#inputTotal').val((Number(subtotal) - Number(descuento) + Number(impTras) - Number(impRete)).toFixed(2));
+            var cfdiTotal = parseFloat(Str2Num($("#inputTotal").val().trim()).replace(/,/g, ''));
+            var codigoMoneda = $("#Moneda option:selected").val();
+            var data = {
+                totalComprobante: cfdiTotal,
+                CodigoMoneda: codigoMoneda
+            }
+            setCantidadLetra(data);
+        }
+
+
+        function Str2Num(strNumber) {
+            if (strNumber != null)
+                return strNumber.replace(/,/g, "");
+        }
+
+        function setCantidadLetra(data) {
+            if ($.isNumeric(data.totalComprobante)) {
+                if (data.totalComprobante > 0) {
+                    let letras = numeroALetras(data.totalComprobante);
+                    exito_setCantidadLetra({
+                        msg: letras
+                    });
+                }
+            }
+        }
+
+
+        function numeroALetras(num) {
+            function Unidades(num) {
+                switch (num) {
+                    case 1: return 'UNO';
+                    case 2: return 'DOS';
+                    case 3: return 'TRES';
+                    case 4: return 'CUATRO';
+                    case 5: return 'CINCO';
+                    case 6: return 'SEIS';
+                    case 7: return 'SIETE';
+                    case 8: return 'OCHO';
+                    case 9: return 'NUEVE';
+                }
+                return '';
+            }
+
+            function Decenas(num) {
+                let decena = Math.floor(num / 10);
+                let unidad = num % 10;
+
+                switch (decena) {
+                    case 1:
+                        switch (unidad) {
+                            case 0: return 'DIEZ';
+                            case 1: return 'ONCE';
+                            case 2: return 'DOCE';
+                            case 3: return 'TRECE';
+                            case 4: return 'CATORCE';
+                            case 5: return 'QUINCE';
+                            default: return 'DIECI' + Unidades(unidad).toLowerCase();
+                        }
+                    case 2:
+                        if (unidad === 0) return 'VEINTE';
+                        else return 'VEINTI' + Unidades(unidad).toLowerCase();
+                    case 3: return DecenaY('TREINTA', unidad);
+                    case 4: return DecenaY('CUARENTA', unidad);
+                    case 5: return DecenaY('CINCUENTA', unidad);
+                    case 6: return DecenaY('SESENTA', unidad);
+                    case 7: return DecenaY('SETENTA', unidad);
+                    case 8: return DecenaY('OCHENTA', unidad);
+                    case 9: return DecenaY('NOVENTA', unidad);
+                    case 0: return Unidades(unidad);
+                }
+            }
+
+            function DecenaY(strSin, numUnidades) {
+                if (numUnidades > 0)
+                    return strSin + ' Y ' + Unidades(numUnidades);
+                return strSin;
+            }
+
+            function Centenas(num) {
+                let centenas = Math.floor(num / 100);
+                let resto = num % 100;
+
+                switch (centenas) {
+                    case 1:
+                        if (resto > 0) return 'CIENTO ' + Decenas(resto);
+                        return 'CIEN';
+                    case 2: return 'DOSCIENTOS ' + Decenas(resto);
+                    case 3: return 'TRESCIENTOS ' + Decenas(resto);
+                    case 4: return 'CUATROCIENTOS ' + Decenas(resto);
+                    case 5: return 'QUINIENTOS ' + Decenas(resto);
+                    case 6: return 'SEISCIENTOS ' + Decenas(resto);
+                    case 7: return 'SETECIENTOS ' + Decenas(resto);
+                    case 8: return 'OCHOCIENTOS ' + Decenas(resto);
+                    case 9: return 'NOVECIENTOS ' + Decenas(resto);
+                }
+                return Decenas(resto);
+            }
+
+            function Seccion(num, divisor, strSingular, strPlural) {
+                let cientos = Math.floor(num / divisor);
+                let resto = num - (cientos * divisor);
+
+                let letras = '';
+
+                if (cientos > 0)
+                    if (cientos > 1) letras = numeroALetrasEntero(cientos) + ' ' + strPlural;
+                    else letras = strSingular;
+
+                if (resto > 0) letras += ' ';
+
+                return letras;
+            }
+
+            function Miles(num) {
+                let divisor = 1000;
+                let cientos = num % divisor;
+                return Seccion(num, divisor, 'MIL', 'MIL') + Centenas(cientos);
+            }
+
+            function Millones(num) {
+                let divisor = 1000000;
+                let cientos = num % divisor;
+                return Seccion(num, divisor, 'UN MILLÓN', 'MILLONES') + Miles(cientos);
+            }
+
+            function numeroALetrasEntero(num) {
+                if (num === 0) return 'CERO';
+                else if (num < 100) return Decenas(num);
+                else if (num < 1000) return Centenas(num);
+                else if (num < 1000000) return Miles(num);
+                else return Millones(num);
+            }
+
+            // Aquí comienza la lógica principal
+            let data = num.toString().split('.');
+            let enteros = parseInt(data[0]);
+            let centavos = data.length > 1 ? parseInt(data[1].substring(0, 2)) : 0;
+
+            let letrasMoneda = numeroALetrasEntero(enteros) + ' PESOS';
+
+            if (centavos > 0) {
+                letrasMoneda += ' ' + centavos.toString().padStart(2, '0') + '/100 M.N.';
+            } else {
+                letrasMoneda += ' 00/100 M.N.';
+            }
+
+            return letrasMoneda;
+        }
+
+        function setCantidadLetra(data) {
+            if ($.isNumeric(data.totalComprobante)) {
+                if (data.totalComprobante > 0) {
+                    let letras = numeroALetras(data.totalComprobante);
+                    exito_setCantidadLetra({
+                        msg: letras
+                    });
+                }
+            }
+        }
+
+        function exito_setCantidadLetra(response) {
+            $("#inputTotalLetra").text(response.msg);
+        }
+
+        //trae el emisor de la bd probamos fucnon , aqui mandaremos a llamar la funcion para recuperar a losemisores
+        $(document).on('change', '#selectEmisor', function (event) {
+            event.preventDefault();
+            var dat_fis = $("#selectEmisor").val();
+            if (dat_fis != "") {
+                var datos = {
+                    datos_fiscales: dat_fis
+                };
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    data: datos,
+                    dataType: "json",
+                    success: function (response) {
+                        console.log("traera la lista de emisores....", response);
+                        $('#container-datosFiscales').html(response.html);
+                    },
+                    error: function (response) {
+                        console.log(response);
+                    }
+                });
+            } else $('#container-datosFiscales').empty();
+
+        });
+
+
+        $(document).on('click', '#btnProductive', function (event) {
+            event.preventDefault();
+            var act = $(this).data('act');
+            debugger;
+            limpiarValidacion();
+
+            var v1 = validarEmisor();
+            var v2 = validarReceptor();
+            var v3 = validarConceptos();
+            var v4 = validarFormasPago();
+
+            if (v1 && v2 && v3 && v4) {
+                var actualizar = (act == "1") ? true : false;
+                TimbrarCFDI(actualizar);
+            }
+        });
+
+        function TimbrarCFDI(actualizar) {
+
+            var id_comprobante = "";
+            if (actualizar)
+                men = ".";
+            id_comprobante = "0"
+            alertify.success('Generando CFDI');
+
+            //obtener datos Emisor
+            var _emisor = getEmisor();
+            var _receptor = getReceptor();
+            var _relacion = getRelacionados();  
+            var _formaPago = getFormaPago();
+            var _conceptos = getConceptos();
+            var _totales = getTotales();
+            var _adicionales = (typeof $("#inputTotalLetra").val() !== 'undefined') ? $("#inputTotalLetra").val() : "";
+            var data = {
+                actualizar: actualizar,
+                id_comprobante: id_comprobante,
+                emisor: JSON.stringify(_emisor),
+                receptor: JSON.stringify(_receptor),
+                formaPago: JSON.stringify(_formaPago),
+                conceptos: JSON.stringify(_conceptos),
+                totales: JSON.stringify(_totales),
+                adicionales: _adicionales,
+                relacionados: JSON.stringify(_relacion)
+            };
+            console.log("Infortmacion que se mandara a timbrar::::::",data);
+            $.ajax({
+                type: "post",
+                url: "",  //traera la ruta para mandar a tibra el comprpobante
+                data: data,
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response.exito) {
+                        console.log("se mandara la salida de exito");
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                },
+                complete: function () {
+                    alertify.error("Error al facturar")
+                }
+            });
+           
+        }
+
+        function getEmisor() {
+            var _rfc = $("#lblRfcEmisor").val();
+            var _regimenFiscal = $("#regimenFiscalEmisor").val();
+            var _nombre = $("#razonSocialEmisor").val();
+            var _lblSerie = $("#lblSerie").val();
+            var _lblFolio = $("#lblFolio").val();
+            var _tipoComprobanteEmisor = $('#tipoComprobanteEmisor').val();
+           
+            
+            var emisor = {
+                Rfc: _rfc,
+                Nombre: _nombre,
+                RegimenFiscal: _regimenFiscal,
+                Serie: _lblSerie,
+                Folio: _lblFolio,
+                SelectCfdi: _tipoComprobanteEmisor
+            };
+            console.log("Datos de emisor::", emisor);
+            return emisor;
+        }
+
+        function getReceptor() {
+            var _rfc = $("#lblRfcReceptor").val();
+            var _lblCustCodigoPostal = $("#lblCustCodigoPostal").val();
+            var _nombre = $("#lblRazonReceptor").val();
+            var _selectUsoCFDI = $("#selectUsoCFDI").val();
+            var _NumRegIdTrib = $("#NumRegIdTrib").val();
+            var _emailReceptor = $("#emailReceptor").val();
+            var _lblCustPais = $("#selectResidenciaFiscal").val();
+
+            var receptor = {
+                Rfc: _rfc,
+                Nombre: _nombre,
+                ResidenciaFiscal: _lblCustPais,
+                NumRegIdTrib: _NumRegIdTrib,
+                UsoCFDI: _selectUsoCFDI,
+                Cp: _lblCustCodigoPostal,
+                Email: _emailReceptor
+            };
+            console.log("Datos de receptor::", receptor);
+            return receptor;
+        }
+
+        function getRelacionados() {
+            var rows = $('#tbl_cfdiRel >tbody > tr > td.dataTables_empty');
+            if (rows.length == 0) {
+                var table = $('#tbl_cfdiRel').DataTable();
+                var $tableCount = table.rows().count();
+                var CfdiRelacionado = [];
+                var relacion = "";
+                for (var i = 0; i < $tableCount; i++) {
+                    var _data = table.rows().data()[i];
+                    if (typeof _data.UUID !== 'undefined') {
+                        CfdiRelacionado[i] = {
+                            UUID: _data.UUID
+                        };
+                        relacion = _data.TipoRelacion;
+                    }
+                }
+                var CfdiRelacionados = {
+                    "CfdiRelacionado": CfdiRelacionado,
+                    "TipoRelacion": relacion
+                };
+                console.log("Datos de CfdiRelacionados::", CfdiRelacionados);
+                return CfdiRelacionados;
+            }
+            return null;
+        }
+
+        function getFormaPago() {
+            var _metodoPago = $('#MetodoPago').val();
+            var _formaPago = $('#FormaPago').val();
+            var _condicionesDePago = $('#CondicionesDePago').val();
+            var _moneda = $('#Moneda').val();
+            var _tipoCambio = $('#TipoCambio').val();
+
+            var formaPago = {
+                MetodoPago: _metodoPago,
+                CondicionesDePago: _condicionesDePago,
+                Moneda: _moneda,
+                FormaPago: _formaPago,
+                TipoCambio: _tipoCambio
+            };
+            console.log("Datos de formaPago::", formaPago);
+            return formaPago;
+        }
+
+        function getConceptos() {
+            var heads = [];
+            $("#tbl_conceptos thead").find("th").each(function () {
+                heads.push($(this).text().replace(".", "").replace(" ", "").trim());
+            });
+            heads.push("Impuestos");
+            var table = $('#tbl_conceptos').DataTable();
+            var $tableCount = table.rows().count();
+            var Conceptos = [];
+            for (var i = 0; i < $tableCount; i++) {
+                cur = {};
+                var _data = table.rows().data()[i];
+                for (var n = 0; n < _data.length; n++) {
+                    var title = heads[n].replace('/', '_');
+                    cur[title] = _data[n];
+                }
+                Conceptos.push(cur);
+            }
+
+            console.log("Datos de Conceptos::", Conceptos);
+            return Conceptos;
+        }
+
+        function getTotales() {
+            var _Subtotal = ($('#inputSubtotal').val() == "0.00") ? "0" : $('#inputSubtotal').val();
+            var _Descuento = $('#inputDescuento').val();
+            var _ImpuestosTrasladados = $('#inputImpTras').val();
+            var _ImpuestosRetenidos = $('#inputImpRete').val();
+            var _Total = ($('#inputTotal').val() == "0.00") ? "0" : $('#inputTotal').val();
+            var totales = {
+                Subtotal: _Subtotal,
+                Descuento: _Descuento,
+                ImpuestosTrasladados: _ImpuestosTrasladados,
+                ImpuestosRetenidos: _ImpuestosRetenidos,
+                Total: _Total
+            };
+
+            console.log("Datos de totales::", totales);
+            return totales;
+        }
+
+
+
+        function validarConceptos() {
+            var valido = true;
+            var table = $('#tbl_conceptos').DataTable();
+            var nRows = table.rows().count();
+            if (nRows == 0) {
+                valido = false;
+                alertify.error("No se han detectado conceptos");
+            }
+            return valido;
+        }
+
+        function validarReceptor() {
+            var valido = false;
+            var selectUsoCFDI = ($('#selectUsoCFDI').val() == "") ? false : true;
+            var lblRfcReceptor = ($('#lblRfcReceptor').val() == "") ? false : true;
+            var lblCustCodigoPostal = ($('#lblCustCodigoPostal').val() == "") ? false : true;
+            var lblRazonReceptor = ($('#lblRazonReceptor').val() == "") ? false : true;
+            var NumRegIdTrib = ($('#NumRegIdTrib').val() == "") ? false : true;
+            
+            if (selectUsoCFDI && lblRfcReceptor && lblCustCodigoPostal && lblRazonReceptor && NumRegIdTrib) {
+                valido = true;
+            } else {
+                if (!selectUsoCFDI) {
+                    $('#selectUsoCFDI').addClass("is-invalid");
+                    $('#selectUsoCFDI').siblings("label").addClass("text-danger");
+                    alertify.error("Falta definir el uso de CFDI.")
+                }
+                if (!lblRfcReceptor) {
+                    $('#lblRfcReceptor').addClass("is-invalid");
+                    $('#lblRfcReceptor').siblings("label").addClass("text-danger");
+                    alertify.error("Falta asignar el rfc del receptor.")
+                }
+                if (!lblCustCodigoPostal) {
+                    $('#lblCustCodigoPostal').addClass("is-invalid");
+                    $('#lblCustCodigoPostal').siblings("label").addClass("text-danger");
+                    alertify.error("Falta asignar Código Postal del receptor.")
+                }
+                if (!lblRazonReceptor) {
+                    $('#lblRazonReceptor').addClass("is-invalid");
+                    $('#lblRazonReceptor').siblings("label").addClass("text-danger");
+                    alertify.error("Falta Razón Social del receptor.")
+                }
+                if (!NumRegIdTrib) {
+                    $('#NumRegIdTrib').addClass("is-invalid");
+                    $('#NumRegIdTrib').siblings("label").addClass("text-danger");
+                    alertify.error("Falta asignar No de registro de identidad fiscal.")
+                }
+            }
+            return valido;
+        }
+
+
+        function validarEmisor() {
+            var valido = false;
+            var rfcEmisor = ($('#lblRfcEmisor').val() == "") ? false : true;
+            var clvRegimenFis = ($('#regimenFiscalEmisor').text() == "") ? false : true;
+            var razonSocialEmisor = ($('#razonSocialEmisor').val() == "") ? false : true;
+            var tipoComprobanteEmisor = ($('#tipoComprobanteEmisor').text() == "") ? false : true;
+            if (rfcEmisor && clvRegimenFis && razonSocialEmisor && tipoComprobanteEmisor) {
+                valido = true;
+            } else {
+                if (!rfcEmisor)
+                    $('#lblRfcEmisor').addClass("is-invalid");
+                    $('#lblRfcEmisor').siblings("label").addClass("text-danger"); 
+                    alertify.error("Falta asignar EL RFC del emisor.");
+
+                if (!clvRegimenFis) {
+                    $('#selectEmisor').addClass("is-invalid");
+                    $('#selectEmisor').siblings("label").addClass("text-danger"); 
+                    alertify.error("Falta asignar la clave del régimen fiscal del emisor.");
+                }
+                if (!razonSocialEmisor) {
+                    $('#razonSocialEmisor').addClass("is-invalid");
+                    $('#razonSocialEmisor').siblings("label").addClass("text-danger");
+                    alertify.error("Falta definir la razón social del emisor.");
+                }
+                if (!tipoComprobanteEmisor) {
+                    $('#tipoComprobanteEmisor').addClass("is-invalid");
+                    $('#tipoComprobanteEmisor').siblings("label").addClass("text-danger");
+                    alertify.error("Falta el tipo de comprobante, seccion emisor.");
+                }
+
+            }
+            return valido;
+        }
+
+        function limpiarValidacion() {
+            $('#selectEmisor').removeClass("is-invalid");
+            $('#selectEmisor').siblings("label").removeClass("text-danger");
+            $('#regimenFis').siblings("label").removeClass("bg-danger text-danger");
+            $('#nombreRazonSoc').siblings("label").removeClass("bg-danger text-danger");
+            $('#selectSucursal').removeClass("is-invalid");
+            $('#selectUsoCFDI').removeClass("is-invalid");
+            $('#selectUsoCFDI').siblings("label").removeClass("text-danger")
+            $('#lblRfcReceptor').removeClass("is-invalid");
+            $('#lblRfcReceptor').siblings("label").removeClass("bg-danger text-danger");
+        }
+
+        function validarFormasPago() {
+            var valido = false;
+            var MetodoPago = ($('#MetodoPago').val() == "") ? false : true;
+            var FormaPago = ($('#FormaPago').val() == "") ? false : true;
+            var CondicionesDePago = ($('#CondicionesDePago').val() == "") ? false : true;
+            var TipoCambio = ($('#TipoCambio').val() == "") ? false : true;
+            if (MetodoPago && FormaPago && CondicionesDePago && TipoCambio) {
+                valido = true;
+            } else {
+                if (!MetodoPago)
+                    $('#MetodoPago').addClass("is-invalid");
+                    $('#MetodoPago').siblings("label").addClass("text-danger");
+                    alertify.error("Falta el Método de pago.");
+                if (!FormaPago) {
+                    $('#FormaPago').addClass("is-invalid");
+                    $('#FormaPago').siblings("label").addClass("text-danger");
+                    alertify.error("Falta Forma de pago.");
+                }
+                if (!CondicionesDePago) {
+                    $('#CondicionesDePago').addClass("is-invalid");
+                    $('#CondicionesDePago').siblings("label").addClass("text-danger");
+                    alertify.error("Falta Condiciones de pago.");
+                }
+                if (!TipoCambio) {
+                    $('#TipoCambio').addClass("is-invalid");
+                    $('#TipoCambio').siblings("label").addClass("text-danger");
+                    alertify.error("Falta Tipo de cambio.");
+                }
+            }
+            return valido;
+        }
+
+        function validarConceptos() {
+            var valido = true;
+            var table = $('#tbl_conceptos').DataTable();
+            var nRows = table.rows().count();
+            if (nRows == 0) {
+                valido = false;
+                alertify.error("No se han detectado conceptos");
+            }
+            return valido;
+        }
+
+    });
+</script>
+
+{% endblock %}

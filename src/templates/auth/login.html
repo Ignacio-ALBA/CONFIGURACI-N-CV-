@@ -1,0 +1,58 @@
+{% extends './base.html' %}
+{% block title %}Login{% endblock %}
+{% block customCss %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/login.css') }}"/>
+<link rel="stylesheet" href="{{url_for('static', filename='css/style.css') }}"/>
+<link rel="stylesheet" href="{{url_for('static', filename='css/fontawesome_6/css/all.min.css') }}"/>
+{% endblock %}
+{% block body %}
+<form action="/login" method="POST">
+  <div class="container valign-wrapper" id="content" style="height: 100%">
+    <div class="row">
+      <div class="col s12">
+        <form action="/app/login" method="POST">
+          <div class="card-panel z-depth-5" style="border-radius: 10px">
+           
+            <img src="/static/img/didipsa_HD.png" width="100%" height="150px" />
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <br />
+            {% for message in messages %}
+            <div class="alert show" id="myAlert">
+              <span class="fas fa-exclamation-circle"></span>
+              <span class="msg">{{ message }}</span>
+              <span class="close-btn" onclick="closeAlert()">
+                <span class="fas fa-times"></span>
+              </span>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <div class="input-field">
+              <i class="material-icons prefix">account_circle</i>
+              <input class="validate" id="user_name" name="username" type="text" required="" />
+              <label for="user_name">Usuario</label>
+            </div>
+            <div class="input-field">
+              <i class="material-icons prefix">vpn_key</i>
+              <input class="validate" id="user_pass" name="password" type="password" required="" />
+              <label for="user_pass">Contraseña</label>
+            </div>
+            <div class="row center-align">
+              <input class="btn-large green darken-3" type="submit" value="Iniciar Sesión" style="border-radius: 10px"/>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</form>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+  function closeAlert() {
+    var alert = document.getElementById("myAlert");
+    alert.style.display = "none";
+  }
+</script>
+{% endblock %}

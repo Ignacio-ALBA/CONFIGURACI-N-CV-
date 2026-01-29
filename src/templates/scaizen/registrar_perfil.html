@@ -1,0 +1,90 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Perfil{% endblock %}
+
+{% block tables %}
+<button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn">
+    <i class="fa-solid fa-circle-arrow-left"></i>
+  </button>
+<h1 class="titulo">Registrar Perfil</h1>
+<hr class="text-black d-none d-sm-block" />
+
+<div   class="formulario">
+
+<form id="registroForm" method="POST" action="{{ url_for('app_scaizen.registrar_perfil') }}">
+    <input type="hidden" name="id" value="{{ id }}">
+
+    <div>
+        <label for="nombre" class="block text-gray-800 font-semibold text-sm">Nombre:</label>
+        <div class="mt-2">
+            <input type="text" id="nombre" name="nombre"
+                class="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800" required>
+        </div>
+    </div>
+
+    <div>
+        <label for="descripcion" class="block text-gray-800 font-semibold text-sm">Descripción:</label>
+        <div class="mt-2">
+            <input type="text" id="descripcion" name="descripcion"
+                class="block w-56 rounded-md py-1.5 px-2 ring-1 ring-inset ring-gray-400 focus:text-gray-800" required>
+        </div>
+    </div>
+
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <button type="button" id="cancelar" class="btn btn-outline-danger">Cancelar</button>
+    <button type="button" id="registrar" class="btn btn-outline-success">Registrar</button>
+</form>
+</div>
+<script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+<script>
+    // Manejar evento de clic para el botón de registro
+    document.getElementById("cancelar").addEventListener("click", function() {
+        // Aquí puedes agregar cualquier lógica adicional que necesites
+        console.log("Se hizo clic en el botón de perfil");
+        // Obtener la URL utilizando url_for de Flask y redireccionar
+        var url = "{{ url_for('app_scaizen.usuarios_perfiles') }}";
+        window.location.href = url;
+    });
+</script>
+<script>
+    $('#registrar').click(function(event) {
+        event.preventDefault();
+        // Obtener los valores de los campos nombre y descripción
+        var nombre = $('#nombre').val();
+        var descripcion = $('#descripcion').val();
+        var id_user_creator = $('#id').val()
+        if (nombre && descripcion) {
+            var horaActual = new Date().toLocaleTimeString(); // Obtener la hora actual
+            var formData = {
+                'nombre': nombre,
+                'descripcion': descripcion,
+                'horaActual': horaActual, // Agregar la hora actual a los datos
+                'id_user_creator': id_user_creator,
+                'csrf_token': "{{ csrf_token() }}"
+            };
+            // Enviar los datos al servidor utilizando AJAX
+            $.ajax({
+                type: 'POST',
+                url: "{{ url_for('app_scaizen.registrar_perfil') }}",
+                data: formData,
+                success: function(response) {
+                    // Manejar la respuesta del servidor aquí si es necesario
+                    console.log("Respuesta del servidor:", response);
+                },
+                error: function(error) {
+                    // Manejar el error si ocurre uno
+                    console.error("Error:", error);
+                }
+            });
+        } else {
+            // Manejar el caso en el que los campos no estén completos
+            console.log("Por favor complete todos los campos.");
+        }
+    });
+</script>
+{% endblock %}

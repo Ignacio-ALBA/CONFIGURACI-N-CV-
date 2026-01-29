@@ -1,0 +1,26 @@
+{% extends './base.html' %} {% block title %}Error 404 {% endblock %} {% block
+customCss %}
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/style2.css') }}"
+/>
+
+{% endblock %} {% block body %}
+
+<div class="container">
+  <div class="content">
+    <h1 class="display-1 fw-bold">404</h1>
+    <p class="fs-3">
+      <span class="text-danger">Opps!</span> Pagina no encontrada.
+    </p>
+    <p class="lead">La página que estás buscando no existe.</p>
+    <a onclick="goBack()" class="btn btn-primary">Regresar</a>
+  </div>
+</div>
+
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+{% endblock %}

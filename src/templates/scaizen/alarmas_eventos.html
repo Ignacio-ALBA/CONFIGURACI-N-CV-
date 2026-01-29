@@ -1,0 +1,728 @@
+{% extends 'scaizen.html' %} 
+
+{% block title %}
+{% if type == 'alarmas' %}Alarmas{% else %}Eventos{% endif %}
+
+{% endblock %} 
+
+{% block styles %}
+<style>
+  th {
+    padding: 5px;
+  }
+
+  td {
+    padding: 3px;
+  }
+
+  td:nth-child(1),
+  th:nth-child(1) {
+    width: 4%;
+    /* 10% del ancho de la tabla */
+      text-align: center;
+  }
+
+  td:nth-child(2),
+  th:nth-child(2) {
+    width: 10%;
+    /* 25% del ancho de la tabla */
+      text-align: center;
+  }
+
+  td:nth-child(3),
+  th:nth-child(3) {
+    width: 10%;
+    /* 20% del ancho de la tabla */
+      text-align: center;
+  }
+
+  td:nth-child(4),
+  th:nth-child(4) {
+    width: 4%;
+    /* 10% del ancho de la tabla */
+      text-align: center;
+  }
+
+  td:nth-child(5),
+  th:nth-child(5) {
+    width: 62%;
+    /* 25% del ancho de la tabla */
+      text-align: start;
+  }
+
+  td:nth-child(6),
+  th:nth-child(6) {
+    width: 10%;
+    /* 20% del ancho de la tabla */
+      text-align: center;
+  }
+</style>
+{% endblock %} 
+
+{%block tables %}
+<div class="formulario">
+  {% if type == 'alarmas' %}
+  <label class="titulo">REPORTE DE ALARMAS</label><br />
+  <p class="dir_vista">{%if blueprint == 'app_distribuidor'%}Distribuidor{%else%}Comercializador{%endif%}/Reporte
+    Alarmas</p>
+  {% else %}
+  <label class="titulo">REPORTE DE EVENTOS</label><br />
+  <p class="dir_vista">{%if blueprint == 'app_distribuidor'%}Distribuidor{%elif blueprint%}Comercializador{%endif%}/Reporte
+    Eventos</p>
+  {% endif %}
+</div>
+  
+  <hr class="text-black d-none d-sm-block" />
+  
+  <div class="formulario">
+    <div class="formulario_bts">
+      <div style="width: 40%; display: flex; justify-content:  space-between; align-items: center;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input type="hidden" name="data" id="dataInput" />
+        <label> Fecha inicio:</label>
+        <input class="date_pickers" type="date" id="datepicker_start" name="selected_start" required />
+        <label> Fecha fin:</label>
+        <input class="date_pickers" type="date" id="datepicker_end" name="selected_start" required />
+      </div>
+      <!--<select style="text-align: center" name="transport2" id="productoSelect" class="btn options_input">
+        <option value="" disabled selected>Seleccione Tipo</option>
+        <option value="all" >Todos</option>
+        {% for producto in productos_options %}
+        <option value="{{ producto['producto_name'] }}">{{ producto['producto_name'].upper() }}</option>
+        {% endfor %}
+      </select>-->
+      <div style="width: 25%; display: flex; align-items:center; justify-content: space-between;">
+      <button style="width: 120px; display: flex; justify-content: space-between; align-items: center;" type="button"
+        id="AddRegistro" class="AddRegistro btn btn-outline-success">
+          <i class="bi bi-plus"></i><a style="color: black;">Registro</a>
+        </button>
+      {% if
+      current_user.RolPerms['Distribuidor']['sub_permisos']['DReportes']['sub_permisos']['DReportedealarmas']['sub_permisos']['DReportedealarmasVer']
+      or
+      current_user.RolPerms['Distribuidor']['sub_permisos']['DReportes']['sub_permisos']['DReportedeeventos']['sub_permisos']['DReportedeeventosVer']
+      or
+      current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportedeeventos']['sub_permisos']['CReportedeeventosVer']
+      %}
+        <button type="button" id="obtenerfechas" class="btn">
+          Enviar
+        </button>
+        {% endif %}
+      {% if
+      current_user.RolPerms['Distribuidor']['sub_permisos']['DReportes']['sub_permisos']['DReportedealarmas']['sub_permisos']['DReportedealarmasPDF']
+      or
+      current_user.RolPerms['Distribuidor']['sub_permisos']['DReportes']['sub_permisos']['DReportedeeventos']['sub_permisos']['DReportedeeventosPDF']
+      or
+      current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportedeeventos']['sub_permisos']['CReportedeeventosPDF']
+      %}
+      <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;"
+        onclick="generate_pdf()" type="button" id="PDF" class="btn btn-outline-success">
+        <i class="fas fa-file-pdf"></i><a style="color: black;"> PDF</a>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Tu tabla va aquí -->
+    <div class="reporte_info" style="width: 100%; height: 100%; overflow-y: auto;">
+    <!--Cambio jul-25-->
+    <h5 id="nu_registros_ini">Total de registros </h5>
+    <!--<table id="tabla-cargas> -->
+    <table id="tabla-cargas-even">
+    <!--Fin cambio jul-25-->  
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Fecha y Hora</th>
+            <th>{% if type == "eventos" %}Usuario{% else %} Proceso{% endif%}</th>
+            <th>Tipo</th>
+            <th>Descripción</th>
+            <th>Identificación</th>
+          </tr>
+        </thead>
+        <tbody>
+        <!--Cambio jul-25-->
+        <!--<tr style="display: none">-->
+        <tr id="loader-row-even" style="display: none">
+        <!--Fin cambio jul-25-->  
+            <td style="height: 25px;"> </td>
+            <td style="height: 25px;"> </td>
+            <td style="height: 25px;"> </td>
+            <td style="height: 25px;"> </td>
+            <td style="height: 25px;"> </td>
+            <td style="height: 25px;"> </td>
+          </tr>
+        </tbody>
+      </table>
+     
+
+
+    </div>
+  <!-- style="display: none;"-->
+  <nav aria-label="Paginación" class="ulpgcds-pager" id="navbar" style="display: none;">
+    <div id="mostrando" class="ulpgcds-pager"></div>
+    <div id="paginacion" class="pagination-container"></div>
+  </nav>
+  </div>
+
+<!-- Modal -->
+<div id="registroModal" class="modal"
+  style="display: none; position: fixed; inset: 0; min-height: 100vh; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; justify-content: center; align-items: center;">
+  <div class="modal-content"
+    style="width: 50%; padding: 20px; border: 1px solid #ccc; background-color: #fff; border-radius: 8px;">
+    <h3>Nuevo Registro</h3><br />
+    <form id="registroForm">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <h5 for="tipo">Clase:</h5>
+      <select id="clase" name="clase" class="btn options_input" required>
+        <option value="" disabled selected>Seleccione Clase</option>
+        <option value="alarma">Alarma</option>
+        <option value="evento">Evento</option>
+      </select><br /><br />
+      <h5 for="tipo">Tipo:</h5>
+      <select id="tipo" name="tipo" class="btn options_input" required>
+        <option value="" disabled selected>Seleccione Tipo</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+      </select><br /><br />
+      <h5 for="datepicker_start">Fecha y Hora:</h5>
+      <input type="datetime-local" id="datetimepicker" name="fecha_hora" required /><br /><br />
+      <h5 for="tipo">Responsable:</h5>
+      <select id="responsable" name="responsable" class="btn options_input" required>
+        <option value="" disabled selected>Seleccione Responsable</option>
+        <option value="Sistema">SISTEMA</option>
+        {% for responsable in usuarios %}
+        <option value="{{ responsable }}">{{ responsable.upper() }}</option>
+        {% endfor %}
+      </select><br /><br />
+      <h5 for="campo1">Descripción</h5>
+      <input type="text" id="descripcion" name="descripcion" required /><br /><br />
+      <div id="componenteField" style="display: none;">
+        <h5 for="componente">Componente:</h5>
+        <input type="text" id="componente" name="componente" />
+      </div>
+      <h5 for="campo2">Identificación</h5>
+      <input type="text" id="identificacion" name="identificacion" required /><br /><br />
+      <button type="button" id="closeModal" class="btn btn-danger">Cancelar</button>
+      <button type="reset" class="btn btn-secondary">Limpiar</button>
+      <button type="submit" class="btn btn-success">Guardar</button>
+    </form>
+  </div>
+</div>
+
+  {% endblock %}
+
+  {% block scripts %}
+<!--Cambio jul-25-->
+<script>
+
+$(document).ready(function() {
+  let startDate, endDate;
+  var date = new Date();
+  var fecha = date.toISOString().substring(0, 10);
+  startDate = fecha;
+  endDate   = fecha;
+  datepicker_start.value = fecha;
+  datepicker_end.value = fecha;
+  let type = "{{type}}";
+  let maxPagesToShow = 5;
+  let totalPaginas = 0;
+  let paginaActual = 1;
+  const range = 2;
+  var pageNumber = 1;
+  var csrfToken = $("input[name='csrf_token']").val();
+  $.ajax({
+            url: "{{ url_for('app_scaizen.' + blueprint + '.' + type) }}",
+            type: 'POST',
+            data: {
+              csrf_token: csrfToken,
+              datepicker_start: startDate,
+              datepicker_end: endDate,
+              page: pageNumber
+            },
+            success: function(response) {
+              paginaActual = response.paginactual;
+                totalPaginas = response.total_paginas;
+                $("#tabla-cargas-even tbody").empty();
+                //if (response.datos_usuario_consulta && response.datos_usuario_consulta.length > 0) {
+                  console.log(response.data);
+
+                    response.data.forEach((data, index) => {
+                        var numeroDeFila = index + 1;
+                        //              <td>${numeroDeFila}</td>
+                        row = `
+                            <tr>
+                              <td>${data.id}</td>
+                              <td>${formatDateTime(data.fecha)}</td>
+                              <td>${data.usuario != null ? data.usuario : 'Desconocido'}</td>
+                              <td>${data.tipo}</td>
+                              <td>${data.mensaje}</td>
+                              <td>${data.identificacion}</td>
+                            </tr>
+                        `
+                        $("#tabla-cargas-even tbody").append(row);
+                    });
+
+                document.getElementById("nu_registros_ini").innerHTML = "Total de registros " + response.cantidad;
+
+                $("#paginacion").empty();
+                let paginationHtml = '';
+
+                if (paginaActual > 1) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="1">Primera</a>`;
+                }
+
+                if (paginaActual > 1) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual - 1}">Anterior</a>`;
+                }
+
+                let startPage = Math.max(1, paginaActual - range);
+                let endPage = Math.min(totalPaginas, paginaActual + range);
+
+                for (let i = startPage; i <= endPage; i++) {
+                if (i === paginaActual) {
+                    paginationHtml += `<span class="pagination-current">${i}</span>`;
+                } else {
+                    paginationHtml += `<a href="#" class="pagination-link" data-page="${i}">${i}</a>`;
+                }
+                }
+
+                if (paginaActual < totalPaginas) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual + 1}">Siguiente</a>`;
+                }
+
+                if (paginaActual < totalPaginas) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${totalPaginas}">Última</a>`;
+                }
+
+                $("#paginacion").append(paginationHtml);
+                $("#navbar").show();
+
+                $(".pagination-link").click(function (e) {
+                e.preventDefault();
+                let pageNumber = $(this).data("page");
+                loadPage(pageNumber);
+                });
+
+            },
+            error: function(xhr, status, error) {
+                console.log("Error en la solicitud AJAX:", error);
+            }
+        });
+    });    
+
+
+    function loadPage(pageNumber) {
+      const csrfToken = $("input[name='csrf_token']").val();
+      var mostrar = "mostrar";
+      $.ajax({
+        url: "{{ url_for('app_scaizen.' + blueprint + '.' + type) }}",
+        type: "POST",
+        data: {
+          csrf_token: csrfToken,
+          selected_start: startDate,
+          selected_end: endDate,
+          page: pageNumber
+        },
+        beforeSend: function () {
+          $("#search").css("display", "none");
+          $("#loader-row").show();
+        },
+        success: function (response) {
+          console.log("Respuesta del servidor:", response);
+          $("#loader-row").hide();
+          updatePagination(response);
+        },
+        error: function (xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", error);
+        }
+      });
+    }
+
+</script>
+<!--Fin cambio jul-25-->
+
+  <script>
+    var datepicker_start = document.getElementById('datepicker_start');
+    var datepicker_end = document.getElementById('datepicker_end');
+  document.addEventListener('DOMContentLoaded', function () {
+      const hoy = new Date();
+      hoy.setDate(hoy.getDate()); // Restar un día
+
+      // Formatear la fecha en formato 'YYYY-MM-DD' para el atributo 'max'
+      const anio = hoy.getFullYear();
+      const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Agregar cero si es menor a 10
+      const dia = hoy.getDate().toString().padStart(2, '0'); // Agregar cero si es menor a 10
+      const fechaMax = `${anio}-${mes}-${dia}`;
+
+      // Asignar el valor a 'max' en el input de fecha
+      document.getElementById('datepicker_start').setAttribute('max', fechaMax);
+      document.getElementById('datepicker_end').setAttribute('max', fechaMax);
+
+    });
+
+    async function generate_pdf() {
+
+      data_start = datepicker_start.value
+      date_end = datepicker_end.value
+
+      // Verificar que todos los campos están completos
+      if (data_start && date_end) {
+      show_load_window('PDF');
+          try {
+              // Construir la URL con los parámetros
+              var url = "{{ url_for('app_scaizen.'+ blueprint + '.alarms_events_mensual_pdf') }}";
+              url += '?datepicker_start=' + encodeURIComponent(data_start) +
+          '&datepicker_end=' + encodeURIComponent(date_end) +
+                    '&type={{type}}';
+
+              // Hacer el fetch para obtener el PDF
+              const response = await fetch(url, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              });
+
+              // Verificar si la respuesta es correcta
+              if (!response.ok) {
+                  const errorData = await response.json();
+                  alert('Error al generar el informe: ' + errorData.error);
+                  hide_load_window();
+                  return;  // Detener la ejecución si hay un error
+              }
+
+              // Verificar si la respuesta es un PDF
+              const contentType = response.headers.get('Content-Type');
+              if (contentType && contentType.includes('application/pdf')) {
+                  const pdfBlob = await response.blob();
+
+                  // Obtener el nombre del archivo desde el encabezado 'Content-Disposition'
+                  let filename = 'informe_mensual.pdf'; // Valor por defecto
+                  const disposition = response.headers.get('Content-Disposition');
+                  if (disposition && disposition.indexOf('attachment') !== -1) {
+                      const matches = /filename[^;=\n]*=((['"]).*?\2|([^;\n]*))/i.exec(disposition);
+                      if (matches != null && matches[1]) {
+                          filename = matches[1].replace(/['"]/g, ''); // Limpiar comillas
+                      }
+                  }
+
+                  // Crear una URL temporal para descargar el PDF
+                  const pdfUrl = window.URL.createObjectURL(pdfBlob);
+                  const link = document.createElement('a');
+                  link.href = pdfUrl;
+                  link.setAttribute('download', filename); // Nombre del archivo
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+              } else {
+                  const jsonResponse = await response.json();
+                  alert(jsonResponse.error || 'Error inesperado al generar el informe.');
+              }
+
+          } catch (error) {
+              console.error('Error fetching the mensual informe:', error);
+              alert('Error al obtener el informe mensual. Por favor, intente nuevamente.');
+          }
+          hide_load_window();
+      } else {
+        hide_load_window();
+          // Mostrar alerta si falta algún campo
+          alert('Por favor, complete todos los campos.');
+      }
+    }
+
+    function formatDateTime(dateTimeString) {
+        // Crear un objeto Date a partir de la cadena de fecha
+        const date = new Date(dateTimeString);
+
+        // Obtener los componentes de la fecha y hora
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes empieza en 0
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        // Formatear la fecha y hora
+        return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+  $(document).ready(function () {
+
+      $('#clase').on('change', function () {
+        if ($(this).val() === 'alarma') {
+          $('#componenteField').show(); // Mostrar el campo "Componente"
+        } else {
+          $('#componenteField').hide(); // Ocultar el campo "Componente"
+        }
+      });
+
+      let startDate, endDate;
+      let type = "{{type}}";
+      let maxPagesToShow = 5;
+      let totalPaginas = 0;
+      let paginaActual = 1;
+      const range = 2;
+    function updatePagination(response) {
+                    paginaActual = response.paginactual;
+                    totalPaginas = response.total_paginas;
+                    $("#loader-row").hide();
+                    console.log(response);
+                    if (response.data) {
+                      let num_resgistros = response.data.length
+                      var rows = `
+                      <hr class="text-black d-none d-sm-block">
+                      <div style="width: 1005; height: auto; display: flex; justify-content: center; align-items: center; margin-bottom: 5px;"><h5>Total de registros ${num_resgistros}</h5></div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Número</th>
+                            <th>Fecha y Hora</th>
+                            <th>${type === "eventos" ? "Usuario" : "Proceso"}</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Identificación</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                      `
+        response.data.forEach(function (data) {
+                        console.log(data);
+          if (type == "eventos") {
+                          rows += `
+                            <tr>
+                              <td>${data.id}</td>
+                              <td>${formatDateTime(data.fecha)}</td>
+                              <td>${data.usuario != null ? data.usuario : 'Desconocido'}</td>
+                              <td>${data.tipo}</td>
+                              <td>${data.mensaje}</td>
+                              <td>${data.identificacion}</td>
+                            </tr>
+                          `
+          } else {
+                          rows += `
+                            <tr>
+                              <td>${data.id}</td>
+                              <td>${formatDateTime(data.fecha)}</td>
+                              <td>${data.proceso}</td>
+                              <td>${data.tipo}</td>
+                              <td>${data.mensaje}</td>
+                              <td>${data.identificacion}</td>
+                            </tr>
+                          `
+                        }
+                        
+                        
+                      });
+
+                      rows += `
+                          </tbody>
+                        </table>
+                        <div style="width: 1005; height: auto; display: flex; justify-content: center; align-items: center; margin-top: 5px;"><h5>Total de registros ${num_resgistros}</h5></div>
+                        `
+                      // Agregar las filas construidas a la tabla
+                      $('.reporte_info').html(rows);
+  
+
+                    } else {
+                        console.log("No se encontraron datos");
+                    }
+                      // Información de la paginación
+                      $("#mostrando").html(`
+                      Mostrando ${response.mostrando} de ${response.cantidad} registros | Páginas: ${paginaActual} / ${totalPaginas}
+                    `);
+
+                    // Paginación
+                    $("#paginacion").empty();
+                    let paginationHtml = '';    
+                    // Primer botón
+                    if (paginaActual > 1) {
+                      paginationHtml += `<a href="#" class="pagination-link" data-page="1">Primera</a>`;
+                    }
+
+                    // Botón de anterior
+                    if (paginaActual > 1) {
+                      paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual - 1}">Anterior</a>`;
+                    }
+
+                    // Rango de páginas
+                    let startPage = Math.max(1, paginaActual - range);
+                    let endPage = Math.min(totalPaginas, paginaActual + range);
+
+                    // Asegurar que no exceda el máximo de páginas a mostrar
+                    if (endPage - startPage + 1 > maxPagesToShow) {
+                      if (paginaActual - range < 1) {
+                        endPage = Math.min(maxPagesToShow, totalPaginas);
+                      } else if (paginaActual + range > totalPaginas) {
+                        startPage = Math.max(totalPaginas - maxPagesToShow + 1, 1);
+                      }
+                    }
+
+                    for (let i = startPage; i <= endPage; i++) {
+                      if (i === paginaActual) {
+                        paginationHtml += `<span class="pagination-current">${i}</span>`;
+                      } else {
+                        paginationHtml += `<a href="#" class="pagination-link" data-page="${i}">${i}</a>`;
+                      }
+                    }
+
+                    // Botón de siguiente
+                    if (paginaActual < totalPaginas) {
+                      paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual + 1}">Siguiente</a>`;
+                    }
+
+                    // Último botón
+                    if (paginaActual < totalPaginas) {
+                      paginationHtml += `<a href="#" class="pagination-link" data-page="${totalPaginas}">Última</a>`;
+                    }
+
+                    $("#paginacion").append(paginationHtml);
+
+                    // Mostrar el contenedor de paginación
+                    $("#navbar").show();
+
+                    // Manejar clics en los enlaces de paginación
+                    $(".pagination-link").click(function (e) {
+                      e.preventDefault();
+                      let pageNumber = $(this).data("page");
+                      loadPage(pageNumber);
+                    });
+      }
+
+    function loadPage(pageNumber) {
+          var csrfToken = $("input[name='csrf_token']").val();
+
+            $.ajax({
+                url: "{{ url_for('app_scaizen.' + blueprint + '.' + type) }}",
+                type: 'POST',
+                data: {
+                  csrf_token: csrfToken,
+                  datepicker_start: startDate,
+                  datepicker_end: endDate,
+                  page: pageNumber
+
+                },
+        success: function (response) {
+                  updatePagination(response);
+ 
+          if (response.error) {
+                        alert(response.error);
+                  }
+                },
+        error: function (xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        }
+
+
+
+    $('#obtenerfechas').on('click', function () {
+        // Obtener el token CSRF y otros datos necesarios
+
+        var datepicker_start = $('#datepicker_start').val();
+        var datepicker_end = $('#datepicker_end').val();
+        startDate = datepicker_start
+      endDate = datepicker_end
+        if (datepicker_start && datepicker_end) {
+          show_load_window()
+          loadPage(1);
+          hide_load_window();
+      } else {
+            alert('Por favor, complete todos los campos.');
+        }
+      });
+
+      // Manejar clic en el botón AddRegistro
+    $('.AddRegistro').on('click', function () {
+        $('#registroModal').fadeIn();
+        $('#registroModal').css({
+          'display': 'flex',
+          'justify-content': 'center',
+          'align-items': 'center'
+        });
+      });
+
+      // Cerrar el modal al hacer clic en la "x"
+    $('#closeModal').on('click', function () {
+        $('#registroModal').fadeOut();
+      });
+
+      // Cerrar el modal al hacer clic fuera del contenido del modal
+    $(window).on('click', function (event) {
+        if ($(event.target).is('#registroModal')) {
+          $('#registroModal').fadeOut();
+        }
+      });
+
+      // Manejar el envío del formulario
+    $('#registroForm').on('submit', function (event) {
+        event.preventDefault();
+
+        // Obtener los datos del formulario
+        const csrfToken = $("input[name='csrf_token']").val();
+        const clase = $('#clase').val();
+        const tipo = $('#tipo').val();
+        const fecha_hora = $('#datetimepicker').val();
+        const responsable = $('#responsable').val();
+        const descripcion = $('#descripcion').val();
+        const identificacion = $('#identificacion').val();
+
+        let componente = null;
+        if ($('#componenteField').is(':visible')) {
+          componente = $('#componente').val();
+        }
+        const data = {
+          csrf_token: csrfToken,
+          clase: clase,
+          tipo: tipo,
+          fecha_hora: fecha_hora,
+          responsable: responsable,
+          descripcion: descripcion,
+          identificacion: identificacion
+        };
+
+        if (componente) {
+          data.componente = componente;
+        } 
+          
+        // Enviar los datos al endpoint mediante AJAX
+        $.ajax({
+          url: "{{ url_for('app_scaizen.' + blueprint + '.registrar_alarma_evento') }}",
+          type: 'POST',
+          data: data,
+        success: function (response) {
+            if (response.success) {
+              alert('Registro guardado exitosamente.');
+              $('#registroModal').fadeOut();
+              $('#registroForm')[0].reset(); // Limpiar el formulario
+            } else {
+              alert('Error al guardar el registro: ' + response.error);
+            }
+          },
+        error: function (xhr, status, error) {
+            console.error('Error en la solicitud AJAX:', error);
+            alert('Ocurrió un error al guardar el registro. Por favor, intente nuevamente.');
+          }
+        });
+      });
+    });
+  </script>
+
+
+{% endblock %}

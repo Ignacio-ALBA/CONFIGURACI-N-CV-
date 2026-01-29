@@ -1,0 +1,100 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Usuarios {% endblock %}
+
+{% block tables %}
+
+<label class="titulo">Reporte de actividad de Usuarios </label><br>
+
+<form method="post" action="#">
+    <label>Fecha de inicio:</label>
+
+    <input type="text" id="datepicker_start" name="selected_start" required>
+
+    <label>Fecha de finalización:</label>
+
+    <input class="datepicker" type="text" id="datepicker_end" name="selected_end" required>
+
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">Enviar</button>
+</form>
+
+<!-- Tu tabla va aquí -->
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-start" colspan="1">Nombre</th>
+            <th class="text-start" colspan="1">Nombre de usuario</th>
+            <th class="text-start" colspan="1">Roles</th>
+            <th class="text-start" colspan="1">Estado </th>
+            <th class="text-start" colspan="2">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-start">Gerardo Martines</td>
+            <td class="text-start">Gerardo </td>
+            <td class="text-start">Operador</td>
+            <td class="text-start">Activo</td>
+            <td class="text-start"><button type="button" class="btn btn-primary btn-sm">Editar</button></td>
+            <td class="text-start"><button type="button" class="btn btn-danger btn-sm">Deshabilitar</button></td>
+
+        </tr>
+        <!-- Agrega más filas según sea necesario -->
+    </tbody>
+</table>
+
+<script>
+    $(function() {
+        var startDate, endDate;
+        $("#datepicker_start").datepicker({
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct',
+                'Nov', 'Dic'
+            ],
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1, // Lunes como primer día de la semana
+            onSelect: function(selectedDate) {
+                // Al seleccionar una fecha en el primer datepicker
+                startDate = $(this).datepicker('getDate');
+                // Configura la opción minDate del segundo datepicker para ser un día después de la fecha seleccionada en el primer datepicker
+                $("#datepicker_end").datepicker("option", "minDate", addDays(startDate, 1));
+                startDate = $(this).datepicker('getDate');
+            }
+        });
+        $("#datepicker_end").datepicker({
+            dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+            monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto',
+                'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ],
+            monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct',
+                'Nov', 'Dic'
+            ],
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1, // Lunes como primer día de la semana
+            onSelect: function(selectedDate) {
+                endDate = $(this).datepicker('getDate');
+            }
+        });
+        $("#obtenerfechas").click(function() {
+            // Aquí puedes usar las variables startDate y endDate como desees
+            if  (startDate && endDate) {
+                console.log("Fecha de inicio: ", startDate);
+                console.log("Fecha de finalización: ", endDate);
+            } else {
+                console.log("Seleccione ambas fechas");
+            }
+        });
+
+        function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return result;
+        }
+    });
+</script>
+{% endblock %}

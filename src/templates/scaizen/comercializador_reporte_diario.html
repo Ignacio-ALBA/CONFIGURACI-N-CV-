@@ -1,0 +1,963 @@
+{% extends 'scaizen.html' %} 
+
+{% block title %}REPORTE DIARIO DE TANQUE {% endblock %} 
+
+{% block tables %}
+  <!--<button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn">
+    <i class="fa-solid fa-circle-arrow-left"></i>
+  </button>-->
+  
+  <div class="formulario">
+    <label class="titulo">REPORTE DIARIO DE TANQUE</label> 
+    <p class="dir_vista">Comercializador/Reporte Diario</p>
+  </div>
+  <hr class="text-black d-none d-sm-block" />
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
+  <div class="formulario">
+    <div class="formulario_bts">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+      <input type="hidden" name="data" id="dataInput" />
+      <label> Seleccionar fecha:</label>
+      <input type="date" id="datepicker_start" name="selected_start" required />
+
+      <select style="text-align: center" name="transport2" id="productoSelect" class="btn options_input">
+        <option value="" disabled selected>Seleccione el Producto</option>
+        <option value="all" >Todos</option>
+        {% for producto in productos_options %}
+        <option value="{{ producto['producto_name'] }}">{{ producto['producto_name'].upper() }}</option>
+        {% endfor %}
+      </select>
+      <select style="text-align: center" name="transport1" id="tanqueSelect" class="btn options_input">
+        <option value="" disabled selected>Seleccione el Tanque</option>
+      </select>
+      {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioVer']%}
+      <button type="button" id="obtenerfechas" class="btn">
+        Enviar
+      </button>
+      {% endif %}
+      {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioGenerar']%}
+      <button onclick="generate_mensual_report()" type="button" class="btn btn-outline-success" id="bt_generar" style="display: none;">
+        GENERAR
+      </button>
+      {% endif %}
+      {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioPDF']%}
+      <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="generate_pdf()" type="button" id="PDF" class="btn btn-outline-success">
+        <i class="fas fa-file-pdf"></i><a style="color: black;">  PDF</a>
+      </button>
+      {% endif %}
+      {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioJSON']%}
+      <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="download_json_file()" type="button" id="JSON" class="btn btn-outline-success">
+        <i class="fab fa-js"></i><a style="color: black;"> JSON</a>
+      </button>
+      {% endif %}
+      {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioXML']%}
+      <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="download_xml_file()" type="button" id="XML" class="btn btn-outline-success">
+        <i class="fas fa-file-excel"></i><a style="color: black;">XML</a> 
+      </button>
+      {% endif %}
+    </div>
+
+    <!-- Tu tabla va aquí -->
+    <div class="reporte_info" style="width: 100%; height: 100%; overflow-y: auto;">
+    </div>
+  </div>
+  <!-- Modal -->
+  <div id="configuracionModal" class="modal fade" tabindex="-1" aria-labelledby="configuracionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="configuracionModalLabel">Configuración</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="pressureField" class="form-label">Presión Absoluta:</label>
+            <input type="text" class="form-control" id="pressureField" name="pressureField" required>
+          </div>
+          <div class="mb-3">
+            <label for="costField" class="form-label">Costo:</label>
+            <input type="text" class="form-control" id="costField" name="costField" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="saveChanges">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+
+<script>
+  const productos = {{ productos_options | tojson }};
+  const productos_colors = {{ productos_color | tojson }};
+  let all_tanques = []
+
+  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']['sub_permisos']['CReportediarioGenerar']%}
+  function generate_mensual_report() {
+    // Obtiene la URL de la ruta del servidor usando Jinja para Flask
+    const url = "{{ url_for('app_scaizen.'+ blueprint + '.diario_tanques') }}";
+    // Obtiene el token CSRF del campo oculto en el formulario
+    var csrfToken = $("input[name='csrf_token']").val();
+    // Crea un objeto FormData
+    const formData = new FormData();
+
+
+    let startDate = document.getElementById('datepicker_start').value + ' 00:00:00';
+    let generar = true;
+    
+    
+
+    // Agrega los datos al FormData
+    if(startDate){
+    formData.append('startDate', startDate);
+    formData.append('generar', generar);
+    formData.append('csrf_token', csrfToken);
+    // Realiza la solicitud fetch
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        // Verifica si la respuesta fue exitosa (código de estado 200-299)
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json(); // Convierte la respuesta a JSON
+    })
+    .then(data => {
+        // Maneja los datos recibidos
+        if(data.error){
+          alert(data.error)
+        }else{
+          if(data['response'] == true){
+            alert("El reporte se genero con éxito, ahora puedes descargarlo.")
+          }
+          if(data['response'] == false){
+            alert("Error al generar el reporte, vuelve a intentar generarlo.")
+          }
+        }
+        document.getElementById('bt_generar').style.display = 'none';
+        //loadPage(1);
+    })
+    .catch(error => {
+        // Maneja cualquier error ocurrido durante la solicitud
+        console.error('There was a problem with the fetch operation:', error);
+    });
+    }else{
+      alert("Ingresa un una fecha para poder generar el reporte.")
+    }
+    
+  }
+
+  {% endif %}
+
+  async function generate_pdf() {
+      var startDateValue = document.getElementById('datepicker_start').value;
+      var productoSelect = document.getElementById('productoSelect').value;
+      var tanqueSelect = document.getElementById('tanqueSelect').value;
+
+      // Verificar que todos los campos están completos
+      if (startDateValue && productoSelect && tanqueSelect) {
+        show_load_window('PDF');
+          try {
+            startDate = new Date(startDateValue);
+
+              // Construir la URL con los parámetros
+              var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_PDF') }}";
+              url += '?productoSelect=' + encodeURIComponent(productoSelect) +
+                    '&tanqueSelect=' + encodeURIComponent(tanqueSelect) +
+                    '&startDate=' + encodeURIComponent(startDate.toISOString());
+              console.log(url);
+              
+              // Hacer el fetch para obtener el PDF
+              const response = await fetch(url, {
+                  method: 'GET',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              });
+
+              // Verificar si la respuesta es correcta
+              if (!response.ok) {
+                  const errorData = await response.json();
+                  hide_load_window();
+                  alert('Error al generar el informe: ' + errorData.error);
+                  return;  // Detener la ejecución si hay un error
+              }
+
+              // Verificar si la respuesta es un PDF
+              const contentType = response.headers.get('Content-Type');
+              if (contentType && contentType.includes('application/pdf')) {
+                  const pdfBlob = await response.blob();
+
+                  // Obtener el nombre del archivo desde el encabezado 'Content-Disposition'
+                  let filename = 'informe_mensual.pdf'; // Valor por defecto
+                  const disposition = response.headers.get('Content-Disposition');
+                  if (disposition && disposition.indexOf('attachment') !== -1) {
+                      const matches = /filename[^;=\n]*=((['"]).*?\2|([^;\n]*))/i.exec(disposition);
+                      if (matches != null && matches[1]) {
+                          filename = matches[1].replace(/['"]/g, ''); // Limpiar comillas
+                      }
+                  }
+
+                  // Crear una URL temporal para descargar el PDF
+                  const pdfUrl = window.URL.createObjectURL(pdfBlob);
+                  const link = document.createElement('a');
+                  link.href = pdfUrl;
+                  link.setAttribute('download', filename); // Nombre del archivo
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+              } else {
+                  const jsonResponse = await response.json();
+                  alert(jsonResponse.error || 'Error inesperado al generar el informe.');
+                  if(jsonResponse.action = 'redirect'){
+                    window.location = '/scaizen/';
+                  }
+                  hide_load_window();
+                  document.getElementById('bt_generar').style.display = 'initial';
+              }
+
+          } catch (error) {
+              console.error('Error fetching the mensual informe:', error);
+              alert('Error al obtener el informe mensual. Por favor, intente nuevamente.' +error);
+          }
+          hide_load_window()
+      } else {
+          // Mostrar alerta si falta algún campo
+          hide_load_window()
+          alert('Por favor, complete todos los campos.');
+      }
+    }
+  
+  async function download_json_file() {
+    var datepicker_start = document.getElementById('datepicker_start').value;
+
+    // Verificar que todos los campos están completos
+    if (datepicker_start) {
+      show_load_window('JSON');
+        try {
+            // Construir la URL para obtener el archivo JSON
+            var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_JSON') }}"; // Ajusta la URL según sea necesario
+            url += '?datepicker_start=' + encodeURIComponent(datepicker_start);
+
+            // Hacer el fetch para obtener el JSON
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            // Verificar si la respuesta es correcta
+            if (!response.ok) {
+                const errorData = await response.json();
+                hide_load_window()
+                alert('Error al descargar el archivo JSON: ' + (errorData.error || 'Error desconocido'));
+                console.log(errorData.error);
+                
+                return;  // Detener la ejecución si hay un error
+            }
+
+            // Obtener el encabezado Content-Disposition para extraer el nombre del archivo
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let fileName = 'archivo.json'; // Valor por defecto
+            if (contentDisposition) {
+                // Buscar el filename dentro de Content-Disposition
+                const match = contentDisposition.match(/filename="?([^"]+)"?/);
+                if (match && match[1]) {
+                    fileName = match[1];  // Nombre del archivo extraído
+                }
+            }
+            
+
+            // Verificar si el contenido es JSON
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+                // Obtener el contenido JSON
+                const jsonData = await response.json();
+
+                // Verificar si hay un error en la respuesta JSON
+                if (jsonData.error) {
+                    alert(jsonData.error || 'Error inesperado al generar el informe.');
+                    hide_load_window();
+                    document.getElementById('bt_generar').style.display = 'initial';
+                    return;
+                }
+
+                // Convertir el JSON a un Blob
+                const jsonBlob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+
+                // Crear una URL temporal para descargar el JSON
+                const jsonUrl = window.URL.createObjectURL(jsonBlob);
+                const link = document.createElement('a');
+                link.href = jsonUrl;
+                link.setAttribute('download', fileName); // Nombre del archivo
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Liberar la URL temporal
+                window.URL.revokeObjectURL(jsonUrl);
+            } else {
+                alert('Respuesta no es de tipo JSON.');
+            }
+
+        } catch (error) {
+            console.error('Error al obtener el archivo JSON:', error);
+            alert('Error al obtener el archivo JSON. Por favor, intente nuevamente.');
+        }
+        hide_load_window()
+    } else {
+      hide_load_window()
+        // Mostrar alerta si falta algún campo
+        alert('Por favor, complete todos los campos.');
+    }
+}
+
+  async function download_xml_file() {
+    var datepicker_start = document.getElementById('datepicker_start').value;
+      // Verificar que todos los campos están completos
+      if (datepicker_start) {
+        show_load_window('XML');
+          try {
+              // Construir la URL para obtener el archivo XML
+              var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_XML') }}"; // Ajusta la URL según sea necesario
+              url += '?datepicker_start=' + encodeURIComponent(datepicker_start);
+
+              // Hacer el fetch para obtener el archivo XML
+              const response = await fetch(url, {
+                  method: 'GET',
+                  headers: {
+                      'X-Requested-With': 'XMLHttpRequest'
+                  }
+              });
+
+              // Verificar si la respuesta es correcta
+              if (!response.ok) {
+                  const errorData = await response.text(); // Leer el error como texto
+                  hide_load_window()
+                  alert('Error al descargar el archivo XML: ' + errorData);
+                  console.log(errorData);
+                  
+                  return;
+              }
+              // Obtener el encabezado Content-Disposition para extraer el nombre del archivo
+              const contentDisposition = response.headers.get('Content-Disposition');
+                let fileName = 'archivo.json'; // Valor por defecto
+                if (contentDisposition) {
+                    // Buscar el filename dentro de Content-Disposition
+                    const match = contentDisposition.match(/filename="?([^"]+)"?/);
+                    if (match && match[1]) {
+                        fileName = match[1];  // Nombre del archivo extraído
+                    }
+                }
+
+              // Verificar si el contenido es un archivo XML
+              const contentType = response.headers.get('Content-Type');
+              if (contentType && contentType.includes('application/xml')) {
+                  // Leer el archivo XML como texto
+                  const xmlData = await response.text();
+
+                  // Convertir el XML a un Blob para descargar
+                  const xmlBlob = new Blob([xmlData], { type: 'application/xml' });
+
+                  // Crear una URL temporal para el archivo XML
+                  const xmlUrl = window.URL.createObjectURL(xmlBlob);
+                  const link = document.createElement('a');
+
+                  // Definir nombre dinámico para el archivo (puedes definir el valor de `producto` en el contexto adecuado)
+                  const producto = 'producto'; // Ajusta el valor de 'producto' según tu contexto
+                  link.href = xmlUrl;
+                  link.setAttribute('download', fileName); // Nombre dinámico del archivo
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+
+                  // Liberar la URL temporal
+                  window.URL.revokeObjectURL(xmlUrl);
+              } else {
+                  // Manejar el caso en que la respuesta no es XML
+                  const errorData = await response.json(); // Leer como texto
+                  alert(errorData.error || 'Error inesperado.');
+                  hide_load_window();
+                  document.getElementById('bt_generar').style.display = 'initial';
+              }
+
+          } catch (error) {
+              console.error('Error al obtener el archivo XML:', error);
+              alert('Error al obtener el archivo XML. Por favor, intente nuevamente.');
+          }
+          hide_load_window()
+      } else {
+          // Mostrar alerta si falta algún campo
+          hide_load_window()
+          alert('Por favor, complete todos los campos.');
+      }
+  }
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const hoy = new Date();
+    hoy.setDate(hoy.getDate() - 1); // Restar un día
+
+    // Formatear la fecha en formato 'YYYY-MM-DD' para el atributo 'max'
+    const anio = hoy.getFullYear();
+    const mes = (hoy.getMonth() + 1).toString().padStart(2, '0'); // Agregar cero si es menor a 10
+    const dia = hoy.getDate().toString().padStart(2, '0'); // Agregar cero si es menor a 10
+    const fechaMax = `${anio}-${mes}-${dia}`;
+
+    // Asignar el valor a 'max' en el input de fecha
+    document.getElementById('datepicker_start').setAttribute('max', fechaMax);
+
+      const productoSelect = document.getElementById('productoSelect');
+      for(let producto of productos){
+        for(let tanque of  producto['tanques']){
+          all_tanques.push(tanque)
+        }
+      }
+      all_tanques = all_tanques.sort((a, b) => a.localeCompare(b));
+
+      productoSelect.addEventListener('change', function() {
+          const selectedProduct = this.value;
+          if (selectedProduct === 'all') {
+            const tanqueSelect = document.getElementById('tanqueSelect');
+            tanqueSelect.innerHTML = ''
+            const option = document.createElement('option');
+            option.value = '';
+            option.textContent = 'Seleccione el Tanque';
+            option.disabled = true;
+            option.selected = true;
+            tanqueSelect.appendChild(option);
+            const option2 = document.createElement('option');
+            option2.value = 'all';
+            option2.textContent = 'Todos';
+            tanqueSelect.appendChild(option2);
+            for(let tanque of all_tanques){
+              const option = document.createElement('option');
+              option.value = tanque; // Asignar el valor del tanque
+              option.textContent = tanque; // Texto que se mostrará en la opción
+              tanqueSelect.appendChild(option); // Agregar la opción al select
+            }
+          } else {
+
+              for(let producto of productos){
+                if(producto['producto_name'] == selectedProduct){
+                  const tanqueSelect = document.getElementById('tanqueSelect');
+                  tanqueSelect.innerHTML = ''; // Limpiar las opciones anteriores
+                  // Agregar tanques como opciones en el select
+                  const option = document.createElement('option');
+                  option.value = '';
+                  option.textContent = 'Seleccione el Tanque';
+                  option.disabled = true;
+                  option.selected = true;
+                  tanqueSelect.appendChild(option);
+                  const option2 = document.createElement('option');
+                  option2.value = 'all';
+                  option2.textContent = 'Todos';
+                  tanqueSelect.appendChild(option2);
+                  
+                  const sortedTanques = producto['tanques'].sort((a, b) => a.localeCompare(b));
+                  for (let tanque of sortedTanques) {
+                      const option = document.createElement('option');
+                      option.value = tanque; // Asignar el valor del tanque
+                      option.textContent = tanque; // Texto que se mostrará en la opción
+                      tanqueSelect.appendChild(option); // Agregar la opción al select
+                  }
+
+                  break;
+                }
+              }
+          }
+          // Aquí puedes realizar otra acción como enviar datos, actualizar otro campo, etc.
+      });
+
+      // Si deseas que se ejecute alguna lógica al cargar, puedes llamar aquí
+      //productoSelect.dispatchEvent(new Event('change'));
+  });
+
+  $(document).ready(function() {
+    // Obtener el token CSRF y el número de página del formulario oculto
+    var csrfToken = $("input[name='csrf_token']").val();
+
+    // Manejar clic en el botón "Obtener Fechas"
+    // Manejar clic en el botón "Obtener Fechas"
+    $('#obtenerfechas').on('click', function(event) {
+        event.preventDefault();
+
+        var startDateValue = $("#datepicker_start").val();
+        var productoSelect = $("#productoSelect").val();
+        var tanqueSelect = $("#tanqueSelect").val();
+        // Verificar el formato de la fecha
+        if (/^\d{4}-\d{2}-\d{2}$/.test(startDateValue)) {
+            startDate = new Date(startDateValue);
+
+            if (startDate && productoSelect && tanqueSelect) {
+                var formData = {
+                    'csrf_token': csrfToken,
+                    'startDate': startDate.toISOString(),  // Formatear a yyyy-mm-dd
+                    'productoSelect':productoSelect,
+                    'tanqueSelect':tanqueSelect
+                  };
+                  show_load_window('VISTA');
+                $.ajax({
+                    url: "{{ url_for('app_scaizen.'+ blueprint + '.diario_tanques') }}",
+                    data: formData,
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    beforeSend: function() {
+                        $("#loader-row").show();
+                    },
+                    success: function(response) {
+                        $("#loader-row").hide();
+                        
+                        var rows = `
+                        <hr class="text-black d-none d-sm-block">
+                        `
+                        if(response.error){
+                          alert(response.error)
+                          hide_load_window();
+                          document.getElementById('bt_generar').style.display = 'initial';
+                          $('.reporte_info').html('');
+                        }
+                        else{
+                          
+                          response.forEach(function(data) {
+                            console.log(data);
+                            if(rows != ''){
+                              rows += `
+                              <br>
+                              <br>`
+                            }
+
+                          data['tanques'].forEach(function(tanque) {
+                            rows += `
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4 style="font-weight:bold;">Tanque ${tanque['Codigo']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Clave Identificación Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['ClaveIdentificacionTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Localización y Descripción del Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['LocalizacionYODescripcionTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Vigencia de Calibración del tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['VigenciaCalibracionTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Capacidad Total de Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['CapacidadTotalTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Capacidad Operativa Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['CapacidadOperativaTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Capacidad Útil Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['CapacidadUtilTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Capacidad de Fondaje del Tanque:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['CapacidadFondajeTanque']}</h4>
+                              </div>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center;">
+                                <h4>Volumen Mínimo Operativo:</h4><h4 style="font-weight:300; margin-left: 10px;">${tanque['VolumenMinimoOperacion']}</h4>
+                              </div>
+                              <br>
+                              <div style="width: 100%; display: flex; justify-content: start; align-items: center; margin-bottom: 5px;">
+                                <h4 style="color:${productos_colors[data['nombre_producto']]}">Producto ${productos_names[data['nombre_producto']]}</h4>
+                              </div>
+                              <div style="width: 80%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <div style="width:280px; display:flex;"><h4>Clave de producto:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ClaveProducto']}</h4></div>
+                                <div style="width:320px; display:flex;"><h4>Clave de subproducto:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ClaveSubProducto']}</h4></div>
+                                <div style="width:300px; display:flex;"><h4>Marca Comercial:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['MarcaComercial']}</h4></div>
+                              </div>
+                              `
+                              if(data['ClaveProducto'] == "PR07"){
+                              rows += `
+                              <div style="width: 70%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <div style="width:400px; display:flex;"><h4>Gasolina con combustible No fósil:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['GasolinaConCombustibleNoFosil'] ? data['GasolinaConCombustibleNoFosil'] : 'N/A'}</h4></div>
+                                <div style="width:600px; display:flex;"><h4>Campos de combustible No fósil en Gasolina:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposDeCombustibleNoFosilEnGasolina'] ? data['ComposDeCombustibleNoFosilEnGasolina'] : 'N/A'}</h4></div>
+                              </div>
+                              <div style="width: 80%; display: flex; justify-content: start; align-items: center; margin-bottom: 5px;">
+                                <h4>Campos Octanaje en Gasolina: </h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposOctanajeGasolina'] ? data['ComposOctanajeGasolina'] : 'N/A'}</h4>
+                              </div>
+                              `
+                            }else if(data['ClaveProducto'] == "PR03"){
+                              rows += `
+                              <div style="width: 70%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <div style="width:400px; display:flex;"><h4>Diésel con combustible No fósil:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['DieselConCombustibleNoFosil']  ? data['DieselConCombustibleNoFosil'] : 'N/A'}</h4></div>
+                                <div style="width:600px; display:flex;"><h4>Campos de combustible No fósil en Diésel:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposDeCombustibleNoFosilEnDiesel'] ? data['ComposDeCombustibleNoFosilEnDiesel'] : 'N/A'}</h4></div>
+                              </div>
+                              `
+                            }
+                            
+                            rows += `
+                              <div style="width: 60%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <div style="width:350px; display:flex;"><h4>Marcaje:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['Marcaje'] ? data['Marcaje'] : 'N/A'}</h4></div>
+                                <div style="width:420px; display:flex;"><h4>Concentración Sustancia Marcaje:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ConcentracionSustanciasMarcaje'] ? data['ConcentracionSustanciasMarcaje'] : 'N/A'}</h4></div>
+                              </div>
+                              <br>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Volumen Inicial de Tanque 
+                                    </th>
+                                    <th colspan="6" style="color: white; background-color: #122b49">
+                                      Volumen Recepción / Descargas  (Recibido)
+                                    </th>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Volumen Final de Tanque 
+                                    </th>
+                                  </tr>
+                                  <tr>
+                                    <th>Fecha y shora</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+
+                                    <th>No</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+                                    <th>Temp</th>
+                                    <th>Presión Absoluta</th>
+                                    <th>Costo</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                              `;
+                          tanque['recepcion'].forEach(function(item) {
+                                rows += `  
+                                  <tr>
+                                    <td>${item['FechaYHoraInicioRecepcion']}</td>
+                                    <td>${item['VolumenInicialTanque']}</td>
+                                    <td>${item[''] !== undefined ? item[''] : "---"}</td>
+                                    <td>${item['Id_RECEPCION']}</td>
+                                    <td>${item['VolumenRecepcion']}</td>
+                                    <td>${item['VolumenRecepcionNeto'] !== undefined ? item[''] : "---"}</td>
+                                    <td>${item['Temperatura']}</td>
+                                    <td>${item['PresionAbsoluta']}</td>
+                                    <td>${item['Costo']}</td>
+                                    <td>${item['FechaYHoraFinalRecepcion']}</td>
+                                    <td>${item['VolumenFinalTanque']}</td>
+                                    <td>${item[''] !== undefined ? item[''] : "---"}</td>
+                                  </tr>
+                              `;
+                          });
+                          rows += `
+                                  </tbody>
+                              </table>
+                              <br>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Volumen Inicial de Tanque 
+                                    </th>
+                                    <th colspan="6" style="color: white; background-color: #122b49">
+                                      Volumen Entrega / Cargas (Salidas)
+                                    </th>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Volumen Final de Tanque 
+                                    </th>
+                                  </tr>
+                                  <tr>
+                                    <th>Fecha y hora</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+
+                                    <th>No</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+                                    <th>Temp</th>
+                                    <th>Presión Absoluta</th>
+                                    <th>Costo</th>
+                                    <th>Fecha y hora</th>
+                                    <th>Vol. Natural</th>
+                                    <th>Vol. Neto</th>
+                                  </tr>
+                                </thead>
+                                <tbody>`;
+                          tanque['entrega'].forEach(function(item) {
+                                rows += `  
+                                  <tr>
+                                    <td>${item['FechaYHoraInicialEntrega']}</td>
+                                    <td>${item['VolumenInicialTanque']}</td>
+                                    <td>${item[''] !== undefined ? item[''] : "---"}</td>
+                                    <td>${item['Id_ENTREGA']}</td>
+                                    <td>${item['VolumenEntregado']}</td>
+                                    <td>${item['VolumenEntregadoNeto'] !== undefined ? item[''] : "---"}</td>
+                                    <td>${item['Temperatura']}</td>
+                                    <td>${item['PresionAbsoluta']}</td>
+                                    <td>${item['Costo']}</td>
+                                    <td>${item['FechaYHoraFinalEntrega']}</td>
+                                    <td>${item['VolumenFinalTanque']}</td>
+                                    <td>${item[''] !== undefined ? item[''] : "---"}</td>
+                                  </tr>
+                              `;
+                              });
+                          rows += `
+                                  </tbody>
+                              </table>
+                              <br>
+                              <table>
+                                <thead>
+                                  <tr>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Existencias
+                                    </th>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Recepciones  (Recibido)
+                                    </th>
+                                    <th colspan="4" style="color: white; background-color: #122b49">
+                                      Entregas (Salidas)
+                                    </th>
+                                  </tr>
+                                  <tr>
+                                    <th>Volumen Existente Anterior</th>
+                                    <th>Volumen en Recepciones</th>
+                                    <th>Volumen en Entregas</th>
+                                    <th>Volumen Existente</th>
+
+                                    <th>Total de Recepciones</th>
+                                    <th>Total de Documentos</th>
+                                    <th>Volumen Recibido</th>
+                                    <th>Compras</th>
+
+                                    <th>Total de Entregas</th>
+                                    <th>Total de Documentos</th>
+                                    <th>Volumen Entregado</th>
+                                    <th>Ventas</th>
+
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>${tanque['existencias']['VolumenExistenciasAnterior']}</td>
+                                    <td>${tanque['existencias']['VolumenAcumOpsRecepcion']}</td>
+                                    <td>${tanque['existencias']['VolumenAcumOpsEntrega']}</td>
+                                    <td>${tanque['existencias']['VolumenExistencias']}</td>
+                                    <td>${tanque['recepciones']['TotalRecepciones']}</td>
+                                    <td>${tanque['recepciones']['TotalDocumentos']}</td>
+                                    <td>${tanque['recepciones']['SumaVolumenRecepcion']}</td>
+                                    <td>${tanque['recepciones']['SumaCompras']}</td>
+                                    <td>${tanque['entregas']['TotalEntregas']}</td>
+                                    <td>${tanque['entregas']['TotalDocumentos']}</td>
+                                    <td>${tanque['entregas']['SumaVolumenEntregado']}</td>
+                                    <td>${tanque['entregas']['SumaVentas']}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              <hr class="text-black d-none d-sm-block">
+                              `
+                            });
+                          });
+                          // Agregar las filas construidas a la tabla
+                          $('.reporte_info').html(rows);
+                        }
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        $("#loader-row").hide();
+                        console.error("Error en la solicitud AJAX:", error);
+                        $("#error-message").text('Hubo un error al procesar la solicitud. Por favor, inténtelo de nuevo.').show();
+                    }
+                });
+            } else {
+                alert("Seleccione todos los campos");
+            }
+        } else {
+            alert("Formato de fecha incorrecto. Asegúrate de que esté en formato YYYY-MM-DD.");
+        }
+        hide_load_window()
+    });
+
+    function formatDate(dateString) {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+
+    // Usa una cadena con dos líneas separadas por un salto de línea
+    return `${year}-${month}-${day}`;
+    }
+    
+    function formatHours(dateString){
+      
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '';
+
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    // Usa una cadena con dos líneas separadas por un salto de línea
+    return `${hours}:${minutes}:${seconds}`;
+    }
+    function digitos(numero){
+      return numero.toFixed(3);
+
+    }
+    $(document).on('click',  'button.editar', function() {
+        $('#configuracionModal').modal('show'); // Mostrar el modal
+    });
+    /* $('#configuracionModal .close, #configuracionModal .btn-secondary').on('click', function() {
+        $('#configuracionModal').modal('hide'); // Ocultar el modal
+    });*/
+
+    /*
+    $('#PDF').on('click', function(event) {
+        event.preventDefault();
+        if (datos_1 && datos_2 && datos_3 && datos_4) {
+            var formData = JSON.stringify({
+                'csrf_token': csrfToken,
+                'diario': datos_1,
+                'lectura_anterior_batch': datos_2,
+                'lectura_posterior_batch': datos_3,
+                'data_tanque_inico_fin': datos_4,
+                'selectedId': $('#transport1').val(),
+                'startDate': startDate.toISOString() 
+
+            });
+
+            $.ajax({
+                url: "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_PDF') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                headers: { 'X-CSRFToken': csrfToken },
+                data: formData,
+                xhrFields: {
+                    responseType: 'blob'  // Indica que esperas una respuesta de tipo blob
+                },
+                success: function(response) {
+                    // Crear un enlace para descargar el archivo
+                    var url = URL.createObjectURL(response);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'employee_report.pdf';  // Nombre del archivo que se descargará
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);  // Limpiar el objeto URL
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        } else {
+            alert("No hay datos disponibles para generar el PDF.");
+        }
+    });
+    var startDateJSON = null;
+    $('#JSON').on('click', function(event) {
+            event.preventDefault();
+            var startDateValueJSON = $("#datepicker_start").val();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(startDateValueJSON)) {
+              startDateJSON = new Date(startDateValueJSON);
+              if (startDateJSON) {
+                    var formData = JSON.stringify({
+                        'csrf_token': csrfToken,
+                        'selectedId': $('#transport1').val(),
+                        'startDate': startDateJSON.toISOString()
+                    });
+
+                    $.ajax({
+                        url: "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_JSON') }}",
+                        type: 'POST',
+                        contentType: 'application/json',
+                        headers: { 'X-CSRFToken': csrfToken },
+                        data: formData,
+                        dataType: 'json',  // Indica que esperamos un JSON
+                        success: function(response) {
+                            // Crea un archivo JSON desde la respuesta
+                            var blob = new Blob([JSON.stringify(response, null, 2)], { type: 'application/json' });
+                            var url = URL.createObjectURL(blob);
+                            var a = document.createElement('a');
+                            a.href = url;
+                            a.download = 'Reporte_diario_Tv-100.json';  // Nombre del archivo descargado
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);  // Limpia el objeto URL
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error en la solicitud AJAX:", error);
+                        }
+                    });
+                } else {
+                    alert("Se debe seleccionar una fecha de busqueda para el reporte JSON.");
+                }
+              }
+        });
+    $('#XML').on('click', function(event) {
+        event.preventDefault();
+        if (datos_1 && datos_2 && datos_3 && datos_4) {
+            var formData = JSON.stringify({
+                'csrf_token': csrfToken,
+                'datos_1': datos_1,
+                'datos_2': datos_2,
+                'datos_3': datos_3,
+                'datos_4': datos_4
+            });
+
+            $.ajax({
+                url: "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_JSON') }}",
+                type: 'POST',
+                contentType: 'application/json',
+                headers: { 'X-CSRFToken': csrfToken },
+                data: formData,
+                xhrFields: {
+                    responseType: 'blob'  // Indica que esperas una respuesta de tipo blob
+                },
+                success: function(response) {
+                  // Procesar la respuesta JSON
+                  console.log('Datos recibidos:', response);
+                  // Aquí puedes procesar el JSON como necesites
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        } else {
+            alert("No hay datos disponibles para generar el PDF.");
+        }
+    });
+
+
+      */
+
+/*
+    document.getElementById('JSON').addEventListener('click', function() {
+        var data = datosGlobales; // Cambia esto al dato que quieras enviar
+        var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_JSON') }}";
+        document.getElementById('JSON-link').href = url + '?dato=' + encodeURIComponent(JSON.stringify(data));
+    });
+
+    document.getElementById('XML').addEventListener('click', function() {
+        var data = datosGlobales; // Cambia esto al dato que quieras enviar
+        var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_de_tanque_XML') }}";
+        document.getElementById('XML-link').href = url + '?dato=' + encodeURIComponent(JSON.stringify(data));
+    });
+*/
+  
+  
+  
+  
+  
+  });
+</script> 
+{% endblock %}

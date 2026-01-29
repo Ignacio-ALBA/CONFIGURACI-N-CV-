@@ -1,0 +1,71 @@
+{% extends 'scaizen.html' %} 
+
+{% block title %}
+{% if type == 'alarmas' %}Inicio{% else %}Eventos{% endif %}
+
+{% endblock %} 
+
+{% block styles %}
+<style>
+  .bt{
+    display: flexbox;
+    background-color: #122B49;
+    height: 40px;
+    width: 250px;
+    border-radius: 10px;
+    border-style: none;
+    color: white;
+    align-self: center;
+    justify-self: center;
+  }
+  .bt:hover{
+    background-color: #009578;
+  }
+</style>
+{% endblock %} 
+
+{%block tables %}
+  <label class="titulo">ACCESOS RÁPIDOS</label><br />
+  <hr class="text-black d-none d-sm-block" />
+  <div  class="formulario" >
+    <div style="display: grid; justify-content: center; align-items: center; grid-template-columns: repeat(1,100%); width: 100%; height: 100%;">
+      
+      <div style="width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: start; align-items: center;">
+        <h2>Comercializador</h2>
+        {% if current_user.RolPerms['Comercializador']%}
+        <div style=" width: 100%; height: 100%; display: grid; grid-template-columns: repeat(auto-fill, 250px); grid-template-rows: repeat(2, 40px);
+          gap: 10px; padding: 10px; align-items: center; justify-content: center;">
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CCompras']%}
+            <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.compra_alta') }}'"><i class="fa-solid fa-cart-shopping"></i> Alta Compra</button>
+            <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.consultar_compras') }}'"><i class="fa-solid fa-cart-shopping"></i> Compras</button>
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CVentas']%}  
+              {% if current_user.RolPerms['Comercializador']['sub_permisos']['CVentas']['sub_permisos']['CVentasConsultar']%} 
+              <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.consultar_ventas') }}'"><i class="fa-brands fa-sellsy"></i> Ventas</button>
+            {% endif %}
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']%}
+            {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']%}
+            <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.diario_tanques') }}'"><i class="fa-solid fa-book"></i> Reporte Volumétrico Diario</button>
+            {% endif %}
+            {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']%}
+            <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.control_mensual_volumetrico') }}'"><i class="fa-solid fa-book"></i> Reporte Volumétrico Mensual</button>
+            {% endif %}
+            {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportedeeventos']%}
+            <button class="bt" onclick="window.location = '{{ url_for('app_scaizen.app_comercializador.eventos') }}'"><i class="fa fa-list" aria-hidden="true"></i> Reporte de Eventos</button>
+            {% endif %}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}   
+<script>
+  
+</script>
+{% endblock %}
+  
+  

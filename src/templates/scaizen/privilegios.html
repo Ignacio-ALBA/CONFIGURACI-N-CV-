@@ -1,0 +1,91 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Privilegios {% endblock %}
+
+{% block tables %}
+
+<label class="titulo">Asignación de privilegios </label><br>
+<hr class="text-black d-none d-sm-block" />
+
+<div   class="formulario">
+
+<!-- Tu tabla va aquí -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Privilegios</th>
+            <th>Super Administrador</th>
+            <th>Administrador</th>
+            <th>Supervisor</th>
+            <th>Operador</th>
+            <th>Auditor Fiscal</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Registrar Usuarios</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+        </tr>
+        <tr>
+            <td>Configurar controles volumetricos</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Definir desplegados graficos de operación</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Ver información almacenada</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Registrar eventos en bitacora</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Registrar alarmas en bitacora</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Registrar alarmas en bitacora</td>
+            <td> </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <!-- Agrega más filas según sea necesario -->
+    </tbody>
+</table>
+
+<form method="post" action="#">
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">Guardar</button>
+</form>
+</div>
+{% endblock %}

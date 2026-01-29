@@ -1,0 +1,44 @@
+services:
+  controles_volumetricos2:
+    container_name: controles_volumetricos2
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/app
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    environment:
+      - TZ=America/Mexico_City
+    restart: always
+    networks:
+      - scaizen-network
+    hostname: servidor_controles_volumetricos
+
+  xampp:
+    container_name: xampp
+    build:
+      context: ./xampp
+      dockerfile: Dockerfile
+      args:
+        XAMPP_FILE: "xampp-linux-x64-8.2.0-0-installer.run"
+        XAMPP_URL: "https://downloads.sourceforge.net/project/xampp/XAMPP%20Linux/8.2.0/xampp-linux-x64-8.2.0-0-installer.run"
+    ports:
+      - "8080:80"
+      - "3306:3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./xampp_data:/opt/lampp/htdocs
+    environment:
+      - TZ=America/Mexico_City
+    restart: always
+    networks:
+      - scaizen-network
+    hostname: servidor_xampp
+
+networks:
+  scaizen-network:
+    driver: bridge

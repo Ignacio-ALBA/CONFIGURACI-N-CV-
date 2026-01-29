@@ -1,0 +1,381 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Usuarios {% endblock %}
+
+
+{% block tables %}
+ 
+  
+ 
+        
+        <label class="titulo">Perfiles registrados </label><br>
+
+         <form method="post" action="#">
+            <label> Busqueda por nombre:</label>
+           
+            <input type="email" id="datepicker_end" name="selected_end"  placeholder="Nombre" required>
+
+            <button  type="button" id="obtenerfechas" class="btn btn-outline-success">Buscar</button> 
+
+            <button style="text-align: right;" type="button" id="perfil" class="btn btn-outline-success button-spacing">
+                <i class="fa-regular fa-user"></i> Registrar
+            </button> 
+        </form>
+       
+
+        <!-- 
+        <form method="post" action="{{ url_for('app_scaizen.registrar_usuario') }}">
+            <button  type="submit" id="perfil" class="btn btn-outline-success">Registrar perfil</button>
+        </form> -->
+        
+        <!-- Tu tabla va aquí -->
+        <table class="table" id="tabla-perfiles">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nombre </th>
+                    <th>Descripción</th>
+                    <th>Editar privilegios</th>
+                    <th>Estado</th>
+                 </tr>
+            </thead>
+            <tbody>
+                 
+                <tr id="search" style="display: table-row;">
+                    <td style="font-weight:bold ; text-align: center;  background-color:#ccc;" valign="Top" colspan="10">Ningun dato disponible</td>
+                </tr>
+                <tr id="loader-row" style="display: none;">
+                    <td colspan="5" style="text-align:center;">
+                        <div class="typing-indicator">
+                            <div class="typing-circle"></div>
+                            <div class="typing-circle"></div>
+                            <div class="typing-circle"></div>
+                            <div class="typing-shadow"></div>
+                            <div class="typing-shadow"></div>
+                            <div class="typing-shadow"></div>
+                        </div>
+                    </td>
+                </tr>
+
+                <!-- Agrega más filas según sea necesario -->
+            </tbody>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Nombre </th>
+                    <th>Descripción</th>
+                    <th>Editar privilegios</th>
+                    <th>Estado</th>
+                 </tr>
+
+        </table>
+
+
+        <nav aria-label="Paginación" class="ulpgcds-pager" id="navbar" style="display: none;">
+            <div  id="mostrando" >
+            </div>
+           <div id="paginacion">
+           </div>
+      </nav>  
+<script>
+// Manejar evento de clic para el botón de registro
+document.getElementById("perfil").addEventListener("click", function() {
+    // Aquí puedes agregar cualquier lógica adicional que necesites
+    console.log("Se hizo clic en el botón de perfil");
+    // Obtener la URL utilizando url_for de Flask y redireccionar
+    var url = "{{ url_for('app_scaizen.registrar_perfil') }}";
+    window.location.href = url;
+});
+</script>    
+
+
+<script>
+$(document).ready(function(pageNumber) {
+            var pageNum = $(this).data('page');
+            var csrfToken = $("input[name='csrf_token']").val();
+
+            var formData = {
+                'csrf_token': csrfToken,
+                'page': pageNum 
+            };
+            //Paginacion
+            var maxPagesToShow = 10;
+            var pagina_actual
+            var total_paginas
+            $.ajax({
+                url: "{{ url_for('app_scaizen.usuarios_perfiles') }}",
+                data: formData,
+                type: 'POST',
+                beforeSend: function() {
+                    $('#search').css('display', 'none'); // Ocultar el elemento con el id "search"
+                    // Mostrar el loader antes de enviar la solicitud AJAX
+                    $('#loader-row').show();
+                },
+                success: function(response) {
+                    $('#loader-row').hide();
+
+                    pagina_actual = response.paginactual
+                    total_paginas = response.total_paginas
+                    $('#tabla-perfiles tbody').empty();
+                    if (response.perfiles && response.perfiles.length > 0) {
+                        response.perfiles.forEach(function(perfil) {
+                            $('#tabla-perfiles tbody').append(`
+                                <tr>
+                                    <td>${perfil.id_roll}</td>
+                                    <td>${perfil.nombre_roll}</td>
+                                    <td>${perfil.status_roll}</td>
+                                    
+                                    <td class="text-start"><button type="button" class="btn btn-primary btn-sm">Editar</button></td>
+                                    <td>
+                                        <div class="switch">
+                                            <input type="checkbox" id="toggle_${perfil.id_roll}">
+                                            <label for="toggle_${perfil.id_roll}"></label>
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#tabla-perfiles tbody').append(`
+                            <tr>
+                                <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                            </tr>
+                        `);
+                    }
+                    
+ 
+                    if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                            $('#mostrando').empty().append(`
+                                <nav aria-label="Paginación" class="ulpgcds-pager" >
+                                    <div class="ulpgcds-pager__results">
+                                        ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas} 
+                                    </div>
+                                </nav>
+                            `);
+                            $('#navbar').css('display', 'block'); // Mostrar el elemento
+
+                    } else {
+                        console.log("Error al mostrar");
+                    }
+
+                    $('#paginacion').empty(); // Limpiar el contenido anterior
+
+               
+                    // Generar enlaces de paginación dinámicamente
+                    for (var i = 1; i <= Math.min(response.total_pages,maxPagesToShow ); i++) {
+                        var link = $('<a>', {
+                            href: '#',
+                            class: 'pagination-link',
+                            'data-page': i,
+                            text: i
+                        });
+                        
+                                link.click(function(event) {
+                                    event.preventDefault();
+                                    var pageNumber = $(this).data('page');
+                                    $.ajax({
+                                    url: "{{ url_for('app_scaizen.usuarios_perfiles') }}",
+                                    data: {
+                                       
+                                        'csrf_token': csrfToken,
+                                        'page': pageNumber 
+                                    },
+                                    type: 'POST',
+                                    success: function(response) {
+                                        pagina_actual = response.paginactual
+                                        total_paginas = response.total_paginas
+                                        $('#tabla-perfiles tbody').empty();
+                                            if (response.perfiles && response.perfiles.length > 0) {
+                                                response.perfiles.forEach(function(perfil) {
+                                                    $('#tabla-perfiles tbody').append(`
+                                                        <tr>
+                                                            <td>${perfil.id_roll}</td>
+                                                            <td>${perfil.nombre_roll}</td>
+                                                            <td>${perfil.status_roll}</td>
+                                                             
+                                                            <td class="text-start"><button type="button" class="btn btn-primary btn-sm">Editar</button></td>
+                                                            <td>
+                                                                <div class="switch">
+                                                                    <input type="checkbox" id="toggle_${perfil.id_roll}">
+                                                                    <label for="toggle_${perfil.id_roll}"></label>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    `);
+                                                });
+                                            } else {
+                                                $('#tabla-perfiles tbody').append(`
+                                                    <tr>
+                                                        <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                                                    </tr>
+                                                `);
+                                            }
+                                            if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                                                    $('#mostrando').empty().append(`
+                                                        <nav aria-label="Paginación" class="ulpgcds-pager" >
+                                                            <div class="ulpgcds-pager__results">
+                                                                ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas} 
+                                                            </div>
+                                                        </nav>
+                                                    `);
+                                                    $('#navbar').css('display', 'block'); // Mostrar el elemento
+
+                                            } else {
+                                                console.log("Error al mostrar");
+                                            }
+      
+                                            // Mostrar el botón "prev" solo si el número de página seleccionado es mayor que 1
+                                            if (pageNumber > 1) {
+                                                $('#prev-button').show();
+                                            } else {
+                                                $('#prev-button').hide();
+                                            }
+                                            
+                                                                                    
+                                            // Mostrar el botón "next" solo si el número de página seleccionado es menor que el total de páginas
+                                            if (currentPage < totalPages) {
+                                                $('#next-button').show();
+                                            } else {
+                                                $('#next-button').hide();
+                                            }
+
+                                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error("Error en la solicitud AJAX:", error);
+                                        }
+                                        
+
+                                        
+                                    });
+                        })
+                            // Agregar un controlador de eventos al enlace para enviar la página al servidor
+                        $('#paginacion').append(link);
+                    } 
+
+                    var prevButton = $('<a>', {
+                        href: '#',
+                        class: 'pagination-link',
+                        id: 'prev-button',
+                    }).html('<i class="fas fa-chevron-circle-left"></i>').css({color: 'black',display: 'none'});
+                    var nextButton = $('<a>', {
+                        href: '#',
+                        class: 'pagination-link',
+                        id: 'next-button',
+                    }).html('<i class="fas fa-chevron-circle-right"></i>').css({color: 'black'});
+
+                    
+                    $('#paginacion').prepend(prevButton);// jQuery inserta el elemento prevButton antes de todos los demás elementos hijos del contenedor #paginacion,
+                    $('#paginacion').append(nextButton);//después de todos los demás elementos hijos del contenedor #paginacion,
+
+                    console.log(pagina_actual)
+                    if (pagina_actual == total_paginas){
+                        $('#next-button').hide(); 
+                    }else{  
+                            // Manejar el evento de clic en el botón de avance
+                            $('#next-button').click(function(e) {
+                                e.preventDefault();
+                                pagina_actual++;
+                                if (pagina_actual >= 1) {
+                                    pagination_link(pagina_actual);
+                                }
+                                console.log(pagina_actual);
+
+                                if (pagina_actual == total_paginas) {
+                                    $(this).hide(); // Ocultar el botón de avance cuando se alcanza el límite
+                                    console.log("Desactivado Siguiente" );
+                                }
+
+                                $('#prev-button').show(); // Mostrar el botón de retroceso
+                            });
+
+                            $('#prev-button').click(function(e) {
+                                e.preventDefault();
+                                pagina_actual--;
+                                if (pagina_actual > 0) {
+                                    pagination_link(pagina_actual);
+                                }
+                                console.log(pagina_actual);
+
+                                if (pagina_actual == 1) {
+                                    $(this).hide(); // Ocultar el botón de retroceso cuando la página actual es cero
+                                    console.log("Desactivado Retroceso");
+                                }
+
+                                $('#next-button').show(); // Mostrar el botón de avance
+                            });
+                        }
+                    function pagination_link(pagina_actual) {
+                            // Esta función se llama cuando se hace clic en un enlace de paginación
+                            event.preventDefault();
+                            var pageNumber = pagina_actual
+                            $.ajax({
+                                url: "{{ url_for('app_scaizen.usuarios_perfiles') }}",
+                                data: {
+                                    'csrf_token': csrfToken,
+                                    'page': pageNumber
+                                },
+                                type: 'POST',
+                                success: function(response) {
+                                    pagina_actual = response.paginactual;
+                                    $('#tabla-perfiles tbody').empty();
+                                    if (response.perfiles && response.perfiles.length > 0) {
+                                        response.perfiles.forEach(function(perfil) {
+                                            $('#tabla-perfiles tbody').append(`
+                                                <tr>
+                                                    <td>${perfil.id_roll}</td>
+                                                            <td>${perfil.nombre_roll}</td>
+                                                            <td>${perfil.status_roll}</td>
+                                                            <td class="text-start"><button type="button" class="btn btn-primary btn-sm">Editar</button></td>
+                                                            <td>
+                                                                <div class="switch">
+                                                                    <input type="checkbox" id="toggle_${perfil.id_roll}">
+                                                                    <label for="toggle_${perfil.id_roll}"></label>
+                                                                </div>
+                                                    </td>
+                                                </tr>
+                                            `);
+                                        });
+                                    } else {
+                                        $('#tabla-perfiles tbody').append(`
+                                            <tr>
+                                                <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                                            </tr>
+                                        `);
+                                    }
+                                    if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                                        $('#mostrando').empty().append(`
+                                            <nav aria-label="Paginación" class="ulpgcds-pager">
+                                                <div class="ulpgcds-pager__results">
+                                                    ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas}
+                                                </div>
+                                            </nav>
+                                        `);
+                                        $('#navbar').css('display', 'block'); // Mostrar el elemento
+                                    } else {
+                                        console.log("Error al mostrar");
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error en la solicitud AJAX:", error);
+                                }
+                            });
+                        }
+
+
+
+                    
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+       
+    
+});
+
+</script>
+
+ 
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Historico {% endblock %}
+
+
+{% block tables %}
+ 
+  
+ 
+ 
+        <input type="text" class="form-control" placeholder="Fechas de inicio" aria-label="Cargas" aria-describedby="basic-addon2">
+        <input type="text" class="form-control" placeholder="Fechas de finalización" aria-label="Cargas" aria-describedby="basic-addon2">
+         <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button">Buscar</button>
+         </div>
+
+        
+        <!-- Tu tabla va aquí -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th colspan="2"></th>
+                    <th colspan="3">Vol. inicial de tanque</th>
+                    <th colspan="1"></th>
+                    <th colspan="3">Vol. recibido/descargas y reingreso </th>
+                    <th colspan="1"></th>
+                    <th colspan="4">Vol. salidas/cargas</th>
+  
+                </tr> <tr>
+                    <th>No.</th>
+                    <th>Fecha</th>
+                    <th>Vol.Nat(m &sup3;)</th>
+                    <th>Vol.Neto(m &sup3;)</th>
+                    <th>Temp.</th>
+
+                    <th>#Op</th>
+
+                    <th>Vol.Nat(m &sup3;)</th>
+                    <th>Vol.Neto(m &sup3;)</th>
+                    <th>Temp.</th>
+
+                    <th>#Op</th>
+
+                    <th>Vol.Nat(m &sup3;)</th>
+                    <th>Vol.Neto(m &sup3;)</th>
+                    <th>Temp.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2023-01-18 13:00:43 </td>
+                     <td>Jessica Barranco</td>
+                    <td>Inicio de sesión</td>
+                    <td>SCAIZEN</td>
+                    
+                    <td>1</td>
+                    <td>2</td>
+                    <td>2</td>
+
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+
+                </tr>
+                <!-- Agrega más filas según sea necesario -->
+            </tbody>
+        </table>
+
+        
+        
+        <!-- Tu tabla va aquí -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Vol.Nat(m &sup3;)</th>
+                    <th>Vol.Neto(m &sup3;)</th>
+                    <th>Temperatura promedio</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Inicial</td>
+                    <td> </td>
+                     <td></td>
+                     <td></td>
+
+                </tr>
+                <tr>
+                    <td>recibido</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Venta</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>Final</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+                <tr>
+                    <td>Direfencia</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+
+                </tr>
+
+            </tbody>
+        </table>
+ 
+
+
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'scaizen.html' %} {% block title %}Crear perfiles {% endblock %} {%
+  block tables %}
+  
+  <label class="titulo">Perfiles Registrados</label><br />
+  <form method="post" action="#">
+    {{ form.hidden_tag() }}
+  
+    <label for="{{ form.nombre_usuario.id }}">Nombre:</label>
+    {{ form.nombre_usuario(type="text", placeholder="Ingrese su nombre",
+    class="datepicker", required="required") }}
+  
+    <label for="{{ form.apellidos_usuario.id }}">Apellidos:</label>
+    {{ form.apellidos_usuario(type="text", placeholder="Ingrese sus apellidos",
+    class="datepicker", required="required") }}
+  
+    <label for="{{ form.telefono.id }}">Teléfono:</label>
+    {{ form.telefono(type="text", pattern="[0-9]{10}", placeholder="Ingrese un
+    número de teléfono válido", class="datepicker", required="required") }}
+  
+    <label for="{{ form.email.id }}">E-mail:</label>
+    {{ form.email(type="text", placeholder="nombre@example.com",
+    class="datepicker", required="required") }}
+  
+    <label for="{{ form.contraseña.id }}">Contraseña (Temporal):</label>
+    {{ form.contraseña(type="text", readonly="readonly", class="datepicker") }}
+  
+    <label for="{{ form.genero.id }}">Género:</label>
+    {{ form.genero(type="text", class="form-control", required="required") }}
+  
+    <div>{{form.recaptcha}}</div>
+  
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">
+      Buscar
+    </button>
+  </form>
+  
+  <script>
+    function generarContraseña(longitud) {
+      const caracteres =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_-+=";
+      let contraseñaGenerada = "";
+  
+      for (let i = 0; i < longitud; i++) {
+        const caracterAleatorio = caracteres.charAt(
+          Math.floor(Math.random() * caracteres.length)
+        );
+        contraseñaGenerada += caracterAleatorio;
+      }
+  
+      return contraseñaGenerada;
+    }
+  
+    // Generar y mostrar la contraseña automáticamente al cargar la página
+    document.addEventListener("DOMContentLoaded", function () {
+      const nuevaContraseña = generarContraseña(12); // Se ajustan la longitud según tus necesidades
+      document.getElementById("contraseña").value = nuevaContraseña;
+    });
+  </script>
+  {% endblock %}
+  

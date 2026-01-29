@@ -1,0 +1,749 @@
+{% extends './base.html' %} {% block title %}SCAIZEN {% endblock %} {% block
+customCss %}
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/fontawesome_6/css/all.min.css') }}" />
+  
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/style.css') }}" />
+
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/bootstrap/css/bootstrap.min.css') }}" />
+
+<link
+rel="stylesheet"
+href="{{url_for('static', filename='css/bootstrap-icons/bootstrap-icons.css') }}" />
+
+<link
+rel="stylesheet"
+href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
+
+<link
+  type="text/css"
+  rel="stylesheet"
+  href="{{url_for('static', filename='js/css/materialize.min.css')}}"
+  media="screen,projection" />
+
+<link
+  rel="stylesheet"
+  href="{{url_for('static', filename='css/style_v2.css') }}" />
+
+<link
+  rel="stylesheet"
+  href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+  .loading-container {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    color: #fff;
+    position: relative;
+    margin: 0 32px;
+    display: none;
+  }
+
+  .loading-container::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+    border-radius: 10px;
+    animation: movingLine 2.4s infinite ease-in-out;
+  }
+
+  @keyframes movingLine {
+    0% {
+      opacity: 0;
+      width: 0;
+    }
+    33.3%, 66% {
+      opacity: 0.8;
+      width: 100%;
+    }
+    85% {
+      width: 0;
+      left: initial;
+      right: 0;
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      width: 0;
+    }
+  }
+
+  .loading-text {
+    font-size: 4vw;
+    line-height: 34px;
+    letter-spacing: 10px;
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .loading-text span {
+    animation: moveLetters 2.4s infinite ease-in-out;
+    transform: translatex(0);
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    text-shadow: 0px 2px 10px rgba(46, 74, 81, 0.3);
+  }
+
+  {% for i in range(1, 20) %}
+  .loading-text span:nth-child({{ i }}) {
+    animation-delay: {{ i * 0.1 | round(1) }}s;
+  }
+  {% endfor %}
+
+  @keyframes moveLetters {
+    0% {
+      transform: translateX(-15vw);
+      opacity: 0;
+    }
+    33.3%, 66% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(15vw);
+      opacity: 0;
+    }
+  }
+</style>
+{% block styles %}
+{% endblock %}
+
+{% endblock %} {% block body %}
+<div style="text-align: left" >
+  <div style="display: flex; justify-content: start; align-items: start; width: 100%; height: 100vh;">
+    <div style="overflow: hidden; margin-left: 0px; display: flex; flex-direction: column; justify-content:space-between; background-color: #122b49; height: 100vh; min-width: 55px; max-width: 230px; width: 30vw;">
+      <!--Barra de navegacion-->
+      <div class="mt-4 sidebar">
+      <a
+      class="text-white d-none d-sm-inline text-decoration-none d-flex align-items-center ms-4"
+      role="button">
+      <span class="fs-4 d-none d-sm-inline">
+        <img
+          onclick="window.location = '{{ url_for('app_scaizen.scaizen')}}'"
+          href="{{ url_for('app_scaizen.scaizen')}}"
+          src="/static/img/favicon.png"
+          alt="scaizen"
+          class="me-2"
+          height="130"
+          width="130" />
+      </span>
+    </a>
+        <div class="dropdown open p-3">
+          <div >
+            <a
+              id="username"
+              style="color: white; font-size: 16px;  text-transform: uppercase; display: block; margin-bottom: 4px;">
+              <span class="ms-1 d-none d-sm-inline">{{ current_user.Username }}</span>
+            </a>
+            <a
+              id="fullname"
+              style="color: white; font-size: 9px; text-transform: uppercase; display: block;">
+                <span   class="ms-1 d-none d-sm-inline">{{ current_user.FullName }}</span>
+            </a>
+          </div>
+          <a
+            class="btn border-none dropdown-none text-white dropdown-toggle"
+            style="font-size: 12px"
+            type="button"
+            id="triggerId"
+            data-bs-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false">
+            <span class="ms-1 d-none d-sm-inline">{{
+              current_user.RolName}}</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="triggerId">
+            <a class="dropdown-item" href="{{ url_for('logout')}}">Cerrar
+              sesión</a>
+          </div>
+        </div>
+
+        <hr class="text-white d-none d-sm-block" />
+        <ul class="nav nav-pills flex-column mt-2 mt-sm-0" id="menu">
+          
+      
+          
+          {% if current_user.RolPerms['Comercializador']%}
+          <li class="nav-item my-sm-1 my-2 disabled">
+            <a href="#ventas" data-bs-toggle="collapse" class="nav-link text-white" aria-current="page">
+              <i class="fa-solid fa-pager"></i>
+              <span style="font-size: 16px;" class="ms-3 d-none d-sm-inline">Comercializador</span>
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="nav collapse submenu-indented flex-column" id="ventas" data-bs-parent="#menu">
+              {% if current_user.RolPerms['Comercializador']['sub_permisos']['CCompras']%}
+              <li class="nav-item">
+                <a href="#subcompras_2" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-brands fa-sellsy"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Compras</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_2" data-bs-parent="#ventas">
+                  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CCompras']['sub_permisos']['CComprasAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.compra_alta') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
+                      <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Dar de alta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CCompras']['sub_permisos']['CComprasConsultar']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.consultar_compras') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
+                      <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consultar</span>
+                    </a>
+                  </li>
+                  {% endif %}
+
+                </ul>
+              </li>
+              {% endif %}
+
+              {% if current_user.RolPerms['Comercializador']['sub_permisos']['CVentas']%}  
+              {% if current_user.RolPerms['Comercializador']['sub_permisos']['CVentas']['sub_permisos']['CVentasConsultar']%} 
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.consultar_ventas') }}" aria-current="page">
+                  <i class="fa-brands fa-sellsy"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Ventas</span>
+                </a>
+              </li>
+              {% endif %}
+              {% endif %}
+
+              {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']%}
+              <li class="nav-item">
+                <a href="#subcompras_3" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-regular fa-paste"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reportes</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_3" data-bs-parent="#ventas">
+                  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportediario']%} 
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.diario_tanques') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
+                      <i class="fa-solid fa-book"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reporte diario<br> por tanque</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.control_mensual_volumetrico') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
+                      <i class="fa-solid fa-book"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reporte mensual<br> volumétrico
+                    </a></span>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportedeeventos']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.eventos') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
+                      <i class="fa fa-list" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reporte de <br> Eventos</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+                
+              </li>
+              {% endif %}
+
+            </ul>
+          </li>
+          {% endif %}
+            <!-- aqui va el boton de facturacion falta ver permisos-->
+            <li class="nav-item my-sm-1 my-2 disabled">
+              <a href="#facturacion" data-bs-toggle="collapse" class="nav-link text-white" aria-current="page">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span style="font-size: 16px;" class="ms-3 d-none d-sm-inline">Facturacion</span>
+                <i class="fa fa-caret-down"></i>
+              </a>
+            
+              <ul class="nav collapse submenu-indented flex-column" id="facturacion" data-bs-parent="#menu">
+                <li class="nav-item">
+                  <a class="nav-link text-white" href="{{ url_for('app_scaizen.factura_alta') }}" aria=current="page">
+                    <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Nuevo Comprobante</span>
+                  </a>
+                </li>
+            
+              </ul>
+            </li>
+            <!-- aqui va el boton de facturacion -->
+
+          {% if current_user.RolPerms['Catalogo']%}
+          <li class="nav-item my-sm-1 my-2 disabled">
+            <a href="#perfiles" data-bs-toggle="collapse" class="nav-link text-white" aria-current="page">
+              <i class="fa-solid fa-clipboard-list"></i>
+              <span style="font-size: 16px;" class="ms-3 d-none d-sm-inline">Catálogo</span>
+              <i class="fa fa-caret-down"></i>
+            </a>
+            <ul class="nav collapse submenu-indented flex-column" id="perfiles" data-bs-parent="#menu">
+              {% if current_user.RolPerms['Catalogo']['sub_permisos']['Cliente']%}
+              <li class="nav-item">
+                <a href="#subcompras_4_clientes" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-solid fa-users"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Cliente</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_4_clientes" data-bs-parent="#perfiles">
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Cliente']['sub_permisos']['ClienteAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_alta') }}" aria=current="page">
+                      <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Cliente']['sub_permisos']['ClienteConsultar']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_consultar') }}" aria=current="page">
+                      <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consultar</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+              {% if current_user.RolPerms['Catalogo']['sub_permisos']['Proveedor']%}
+              <li class="nav-item">
+                <a href="#subcompras_7_estaciones" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-solid fa-truck-field"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Proveedor</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_7_estaciones" data-bs-parent="#perfiles">
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Proveedor']['sub_permisos']['ProveedorAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_alta') }}" aria=current="page">
+                      <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Proveedor']['sub_permisos']['ProveedorConsultar']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_consultar') }}" aria=current="page">
+                      <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+              {% if current_user.RolPerms['Catalogo']['sub_permisos']['Estacióndeservicio']%}
+              <li class="nav-item">
+                <a href="#subcompras_4_estaciones" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-solid fa-gas-pump"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Estación de<br> servicio</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_4_estaciones" data-bs-parent="#perfiles">
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Estacióndeservicio']['sub_permisos']['EstacióndeservicioAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_alta') }}" aria=current="page">
+                      <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Estacióndeservicio']['sub_permisos']['EstacióndeservicioConsultar']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_consultar') }}" aria=current="page">
+                      <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+              {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']%} 
+              <li class="nav-item">
+                <a href="#subcompras_5_roles" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa fa-users" aria-hidden="true"></i></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Roles</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_5_roles" data-bs-parent="#perfiles">
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']['sub_permisos']['RolesAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_alta') }}" aria=current="page">
+                      <i class="fa fa-plus" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Crear Rol</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']['sub_permisos']['RolesConsultar']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_consultar') }}" aria=current="page">
+                      <i class="fa fa-address-card" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta Rol</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+              {% if current_user.RolPerms['Catalogo']['sub_permisos']['Usuarios']%}  
+              <li class="nav-item">
+                <a href="#subcompras_6_usuarios" data-bs-toggle="collapse" class="nav-link text-white">
+                  <i class="fa-solid fa-user-group"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Usuarios</span>
+                  <i class="fa fa-caret-down"></i>
+                </a>
+                
+                <ul class="nav collapse submenu-indented flex-column" id="subcompras_6_usuarios" data-bs-parent="#perfiles">
+                <!--   <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_perfiles') }}" aria=current="page">
+                      <i class="fa-solid fa-user-pen"></i>Perfiles
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_permisos') }}" aria=current="page">
+                      <i class="fa-solid fa-users-gear"></i>Permisos
+                    </a>
+                  </li>-->
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Usuarios']['sub_permisos']['UsuariosAlta']%}
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_alta') }}" aria=current="page">
+                      <i class="fa-solid fa-user-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Crear usuarios</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                  {% if current_user.RolPerms['Catalogo']['sub_permisos']['Usuarios']['sub_permisos']['UsuariosConsultar']%} 
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}" aria=current="page">
+                      <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </li>
+              {% endif %}
+            </ul>
+          </li>
+          {% endif %}
+          
+          {% if current_user.RolPerms['Configuración'] %}
+          <li class="nav-item my-sm-1 my-2" id="configuracion">
+            <a href="#" class="nav-link text-white" data-bs-toggle="collapse" data-bs-target="#configuracion_submenu" aria-expanded="false" aria=current="page">
+              <i class="fa-solid fa-gears"></i><span style="font-size: 16px;" class="ms-3 d-none d-sm-inline">Configuración</span>
+              <i class="fa fa-caret-down"></i>
+
+            </a>
+            <ul class="nav collapse submenu-indented flex-column" id="configuracion_submenu" data-bs-parent="#configuracion">
+              <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_configuracion.configuracion') }}" aria=current="page">
+                  <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        {% endif %}
+        </ul>
+
+
+
+          <hr class="text-white d-none d-sm-block" />
+          <div>
+            <a
+              class="d-none d-sm-inline text-decoration-none d-flex align-items-center ms-4"
+              role="button">
+              <span class="fs-4 d-none d-sm-inline rounded-background">
+                <img
+                  src="/static/img/didipsa_HD.png"
+                  alt="scaizen"
+                  class="rounded-image me-2"
+                  height="58px"
+                  width="150px"
+                  style="border-radius: 3px;" 
+                />
+              </span>
+            </a>
+          
+          </div>
+          <div id="copyright" style="background-color: #122b49;">
+            <p>
+              Todos los derechos reservados | &copy; SCAIZEN
+              <span id="year" class></span>
+            </p>
+          </div>
+
+        </ul>
+      </div>
+    </div>
+    
+    <div class="container_table" style="position: relative; {% if img %}background-color: rgba(0, 0, 0, 0);{% endif %}">
+      <div id="myFormccontainer" style="width: 100%; height: auto;">
+        <!-- Contenedor de la tabla -->
+          {% block tables %} {% endblock %}
+          {% if change_pwd_box and change_pwd_box == True %}
+          <form id="myForm" method="POST">
+            <input
+              type="hidden"
+              name="csrf_token"
+              value="{{ csrf_token() }}" />
+
+
+              <input
+              type="hidden"
+              name="user_id"
+              value="{{ current_user.id }}" />
+            <!-- Aquí está el código del modal -->
+            <input type="checkbox" id="btn-modal" />
+            
+            <div class="container-modal">
+              <div class="content-modal">
+                <h2>¡Bienvenido {{ current_user.Username }}!</h2>
+                <p>
+                  Para garantizar su seguridad, le solicitamos que cambie su
+                  contraseña actual.
+                </p>
+                
+                
+                <input
+                  class="datepicker"
+                  placeholder="Nueva contraseña"
+                  type="password"
+                  id="new_password"
+                  name="new_password"
+                  required />
+                  <div id="password_error" style="color: red; font-size: 12px; display: none;">
+                    La contraseña no cumple con los requisitos.
+                  </div>
+                  <label style="font-size: 12px; color: gray;">La contraseña debe contener al menos:</label> 
+                  <ul style="margin-left: 20px; font-size: 12px; color: gray;">
+                    <li>8 caracteres.</li>
+                    <li>Una letra mayúscula.</li>
+                    <li>Una letra minúscula.</li>
+                    <li>Un número.</li>
+                    <li>Un carácter especial (por ejemplo: @, #, $, %).</li>
+                  </ul>
+                <div class="btn-cerrar">
+                  <input
+                    for="btn-modal"
+                    type="submit"
+                    value="Guardar"
+                    style="border-radius: 10px" />
+                </div>
+              </div>
+              <label for="btn-modal" class="cerrar-modal"></label>
+            </div>
+            
+          </form>
+          {% endif%}
+      </div>
+
+      <div id="bg_windows" style="width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); position: absolute; left: 0px; top: 0px;
+        display: flex; justify-content: center; align-items: center; display: none;">
+        <div class="loading-container" id="loading_container">
+          <div class="loading-text" id ='loading_text'>
+            <span>G</span>
+            <span>E</span>
+            <span>N</span>
+            <span>E</span>
+            <span>R</span>
+            <span>A</span>
+            <span>N</span>
+            <span>D</span>
+            <span>O</span>
+          </div>
+        </div>
+      </div>
+      
+
+    </div>
+    
+
+    
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts_base %}
+  {% block scripts %}
+  {% endblock %}
+
+  <script>
+    document.getElementById("year").innerText = new Date().getFullYear();
+  </script>
+
+  <script>
+    function show_load_window(archivo, file = true){
+      window.scrollTo(0, 0);
+      var text= 'GENERANDO';
+      if(file){
+        text = `GENERANDO ${archivo}`;
+      }else {
+        text = archivo;
+      }
+      loading_text = document.getElementById('loading_text');
+      loading_text.innerHTML = '';
+      for (let i = 0; i < text.length; i++) {
+        const span = document.createElement('span');
+        span.textContent = text[i];  // Asignamos la letra actual
+        loading_text.appendChild(span);  // Lo añadimos al div
+        
+      }
+      document.getElementById('bg_windows').style.display = 'flex';
+      document.getElementById('loading_container').style.display = 'initial';
+      if(file){
+        setTimeout(function(){
+          text = `VALIDANDO ${archivo}`;
+          loading_text.innerHTML = '';
+          for (let i = 0; i < text.length; i++) {
+            const span = document.createElement('span');
+            span.textContent = text[i];  // Asignamos la letra actual
+            loading_text.appendChild(span);  // Lo añadimos al div
+            
+          }
+        },3000);
+      }
+    }
+
+    function hide_load_window(){
+      document.getElementById('bg_windows').style.display = 'none';
+      document.getElementById('loading_container').style.display = 'none';
+    }
+
+    {% if PRODUCTOS_NAMES %}
+      const productos_names = {{ productos_names | tojson }};
+
+      const productosNames = {{ productos_names | tojson }};
+      
+      function getProductoName(key) {
+        key = key.replace('PEMEX', '').trim().toLowerCase(); // Elimina el prefijo 'PEMEX' y convierte a minúsculas
+        return productosNames[key];
+      }
+    {% endif %}
+    
+    var csrfToken = $("input[name='csrf_token']").val();
+    var user = $("input[name='username']").val();
+    console.log(user)
+    var formData = {
+            'csrf_token': csrfToken,
+            'user': user
+        };
+    $.ajax({
+      url:"{{url_for('app_scaizen.scaizen')}}",
+      data:formData,
+      type:'POST',
+      success:function(response){
+        console.log("Exito")
+      },
+      
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error("Error:", textStatus, errorThrown);
+      }
+     })
+
+     {% if change_pwd_box and change_pwd_box == True %}
+    document.addEventListener("DOMContentLoaded", function () {
+      // Obtiene el valor actual (puedes cambiar este valor según tu lógica)
+      var valorActual = 1;
+      // Verifica la condición y establece el estado del checkbox
+      if (valorActual === 1) {
+        document.getElementById("btn-modal").checked = true;
+      }
+    });
+
+    
+    document.addEventListener("DOMContentLoaded", function () {
+      document
+        .getElementById("myForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Evitar la recarga predeterminada de la página
+          // Obtener los datos del formulario
+          var formData = new FormData(this);
+          const password = document.getElementById("new_password").value;
+          const passwordError = document.getElementById("password_error");
+
+          // Validar la contraseña
+          const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
+          if (!passwordRegex.test(password)) {
+            event.preventDefault(); // Evitar el envío del formulario
+            
+            passwordError.style.display = "block";
+            return false; // Salir de la función
+          } else {
+            passwordError.style.display = "none";
+          }
+
+          // Enviar la solicitud al servidor
+          fetch("{{url_for('app_scaizen.scaizen')}}", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => response.json()) // Si la respuesta del servidor es JSON
+            .then((data) => {
+              // Manejar la respuesta del servidor
+              console.log(data);
+              // Cerrar el modal aquí (sustituye con el código específico para cerrar tu modal)
+              if(data.response){
+                $('#myForm').hide();
+              }
+              // Ejemplo con jQuery: $('#myModal').modal('hide');
+            })
+            .catch((error) => {
+              // Manejar errores
+              console.error(error);
+            });
+        });
+    });
+    {% endif %}
+  </script>
+
+  // En tu template base (layout.html o similar)
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      let sessionCheckInterval;
+      let inactivityTimer;
+      const timeoutDuration = {{ SESSION_TIMEOUT * 1000 }};
+      const checkInterval = 600000; // 10 minutos
+
+      function checkSession() {
+          fetch('/check_session', {
+              credentials: 'include' // Importante para incluir cookies
+          })
+          .then(response => {
+              if (!response.ok) throw new Error('Network error');
+              return response.json();
+          })
+          .then(data => {
+              if (data.status === 'expired') {
+                  clearInterval(sessionCheckInterval);
+                  clearTimeout(inactivityTimer);
+                  window.location.href = data.redirect;
+              }
+          })
+          .catch(error => console.error('Error checking session:', error));
+      }
+
+      function resetInactivityTimer() {
+          clearTimeout(inactivityTimer);
+          inactivityTimer = setTimeout(() => {
+              window.location.href = "{{ url_for('logout_by_timeout') }}";
+          }, timeoutDuration);
+      }
+
+      // Eventos de actividad del usuario
+      const activityEvents = ['mousemove', 'keypress', 'click', 'scroll'];
+      activityEvents.forEach(event => {
+          window.addEventListener(event, () => {
+              resetInactivityTimer();
+              fetch('/update_activity', { // Endpoint opcional para actualizar actividad
+                  method: 'POST',
+                  credentials: 'include'
+              });
+          });
+      });
+
+      // Iniciar verificaciones
+      sessionCheckInterval = setInterval(checkSession, checkInterval);
+      resetInactivityTimer();
+  });
+  </script>
+{% endblock %}

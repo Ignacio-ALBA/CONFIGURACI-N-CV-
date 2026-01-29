@@ -1,0 +1,673 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema",
+  "$id": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Distribucion.schema.json",
+  "$version": "0.3.0",
+  "type": "object",
+  "description": "Es el elemento madre del archivo JSON.",
+  "properties": {
+    "TipoComplemento": {
+      "enum": [
+        "Almacenamiento",
+        "CDLR",
+        "Comercializacion",
+        "Distribucion",
+        "Expendio",
+        "Extraccion",
+        "Refinacion",
+        "Transporte"
+      ],
+      "description": "Requerido para expresar el tipo de complemento."
+    },
+    "TerminalAlmYTrans": {
+      "type": "object",
+      "description": "Deberá manifestarse cuando se contraten servicios de almacenamiento o transporte.",
+      "properties": {
+        "Almacenamiento": {
+          "type": "object",
+          "description": "Objeto para describir la terminal de almacenamiento.",
+          "properties": {
+            "TerminalAlm": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 250,
+              "description": "Requerido para especificar la terminal de almacenamiento del producto."
+            },
+            "PermisoAlmacenamiento": {
+              "type": "string",
+              "pattern": "^(PL/[0-9]{1,5}/ALM/[0-9]{4})|(PQ/[0-9]{1,5}/ALM/[0-9]{4})|(PL/[0-9]{1,5}/ALM/AE/[0-9]{4})|(G/[0-9]{1,5}/ALM/[0-9]{4})|(P/[0-9]{1,5}/ALM/[0-9]{4})|(LP/[0-9]{1,5}/ALM/[0-9]{4})|(G/[0-9]{1,5}/LPA/[0-9]{4})$",
+              "description": "Requerido para expresar el número de permiso otorgado por la CRE a la terminal de almacenamiento del producto, siguiendo las claves de la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:Permiso} ``\\nameref{Claves:Permiso}\"{}."
+            },
+            "TarifaDeAlmacenamiento": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Requerido para expresar la tarifa pagada por el servicio (cantidad de pesos mexicanos mediante la cual un permisionario otorga el servicio de almacenamiento)."
+            },
+            "CargoPorCapacidadAlmac": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo por capacidad de almacenamiento pagado por el servicio (cantidad de pesos mexicanos por día que ha de pagarse para reservar capacidad para almacenar diariamente en el sistema de almacenamiento. Sin incluir impuestos)."
+            },
+            "CargoPorUsoAlmac": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo por uso pagado por el servicio (cantidad de pesos mexicanos que ha de pagarse por el servicio de recepción-entrega de un barril en el sistema de almacenamiento. Sin incluir impuestos)."
+            },
+            "CargoVolumetricoAlmac": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo volumétrico pagado por el servicio (cargo único en pesos mexicanos que ha de pagarse por los servicios conjuntos de recepción-entrega y almacenamiento de un barril en el sistema de almacenamiento. Sin incluir impuestos)."
+            }
+          },
+          "required": [
+            "TerminalAlm",
+            "PermisoAlmacenamiento",
+            "TarifaDeAlmacenamiento"
+          ]
+        },
+        "Transporte": {
+          "type": "object",
+          "description": "Objeto para describir los servicios de transporte contratados.",
+          "properties": {
+            "PermisoTransporte": {
+              "type": "string",
+              "pattern": "^(PL/[0-9]{1,5}/TRA/OM/[0-9]{4})|(PL/[0-9]{1,5}/TRA/DUC/[0-9]{4})|(PL/[0-9]{1,5}/TRA/TM/[0-9]{4})|(PQ/[0-9]{1,5}/TRA/DUC/[0-9]{4})|(G/[0-9]{1,5}/TUP/[0-9]{4})|(G/[0-9]{1,5}/SAB/[0-9]{4})|(G/[0-9]{1,5}/TRA/OM/[0-9]{4})|(P/[0-9]{1,5}/TRA/TM/[0-9]{4})|(P/[0-9]{1,5}/TRA/OM/[0-9]{4})|(G/[0-9]{1,5}/TRA/[0-9]{4})|(GN/[0-9]{1,5}/P/TRA/DUC/[0-9]{4})|(GN/[0-9]{1,5}/TRA/DUC/[0-9]{4})|(P/[0-9]{1,5}/TRA/DUC/[0-9]{4})|(P/[0-9]{1,5}/P/TRA/DUC/[0-9]{4})|(LP/[0-9]{1,5}/TRA/DUC/[0-9]{4})|(G/[0-9]{1,5}/LPT/[0-9]{4})|(LP/[0-9]{1,5}/TRA/[0-9]{4})$",
+              "description": "Requerido para expresar el número de permiso otorgado por la CRE a la persona moral o física con el cual se realiza la transportación del producto hacia el punto de recepción, siguiendo las claves de la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:PermisoTransporte} ``\\nameref{Claves:PermisoTransporte}\"{}."
+            },
+            "ClaveDeVehiculo": {
+              "type": "string",
+              "minLength": 5,
+              "maxLength": 12,
+              "description": "Opcional para especificar clave del vehículo cuando se trate de transporte por medios distintos a ductos (número económico o en su defecto número de placa)."
+            },
+            "TarifaDeTransporte": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Requerido para expresar la tarifa pagada por el servicio de transporte (cantidad de pesos mexicanos mediante la cual un permisionario otorga el servicio de transporte)."
+            },
+            "CargoPorCapacidadTrans": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo por capacidad pagado por el servicio de transporte cuando haya sido por medio de ducto (cantidad en pesos mexicanos por día que ha de pagarse para reservar capacidad para transportar diariamente en el sistema de transporte. Sin incluir impuestos)."
+            },
+            "CargoPorUsoTrans": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo por uso pagado por el servicio de transporte por medio de ducto (cantidad en pesos mexicanos que ha de pagarse por el servicio de entregar un barril a través del sistema de transporte. Sin incluir impuestos)."
+            },
+            "CargoVolumetricoTrans": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "Opcional para expresar el cargo volumétrico pagado por el servicio de transporte cuando haya sido por medio de ducto (cargo único en pesos mexicanos que ha de pagarse para transportar un barril a través del sistema de transporte. En el caso de la modalidad de reserva contractual, incluye el costo de reservar capacidad para transportar diariamente un barril en el sistema, así como el costo por hacer uso de dicho servicio (Cargo por capacidad y Cargo por uso). En el caso de la modalidad de uso común, se entiende que el cargo permite la recuperación de los costos relacionados con la capacidad y el uso del sistema, aunque el usuario no tenga capacidad reservada. Sin incluir impuestos.)."
+            },
+            "TarifaDeSuministro": {
+              "$ref": "#/definitions/CantidadMonetaria",
+              "description": "opcional para expresar la tarifa de suministro (cantidad de pesos mexicanos mediante la cual un permisionario otorga el servicio de suministro. Incluye impuestos)."
+            }
+          },
+          "additionalProperties": false,
+          "required": ["PermisoTransporte", "TarifaDeTransporte"]
+        }
+      },
+      "minProperties": 1
+    },
+    "Trasvase": {
+      "type": "array",
+      "description": "Deberá manifestarse cuando se contraten servicios de trasvase. ",
+      "items": {
+        "type": "object",
+        "properties": {
+          "NombreTrasvase": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 150,
+            "description": "Requerido para expresar el nombre o denominación social de la persona moral o física que realiza la actividad de trasvase."
+          },
+          "RfcTrasvase": {
+            "$ref": "#/definitions/RFC",
+            "description": "Requerido para expresar el RFC de la persona moral o física que realiza la actividad de trasvase. El RFC deberá contener 12 ó 13 caracteres."
+          },
+          "PermisoTrasvase": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 30,
+            "description": "Opcional para expresar el número de permiso otorgado por la Secretaría de Comunicaciones y Transportes o por la autoridad competente a la persona moral o física que realiza la actividad de trasvase."
+          },
+          "DescripcionTrasvase": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 250,
+            "description": "Requerido para expresar la localización y/o descripción de las instalaciones empleadas en la actividad de trasvase."
+          },
+          "CfdiTrasvase": {
+            "type": "string",
+            "pattern": "^(?!00000000-0000-0000-0000-000000000000)(?!11111111-1111-1111-1111-111111111111)(?!22222222-2222-2222-2222-222222222222)(?!33333333-3333-3333-3333-333333333333)(?!44444444-4444-4444-4444-444444444444)(?!55555555-5555-5555-5555-555555555555)(?!66666666-6666-6666-6666-666666666666)(?!77777777-7777-7777-7777-777777777777)(?!88888888-8888-8888-8888-888888888888)(?!99999999-9999-9999-9999-999999999999)((?i)(?!aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa))((?i)(?!bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb))((?i)(?!cccccccc-cccc-cccc-cccc-cccccccccccc))((?i)(?!dddddddd-dddd-dddd-dddd-dddddddddddd))((?i)(?!eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee))((?i)(?!ffffffff-ffff-ffff-ffff-ffffffffffff))([a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12})$",
+            "description": "Opcional para expresar el folio UUID del CFDI que ampara el servicio de trasvase. "
+          }
+        },
+        "required": ["NombreTrasvase", "RfcTrasvase"]
+      },
+      "minItems": 1
+    },
+    "Dictamen": {
+      "type": "object",
+      "description": "Deberá manifestarse cuando se obtengan los dictámenes por cada lote.",
+      "properties": {
+        "RfcDictamen": {
+          "$ref": "#/definitions/RFC",
+          "description": "Requerido para expresar el RFC del proveedor que presta el servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero, de que se trate, el poder calorífico del gas natural y el octanaje en el caso de gasolina. Puede ser de persona moral o física."
+        },
+        "LoteDictamen": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50,
+          "description": "Requerido para expresar el número de lote del dictamen."
+        },
+        "NumeroFolioDictamen": {
+          "type": "string",
+          "pattern": "^([A-ZÑ]|\\&){3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}[0-9]{5}[12][0-9]{3}$",
+          "description": "Requerido para expresar el número de folio del dictamen. Deberá conformarse de los doce o trece caracteres del RFC del proveedor, seguido de cinco números únicos y consecutivos que correspondan al orden cronológico de emisión del dictamen en el año, seguidos de cuatro números que correspondan al año de emisión del mismo."
+        },
+        "FechaEmisionDictamen": {
+          "type": "string",
+          "format": "date",
+          "description": "Requerido para expresar la fecha en que fue emitido el dictamen, deberá expresarse yyyy-mm-dd, de acuerdo con la especificación ISO 8601."
+        },
+        "ResultadoDictamen": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 300,
+          "description": "requerido para expresar el resultado de las pruebas aplicadas a las muestras. Deberás registrar la información obtenida directamente de un dictamen de laboratorio o de instrumentos en línea para cromatografía y densidad o de la Información que te proporcionen los sujetos que sean tus clientes o proveedores, siempre que se trate del mismo lote."
+        }
+      },
+      "required": [
+        "RfcDictamen",
+        "LoteDictamen",
+        "NumeroFolioDictamen",
+        "FechaEmisionDictamen",
+        "ResultadoDictamen"
+      ]
+    },
+    "Certificado": {
+      "type": "object",
+      "description": "Deberá manifestarse cuando se obtengan los certificados de los equipos y programas informáticos anualmente a más tardar el 30 de septiembre.",
+      "properties": {
+        "RfcCertificado": {
+          "$ref": "#/definitions/RFC",
+          "description": "Requerido para expresar el RFC del proveedor que presta el servicio de verificación de la correcta operación y funcionamiento de los equipos y programas informáticos para llevar los controles volumétricos. Puede ser de persona moral o física."
+        },
+        "NumeroFolioCertificado": {
+          "type": "string",
+          "pattern": "^([A-ZÑ]|\\&){3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}[0-9]{5}[12][0-9]{3}$",
+          "description": "Requerido para expresar el número de folio del certificado. Deberá conformarse de los doce o trece caracteres del RFC del proveedor, seguido de cinco números únicos y consecutivos que correspondan al orden cronológico de emisión del certificado en el año, seguidos de cuatro números que correspondan al año de emisión del mismo."
+        },
+        "FechaEmisionCertificado": {
+          "type": "string",
+          "format": "date",
+          "description": "Requerido para expresar la fecha en que fue emitido el certificado, deberá expresarse yyyy-mm-dd, de acuerdo con la especificación ISO 8601."
+        },
+        "ResultadoCertificado": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 300,
+          "description": "Requerido para expresar el resultado de la verificación, según el certificado."
+        }
+      },
+      "required": [
+        "RfcCertificado",
+        "NumeroFolioCertificado",
+        "FechaEmisionCertificado",
+        "ResultadoCertificado"
+      ]
+    },
+    "Nacional": {
+      "type": "array",
+      "description": "Deberá manifestarse cuando el cliente o proveedor sea nacional.",
+      "items": {
+        "type": "object",
+        "description": "Deberá manifestarse cuando el cliente o proveedor sea nacional.",
+        "properties": {
+          "RfcClienteOProveedor": {
+            "$ref": "#/definitions/RFC",
+            "description": "Requerido para expresar la clave en el RFC del cliente o proveedor."
+          },
+          "NombreClienteOProveedor": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 150,
+            "pattern": "[^|]{1,150}",
+            "description": "Requerido para expresar el nombre, denominación o razón social del cliente o proveedor."
+          },
+          "PermisoClienteOProveedor": {
+            "type": "string",
+            "pattern": "^(H/[0-9]{1,5}/COM/[0-9]{4})|(PL/[0-9]{1,5}/EXP/ES/[0-9]{4})|(PL/[0-9]{1,5}/EXP/ES/MM/[0-9]{4})|(PL/[0-9]{1,5}/EXP/ESA/[0-9]{4})|(H/[0-9]{1,5}/COM/[0-9]{4})|(PL/[0-9]{1,5}/EXP/AE/[0-9]{4})|(G/[0-9]{1,5}/COM/GN/[0-9]{4})|(G/[0-9]{1,5}/COM/PETRO/[0-9]{4})|(G/[0-9]{1,5}/COM/CEE/[0-9]{4})|(G/[0-9]{1,5}/EXP/ES/FE/[0-9]{4})|(G/[0-9]{1,5}/EXP/ES/MM/[0-9]{4})|(G/[0-9]{1,5}/LICUE/[0-9]{4})|(G/[0-9]{1,5}/REG/[0-9]{4})|(LP/[0-9]{1,5}/EXP/ES/[0-9]{4})|(LP/[0-9]{1,5}/EXP/AUT/[0-9]{4})|(LP/[0-9]{1,5}/COM/[0-9]{4})|(PL/[0-9]{1,5}/EXP/ESA/MM/[0-9]{4})|(SENER-REF-[0-9]{1,3}-[0-9]{4})|(SENER-TP-[0-9]{1,3}-[0-9]{4})|(SENER-CPG-[0-9]{1,3}-[0-9]{4})$",
+            "description": "Opcional para expresar el permiso del cliente o proveedor, siguiendo las claves de la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:PermisoClienteProveedor} ``\\nameref{Claves:PermisoClienteProveedor}\"{}."
+          },
+          "CFDIs": {
+            "type": "array",
+            "minItems": 0,
+            "description": "Opcional para declarar todos los CFDIs objeto de las operaciones de los contribuyentes.",
+            "items": {
+              "type": "object",
+              "description": "Objeto para describir un CFDI.",
+              "properties": {
+                "Cfdi": {
+                  "type": "string",
+                  "pattern": "^(?!00000000-0000-0000-0000-000000000000)(?!11111111-1111-1111-1111-111111111111)(?!22222222-2222-2222-2222-222222222222)(?!33333333-3333-3333-3333-333333333333)(?!44444444-4444-4444-4444-444444444444)(?!55555555-5555-5555-5555-555555555555)(?!66666666-6666-6666-6666-666666666666)(?!77777777-7777-7777-7777-777777777777)(?!88888888-8888-8888-8888-888888888888)(?!99999999-9999-9999-9999-999999999999)((?i)(?!aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa))((?i)(?!bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb))((?i)(?!cccccccc-cccc-cccc-cccc-cccccccccccc))((?i)(?!dddddddd-dddd-dddd-dddd-dddddddddddd))((?i)(?!eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee))((?i)(?!ffffffff-ffff-ffff-ffff-ffffffffffff))([a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12})$",
+                  "description": "Requerido para expresar el folio UUID del CFDI."
+                },
+                "TipoCfdi": {
+                  "enum": ["Ingreso", "Egreso", "Traslado"],
+                  "description": "Requerido para expresar el tipo CFDI."
+                },
+                "PrecioVentaOCompraOContrap": {
+                  "$ref": "#/definitions/CantidadMonetaria",
+                  "description": "Requerido para expresar el precio neto del producto vendido o comprado o la contraprestación por el servicio recibido."
+                },
+                "FechaYHoraTransaccion": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "Requerido para expresar la fecha y hora de la transacción que ampara el CFDI, deberá expresarse yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601, deberá expresarse la hora en UTC con la indicación del huso horario."
+                },
+                "VolumenDocumentado": {
+                  "$ref": "#/definitions/Volumen",
+                  "description": "Requerido para expresar el volumen según CFDI."
+                }
+              },
+              "required": [
+                "Cfdi",
+                "TipoCfdi",
+                "PrecioVentaOCompraOContrap",
+                "FechaYHoraTransaccion",
+                "VolumenDocumentado"
+              ]
+            }
+          }
+        },
+        "required": ["RfcClienteOProveedor", "NombreClienteOProveedor"]
+      },
+      "minItems": 1
+    },
+    "Extranjero": {
+      "type": "array",
+      "description": "Deberá manifestarse cuando el cliente o proveedor sea extranjero.",
+      "items": {
+        "type": "object",
+        "description": "Deberá manifestarse cuando el cliente o proveedor sea extranjero.",
+        "properties": {
+          "PermisoImportacionOExportacion": {
+            "type": "string",
+            "pattern": "^([a-zA-Z0-9]{4}C[a-zA-Z0-9]{9})$|^([G]{1}[0-9]{1,17})$",
+            "description": "Requerido para expresar el número de permiso de importación o exportación, siguiendo la nomenclatura descrita en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:ImportacionExportacion} ``\\nameref{Claves:ImportacionExportacion}\"{}. En caso de registrar el producto PR20, la presencia de este elemento será opcional."
+          },
+          "Pedimentos": {
+            "type": "array",
+            "description": "Opcional para declarar todos los pedimentos objeto de las operaciones de los contribuyentes.",
+            "items": {
+              "type": "object",
+              "description": "Objeto para describir un pedimento.",
+              "properties": {
+                "PuntoDeInternacionOExtraccion": {
+                  "type": "string",
+                  "pattern": "^(0[1-2]|0[5-8]|1[1-2]|14|1[6-9]|20|2[2-8]|3[0-1]|3[3-4]|3[7-9]|40|4[2-4]|4[6-8]|5[0-3]|6[4-5]|67|73|75|8[0-4])([0-7])?$",
+                  "description": "Requerido para expresar la aduana y sección por la cual entra o sale el producto del territorio nacional. Se deberá señalar la clave de la ADUANA/SECCION, por la que entra o sale la mercancía a territorio nacional, conforme al Apéndice 1 del Anexo 22 de las Reglas Generales de Comercio Exterior. La clave ADUANA/SECCION se conforma por la clave de aduana, la cual deberá constar por dos dígitos que van desde el 01 al 84, y, en su caso, la sección aduanera la cual deberá constar por un dígito que va del 0 al 7."
+                },
+                "PaisOrigenODestino": {
+                  "$ref": "#/definitions/ClavePais",
+                  "description": "Requerido para expresar el país de donde proviene el producto o de su destino. Se deberá señalar la clave SAAI M3 del país, grupo de países o territorio de la Parte exportadora o importadora, que corresponda al origen de las mercancías, donde se produjeron o su destino, conforme al Apéndice 4 del Anexo 22 de las Reglas Generales de Comercio Exterior. Ejemplo: DEU ALEMANIA (REPUBLICA FEDERAL DE). Deberá estar conformado por tres letras."
+                },
+                "MedioDeTransEntraOSaleAduana": {
+                  "enum": ["1", "2", "3", "6", "7", "8", "11"],
+                  "description": "Requerido para expresar el medio del transporte mediante el cual el producto entra o sale de la aduana. Se deberá señalar la clave del medio de transporte en que se conduce la mercancía para su entrada o salida al territorio nacional, conforme al Apéndice 3 del Anexo 22 de las Reglas Generales de Comercio Exterior, conforme a los siguientes valores permitidos: 1 MARITIMO, 2 FERROVIARIO DE DOBLE ESTIBA, 3 CARRETERO-FERROVIARIO, 6 FERROVIARIO, 7 CARRETERO, 8 TUBERIA, 11 DUCTOS."
+                },
+                "PedimentoAduanal": {
+                  "type": "string",
+                  "pattern": "^[0-9]{2}  (0[1-2]|0[5-8]|1[1-2]|14|1[6-9]|20|2[2-8]|3[0-1]|3[3-4]|3[7-9]|40|4[2-4]|4[6-8]|5[0-3]|6[4-5]|67|73|75|8[0-4])  [0-9]{4}  [0-9](?!0{6})[0-9]{6}$",
+                  "description": "Requerido para expresar el número del pedimento de importación o exportación conforme al Anexo 22 de las Reglas Generales de Comercio Exterior. Está integrado con quince dígitos, que corresponden a:\n2 dígitos, del año de validación.\n2 dígitos, de la aduana de despacho.\n4 dígitos, del número de la patente o autorización otorgada por la AGA al agente, importador, exportador, apoderado aduanal o de Almacén que promueve el despacho. Cuando este número sea menor a cuatro dígitos, se deberán anteponer los ceros que fueren necesarios para completar 4 dígitos.\n1 dígito, debe corresponder al último dígito del año en curso, salvo que se trate de un pedimento consolidado iniciado en el año inmediato anterior o del pedimento original de una rectificación.\n6 dígitos, los cuales serán numeración progresiva por aduana en la que se encuentren autorizados para el despacho, asignada por cada agente, importador, exportador, apoderado aduanal o de Almacén, referido a todos los tipos de pedimento.\nDicha numeración deberá iniciar con 000001.\nCada uno de estos grupos de dígitos deberá ser separado por dos espacios en blanco, excepto entre el dígito que corresponde al último dígito del año en curso y los seis dígitos de la numeración progresiva.\nTratándose de pedimentos de rectificación o pedimentos complementarios, deberá de identificarse con un número nuevo."
+                },
+                "Incoterms": {
+                  "enum": [
+                    "CFR",
+                    "CIF",
+                    "CPT",
+                    "CIP",
+                    "DAF",
+                    "DAP",
+                    "DAT",
+                    "DES",
+                    "DEQ",
+                    "DDU",
+                    "DDP",
+                    "EXW",
+                    "FCA",
+                    "FAS",
+                    "FOB"
+                  ],
+                  "description": "Requerido para expresar los Incoterms (international commercial terms, ``términos internacionales de comercio\"{}). Deberá señalar los términos en tres letras cada uno. De acuerdo con los INCOTERMS internacionales vigentes, se deberá señalar conforme al Apéndice 14 del Anexo 22 de las Reglas Generales de Comercio Exterior. Ejemplo: DAP (ENTREGADA EN LUGAR) a 3 caracteres."
+                },
+                "PrecioDeImportacionOExportacion": {
+                  "$ref": "#/definitions/CantidadMonetaria",
+                  "description": "Requerido para expresar el precio neto del producto (cantidad de pesos mexicanos mediante la cual el permisionario de expendio al público introduce o extrae del territorio nacional un producto. Incluye impuestos, pero no la tarifa de transporte ni almacenamiento)."
+                },
+                "VolumenDocumentado": {
+                  "$ref": "#/definitions/Volumen",
+                  "description": "Requerido para expresar el volumen expresado en el pedimento aduanal."
+                }
+              },
+              "required": [
+                "PuntoDeInternacionOExtraccion",
+                "PaisOrigenODestino",
+                "MedioDeTransEntraOSaleAduana",
+                "PedimentoAduanal",
+                "Incoterms",
+                "PrecioDeImportacionOExportacion",
+                "VolumenDocumentado"
+              ]
+            }
+          }
+        },
+        "minProperties": 1,
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "Aclaracion": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 600,
+      "description": "Requerido para aclarar o justificar inconsistencias en los volúmenes reportados."
+    }
+  },
+  "required": ["TipoComplemento"],
+  "anyOf":[
+    { "required":["TerminalAlmYTrans"] },
+    { "required":["Dictamen"] },
+    { "required":["Certificado"] },
+    { "required":["Nacional"] },
+    { "required":["Extranjero"] },
+    { "required":["Aclaracion"] },
+    { "required":["Trasvase"] }
+  ],
+  "definitions": {
+    "RFC": {
+      "description": "El Registro Federal de Contribuyentes es la clave que se asigna a las personas físicas y morales que tengan obligación de presentar declaraciones periódicas de pago, informativas o por cuenta de terceros, o estén obligadas a expedir comprobantes fiscales por las actividades que realicen.\n La clave se conforma de 12 dígitos en el caso de personas morales, los primeros 3, corresponden a la denominación o razón social del contribuyente, los siguientes 6 corresponden a su fecha de constitución (aa/mm/dd) y los últimos 3 son los dígitos de la homoclave, la cual permite que el RFC sea único e irrepetible aun y cuando coincidan los primeros 9 dígitos anteriores.\n Para el caso de personas físicas, la clave se conforma de 13 dígitos, los primeros 4, corresponden al nombre del contribuyente (2 dígitos para apellido paterno, 1 para apellido materno y 1 para el nombre del contribuyente), los siguientes 6 corresponden a su fecha de nacimiento (aa/mm/dd) y los últimos 3 son los dígitos de la homoclave, la cual permite que el RFC sea único e irrepetible aun y cuando coincidan los primeros 9 dígitos anteriores.",
+      "type": "string",
+      "pattern": "^([A-ZÑ]|\\&){3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+    },
+    "RfcPersonaFisica": {
+      "description": "RFC con longitud de 13 posiciones, correspondiente a una persona física.",
+      "type": "string",
+      "pattern": "^([A-ZÑ]|\\&){4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+    },
+    "RfcPersonaMoral": {
+      "description": "RFC con longitud de 12 posiciones, correspondiente a una persona moral.",
+      "type": "string",
+      "pattern": "^([A-ZÑ]|\\&){3}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+    },
+    "CantidadMonetaria": {
+      "description": "Esto representa una Cantidad Monetaria.",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1000000000000,
+      "fractionDigits": 5
+    },
+    "Volumen": {
+      "type": "object",
+      "description": "Objeto para describir un volumen y su unidad de medida.",
+      "properties": {
+        "ValorNumerico": {
+          "description": "Valor adimensional del volumen.",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100000000000,
+          "fractionDigits": 5
+        },
+        "UnidadDeMedida": {
+          "description": "Unidad de medida asociada al valor numérico.",
+          "$ref": "#/definitions/UM"
+        }
+      },
+      "required": ["ValorNumerico", "UnidadDeMedida"],
+      "additionalProperties": false
+    },
+    "UM": {
+      "description": "Este tipo de variable sólo permite los valores indicados en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:UnidadDeMedida} ``\\nameref{Claves:UnidadDeMedida}\"{}.",
+      "type": "string",
+      "pattern": "^UM0[1-4]$"
+    },
+    "ClavePais": {
+      "description": "Claves SAAI FIII",
+      "enum": [
+        "AFG",
+        "ALB",
+        "DEU",
+        "AND",
+        "AGO",
+        "AIA",
+        "ATG",
+        "ANT",
+        "SAU",
+        "DZA",
+        "ARG",
+        "ARM",
+        "ABW",
+        "AUS",
+        "AUT",
+        "AZE",
+        "BHS",
+        "BHR",
+        "BGD",
+        "BMU",
+        "BLR",
+        "BOL",
+        "BIH",
+        "BWA",
+        "BRA",
+        "BRN",
+        "BGR",
+        "BFA",
+        "BDI",
+        "BTN",
+        "CPV",
+        "TCD",
+        "CYM",
+        "KHM",
+        "CMR",
+        "CAN",
+        "RKE",
+        "CHL",
+        "CHN",
+        "CYP",
+        "CIA",
+        "CCK",
+        "COL",
+        "COM",
+        "EMU",
+        "COG",
+        "COK",
+        "PRK",
+        "KOR",
+        "CIV",
+        "CRI",
+        "HRV",
+        "CUB",
+        "CUR",
+        "DNK",
+        "DJI",
+        "DMA",
+        "ECU",
+        "EGY",
+        "SLV",
+        "ARE",
+        "ERI",
+        "SVN",
+        "ESP",
+        "DSM",
+        "USA",
+        "EST",
+        "ETH",
+        "FJI",
+        "PHL",
+        "FIN",
+        "FRA",
+        "GZA",
+        "GAB",
+        "GMB",
+        "GEO",
+        "GHA",
+        "GIB",
+        "GRD",
+        "GRC",
+        "GRL",
+        "GLP",
+        "GUM",
+        "GTM",
+        "GNB",
+        "GNQ",
+        "GIN",
+        "GUF",
+        "GUY",
+        "HTI",
+        "HND",
+        "HKG",
+        "HUN",
+        "IND",
+        "IDN",
+        "IRQ",
+        "IRN",
+        "IRL",
+        "ISL",
+        "LHM",
+        "FLK",
+        "MNP",
+        "MHL",
+        "SLB",
+        "SJM",
+        "TKL",
+        "WLF",
+        "ISR",
+        "ITA",
+        "JAM",
+        "JPN",
+        "JOR",
+        "KAZ",
+        "KEN",
+        "KIR",
+        "KWT",
+        "KGZ",
+        "LSO",
+        "LVA",
+        "LBN",
+        "LBR",
+        "LBY",
+        "LIE",
+        "LTU",
+        "LUX",
+        "MAC",
+        "MKD",
+        "MDG",
+        "MYS",
+        "MWI",
+        "MDV",
+        "MLI",
+        "MLT",
+        "MAR",
+        "MTQ",
+        "MUS",
+        "MRT",
+        "MEX",
+        "MDA",
+        "MCO",
+        "MNG",
+        "MSR",
+        "MNE",
+        "MOZ",
+        "MMR",
+        "NAM",
+        "NRU",
+        "CXI",
+        "NPL",
+        "NIC",
+        "NER",
+        "NGA",
+        "NIU",
+        "NFK",
+        "NOR",
+        "NCL",
+        "NZL",
+        "OMN",
+        "PIK",
+        "ZYA",
+        "KCD",
+        "PAK",
+        "PLW",
+        "PSE",
+        "PAN",
+        "PNG",
+        "PRY",
+        "PER",
+        "PCN",
+        "PYF",
+        "POL",
+        "PRT",
+        "PRI",
+        "QAT",
+        "GBR",
+        "CZE",
+        "CAF",
+        "LAO",
+        "SRB",
+        "DOM",
+        "SVK",
+        "COD",
+        "RWA",
+        "REU",
+        "ROM",
+        "RUS",
+        "ESH",
+        "WSM",
+        "KNA",
+        "SMR",
+        "SPM",
+        "VCT",
+        "SHN",
+        "LCA",
+        "STP",
+        "SEN",
+        "SYC",
+        "SLE",
+        "SGP",
+        "SYR",
+        "SOM",
+        "LKA",
+        "ZAF",
+        "SDN",
+        "SWE",
+        "CHE",
+        "SUR",
+        "SWZ",
+        "TJK",
+        "THA",
+        "TWN",
+        "TZA",
+        "XCH",
+        "FXA",
+        "TMP",
+        "TGO",
+        "TON",
+        "TTO",
+        "TUN",
+        "TCA",
+        "TKM",
+        "TUR",
+        "TUV",
+        "UKR",
+        "UGA",
+        "URY",
+        "UZB",
+        "VUT",
+        "VEN",
+        "VNM",
+        "VGB",
+        "VIR",
+        "YEM",
+        "YUG",
+        "ZMB",
+        "ZWE",
+        "PTY",
+        "RUH"
+      ]
+    }
+  }
+}

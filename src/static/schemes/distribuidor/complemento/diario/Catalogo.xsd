@@ -1,0 +1,1827 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning"  vc:minVersion="1.1">
+	<xs:element name="catCovol">
+		<xs:annotation>
+			<xs:documentation>Catálogos</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+	<xs:simpleType name="c_claveProductos">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los productos (PR03 - Diésel,PR07 - Gasolina,PR08 - Petróleo,PR09 - Gas Natural,PR10 - Condensado,PR11 - Turbosina,PR12 - Gas L.P.,PR13 - Combustóleo,PR14 - Propano,PR15 – Bioenergético,PR16 – Gasóleo,PR17- Naftas,PR18 – Gasavión,PR19 – Hidratos de metano,PR20 - Otros).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="PR03"/>
+			<xs:enumeration value="PR07"/>
+			<xs:enumeration value="PR08"/>
+			<xs:enumeration value="PR09"/>
+			<xs:enumeration value="PR10"/>
+			<xs:enumeration value="PR11"/>
+			<xs:enumeration value="PR12"/>
+			<xs:enumeration value="PR13"/>
+			<xs:enumeration value="PR14"/>
+			<xs:enumeration value="PR15"/>
+			<xs:enumeration value="PR16"/>
+			<xs:enumeration value="PR17"/>
+			<xs:enumeration value="PR18"/>
+			<xs:enumeration value="PR19"/>
+			<xs:enumeration value="PR20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_claveSubproductos">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la marca de los subproductos (SP1 - Súper-ligero/Dulce,SP2 - Súper-ligero/Semi-amargo,SP3 - Súper-ligero/Amargo,SP4 - Ligero/Dulce,SP5 - Ligero/Semi-amargo,SP6 - Ligero/Amargo,SP7 - Mediano/Dulce,SP8 - Mediano/Semi-amargo,SP9 - Mediano/Amargo,SP10 - Pesado/Dulce,SP11 - Pesado/Semi-amargo,SP12 - Pesado/Amargo,SP13 - Extra-pesado/Dulce,SP14 - Extra-pesado/Semi-amargo,SP15 - Extra-pesado/Amargo,SP16 - Gasolina regular menor a 91 octanos,SP17 - Gasolina premium mayor o igual a 91 octanos,SP18 - Diésel Automotriz [contenido mayor de azufre a 15 mg/kg y contenido máximo de azufre de 500 mg/kg],SP19 - Diésel marino,SP20 - Otros,SP21 - Biodiesel,SP22 – IFO 380,SP23 - Diésel Industrial,SP24 - Diésel de Ultra Bajo Azufre (DUBA) [contenido máximo de azufre de 15 mg/kg],SP25 - Diésel Agrícola,SP26 – Gasavión,SP27 – Gas Natural Vehícular Comprimido,SP28 – Gas Natural Comprimido,SP29 – Gas Natutal Vehícular Licuado,SP30 - Combustóleo menor o igual a 1% de azufre).SP31 - Combustóleo mayor a 1% y menor a 3% de azufre. SP32 - Combustóleo mayor o igual a 3% y menor a 4.4% de azufre. SP33 – IFO 180. SP34 – JET-A. SP35 – JET-A1. SP36 – Bioturbosina. SP37 – Líquidos del Gas Natural. SP38 – Gas Natural sin procesar. SP39 - Etanol Anhidro contenido máximo de 10 % como oxigenante en gasolinas Regular. SP40 - Etanol Anhidro contenido máximo de 10 % como oxigenante en gasolinas Premium.. SP41 – Gas Natural procesado. SP42 – Metano. SP43 – Butano. SP44 – Etano. SP45 - Naftas Pesadas. SP46 - Naftas Ligeras. SP47 – Gasolina natural. SP48 – Gasoleo Doméstico. SP49 - MTBE</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="SP1"/>
+			<xs:enumeration value="SP2"/>
+			<xs:enumeration value="SP3"/>
+			<xs:enumeration value="SP4"/>
+			<xs:enumeration value="SP5"/>
+			<xs:enumeration value="SP6"/>
+			<xs:enumeration value="SP7"/>
+			<xs:enumeration value="SP8"/>
+			<xs:enumeration value="SP9"/>
+			<xs:enumeration value="SP10"/>
+			<xs:enumeration value="SP11"/>
+			<xs:enumeration value="SP12"/>
+			<xs:enumeration value="SP13"/>
+			<xs:enumeration value="SP14"/>
+			<xs:enumeration value="SP15"/>
+			<xs:enumeration value="SP16"/>
+			<xs:enumeration value="SP17"/>
+			<xs:enumeration value="SP18"/>
+			<xs:enumeration value="SP19"/>
+			<xs:enumeration value="SP20"/>
+			<xs:enumeration value="SP21"/>
+			<xs:enumeration value="SP22"/>
+			<xs:enumeration value="SP23"/>
+			<xs:enumeration value="SP24"/>
+			<xs:enumeration value="SP25"/>
+			<xs:enumeration value="SP26"/>
+			<xs:enumeration value="SP27"/>
+			<xs:enumeration value="SP28"/>
+			<xs:enumeration value="SP29"/>
+			<xs:enumeration value="SP30"/>
+			<xs:enumeration value="SP31"/>
+			<xs:enumeration value="SP32"/>
+			<xs:enumeration value="SP33"/>
+			<xs:enumeration value="SP34"/>
+			<xs:enumeration value="SP35"/>
+			<xs:enumeration value="SP36"/>
+			<xs:enumeration value="SP37"/>
+			<xs:enumeration value="SP38"/>
+			<xs:enumeration value="SP39"/>
+			<xs:enumeration value="SP40"/>
+			<xs:enumeration value="SP41"/>
+			<xs:enumeration value="SP42"/>
+			<xs:enumeration value="SP43"/>
+			<xs:enumeration value="SP44"/>
+			<xs:enumeration value="SP45"/>
+			<xs:enumeration value="SP46"/>
+			<xs:enumeration value="SP47"/>
+			<xs:enumeration value="SP48"/>
+			<xs:enumeration value="SP49"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_Marca">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la clave de las marcas.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+			<xs:enumeration value="5"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+			<xs:enumeration value="9"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+			<xs:enumeration value="14"/>
+			<xs:enumeration value="15"/>
+			<xs:enumeration value="16"/>
+			<xs:enumeration value="17"/>
+			<xs:enumeration value="18"/>
+			<xs:enumeration value="19"/>
+			<xs:enumeration value="20"/>
+			<xs:enumeration value="21"/>
+			<xs:enumeration value="22"/>
+			<xs:enumeration value="23"/>
+			<xs:enumeration value="24"/>
+			<xs:enumeration value="25"/>
+			<xs:enumeration value="26"/>
+			<xs:enumeration value="27"/>
+			<xs:enumeration value="28"/>
+			<xs:enumeration value="29"/>
+			<xs:enumeration value="30"/>
+			<xs:enumeration value="31"/>
+			<xs:enumeration value="32"/>
+			<xs:enumeration value="33"/>
+			<xs:enumeration value="34"/>
+			<xs:enumeration value="35"/>
+			<xs:enumeration value="36"/>
+			<xs:enumeration value="37"/>
+			<xs:enumeration value="38"/>
+			<xs:enumeration value="39"/>
+			<xs:enumeration value="40"/>
+			<xs:enumeration value="41"/>
+			<xs:enumeration value="42"/>
+			<xs:enumeration value="43"/>
+			<xs:enumeration value="44"/>
+			<xs:enumeration value="45"/>
+			<xs:enumeration value="46"/>
+			<xs:enumeration value="47"/>
+			<xs:enumeration value="48"/>
+			<xs:enumeration value="49"/>
+			<xs:enumeration value="50"/>
+			<xs:enumeration value="51"/>
+			<xs:enumeration value="52"/>
+			<xs:enumeration value="53"/>
+			<xs:enumeration value="54"/>
+			<xs:enumeration value="55"/>
+			<xs:enumeration value="56"/>
+			<xs:enumeration value="57"/>
+			<xs:enumeration value="58"/>
+			<xs:enumeration value="59"/>
+			<xs:enumeration value="60"/>
+			<xs:enumeration value="61"/>
+			<xs:enumeration value="62"/>
+			<xs:enumeration value="63"/>
+			<xs:enumeration value="64"/>
+			<xs:enumeration value="65"/>
+			<xs:enumeration value="66"/>
+			<xs:enumeration value="67"/>
+			<xs:enumeration value="68"/>
+			<xs:enumeration value="69"/>
+			<xs:enumeration value="70"/>
+			<xs:enumeration value="71"/>
+			<xs:enumeration value="72"/>
+			<xs:enumeration value="73"/>
+			<xs:enumeration value="74"/>
+			<xs:enumeration value="75"/>
+			<xs:enumeration value="76"/>
+			<xs:enumeration value="77"/>
+			<xs:enumeration value="78"/>
+			<xs:enumeration value="79"/>
+			<xs:enumeration value="80"/>
+			<xs:enumeration value="81"/>
+			<xs:enumeration value="82"/>
+			<xs:enumeration value="83"/>
+			<xs:enumeration value="84"/>
+			<xs:enumeration value="85"/>
+			<xs:enumeration value="86"/>
+			<xs:enumeration value="87"/>
+			<xs:enumeration value="88"/>
+			<xs:enumeration value="89"/>
+			<xs:enumeration value="90"/>
+			<xs:enumeration value="91"/>
+			<xs:enumeration value="92"/>
+			<xs:enumeration value="93"/>
+			<xs:enumeration value="94"/>
+			<xs:enumeration value="95"/>
+			<xs:enumeration value="96"/>
+			<xs:enumeration value="97"/>
+			<xs:enumeration value="98"/>
+			<xs:enumeration value="99"/>
+			<xs:enumeration value="100"/>
+			<xs:enumeration value="101"/>
+			<xs:enumeration value="102"/>
+			<xs:enumeration value="103"/>
+			<xs:enumeration value="104"/>
+			<xs:enumeration value="105"/>
+			<xs:enumeration value="106"/>
+			<xs:enumeration value="107"/>
+			<xs:enumeration value="108"/>
+			<xs:enumeration value="109"/>
+			<xs:enumeration value="110"/>
+			<xs:enumeration value="111"/>
+			<xs:enumeration value="112"/>
+			<xs:enumeration value="113"/>
+			<xs:enumeration value="114"/>
+			<xs:enumeration value="115"/>
+			<xs:enumeration value="116"/>
+			<xs:enumeration value="117"/>
+			<xs:enumeration value="118"/>
+			<xs:enumeration value="119"/>
+			<xs:enumeration value="120"/>
+			<xs:enumeration value="121"/>
+			<xs:enumeration value="122"/>
+			<xs:enumeration value="123"/>
+			<xs:enumeration value="124"/>
+			<xs:enumeration value="125"/>
+			<xs:enumeration value="126"/>
+			<xs:enumeration value="127"/>
+			<xs:enumeration value="128"/>
+			<xs:enumeration value="129"/>
+			<xs:enumeration value="130"/>
+			<xs:enumeration value="131"/>
+			<xs:enumeration value="132"/>
+			<xs:enumeration value="133"/>
+			<xs:enumeration value="134"/>
+			<xs:enumeration value="135"/>
+			<xs:enumeration value="136"/>
+			<xs:enumeration value="137"/>
+			<xs:enumeration value="138"/>
+			<xs:enumeration value="139"/>
+			<xs:enumeration value="140"/>
+			<xs:enumeration value="141"/>
+			<xs:enumeration value="142"/>
+			<xs:enumeration value="143"/>
+			<xs:enumeration value="144"/>
+			<xs:enumeration value="145"/>
+			<xs:enumeration value="146"/>
+			<xs:enumeration value="147"/>
+			<xs:enumeration value="148"/>
+			<xs:enumeration value="149"/>
+			<xs:enumeration value="150"/>
+			<xs:enumeration value="151"/>
+			<xs:enumeration value="152"/>
+			<xs:enumeration value="153"/>
+			<xs:enumeration value="154"/>
+			<xs:enumeration value="155"/>
+			<xs:enumeration value="156"/>
+			<xs:enumeration value="157"/>
+			<xs:enumeration value="158"/>
+			<xs:enumeration value="159"/>
+			<xs:enumeration value="160"/>
+			<xs:enumeration value="161"/>
+			<xs:enumeration value="162"/>
+			<xs:enumeration value="163"/>
+			<xs:enumeration value="164"/>
+			<xs:enumeration value="165"/>
+			<xs:enumeration value="166"/>
+			<xs:enumeration value="167"/>
+			<xs:enumeration value="168"/>
+			<xs:enumeration value="169"/>
+			<xs:enumeration value="170"/>
+			<xs:enumeration value="171"/>
+			<xs:enumeration value="172"/>
+			<xs:enumeration value="173"/>
+			<xs:enumeration value="174"/>
+			<xs:enumeration value="175"/>
+			<xs:enumeration value="176"/>
+			<xs:enumeration value="177"/>
+			<xs:enumeration value="178"/>
+			<xs:enumeration value="179"/>
+			<xs:enumeration value="180"/>
+			<xs:enumeration value="181"/>
+			<xs:enumeration value="182"/>
+			<xs:enumeration value="183"/>
+			<xs:enumeration value="184"/>
+			<xs:enumeration value="185"/>
+			<xs:enumeration value="186"/>
+			<xs:enumeration value="187"/>
+			<xs:enumeration value="188"/>
+			<xs:enumeration value="189"/>
+			<xs:enumeration value="190"/>
+			<xs:enumeration value="191"/>
+			<xs:enumeration value="192"/>
+			<xs:enumeration value="193"/>
+			<xs:enumeration value="194"/>
+			<xs:enumeration value="195"/>
+			<xs:enumeration value="196"/>
+			<xs:enumeration value="197"/>
+			<xs:enumeration value="198"/>
+			<xs:enumeration value="199"/>
+			<xs:enumeration value="200"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_Caracter">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para expresar el carácter con el que actúa para efectos regulatorios (1 - contratista, 2 -asignatario, 3 - permisionario, 4 - usuario)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="contratista"/>
+			<xs:enumeration value="asignatario"/>
+			<xs:enumeration value="permisionario"/>
+			<xs:enumeration value="usuario"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_ModalidadPermiso">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la Modalidad Permiso (i) contrato para la exploración y extracción de hidrocarburos; ii) asignación; iii) permiso para tratamiento o refinación de petróleo; iv) permiso de procesamiento de gas natural y condensados; v) permiso de compresión, descompresión, licuefacción o regasificación de gas natural; vi) permiso de transporte de hidrocarburos o petrolíferos; vii) permiso de almacenamiento de hidrocarburos o petrolíferos; viii) permiso de almacenamiento para usos propios de petrolíferos; ix) permiso de distribución de gas natural o petrolíferos; x) permiso de expendio de gas natural o petrolíferos; xi) permiso de comercialización de gas natural o petrolíferos)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="4"/>
+			<xs:enumeration value="i"/>
+			<xs:enumeration value="ii"/>
+			<xs:enumeration value="iii"/>
+			<xs:enumeration value="iv"/>
+			<xs:enumeration value="v"/>
+			<xs:enumeration value="vi"/>
+			<xs:enumeration value="vii"/>
+			<xs:enumeration value="viii"/>
+			<xs:enumeration value="ix"/>
+			<xs:enumeration value="x"/>
+			<xs:enumeration value="xi"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoParaCompresion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso Compresion (a) compresión de gas natural; b) descompresión de gas natural; c) licuefacción de gas natural; d) regasificación de gas natural)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoParaTransporte">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso para Transporte (a) Transporte de petrolíferos por ductos; b) Transporte de petrolíferos por otros medios distintos de ductos (autotanque y semirremolque); c) Transporte de petrolíferos por otros medios distintos de ductos (carrotanque); d) Transporte de gas natural por ducto; e) Transporte de gas natural por medio de semirremolques; f) Transporte de gas licuado de petróleo por medio de ductos; g) Transporte de Gas L.P. por medios distintos de ductos; h) transporte de petrolíferos por medio de buque-tanques)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="f"/>
+			<xs:enumeration value="g"/>
+			<xs:enumeration value="h"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoAlmacenamiento">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso Almacenamiento (a) Almacenamiento de petrolíferos; b) Almacenamiento de petrolíferos en aeródromos; c) Almacenamiento de gas natural; d) Almacenamiento de Gas Licuado de Petróleo)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoDeDistribucion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso de Distribución (a) Permiso de distribución de petrolíferos por medios distintos a ductos; b) Permiso de distribución de gas natural por ducto; c) Permiso de distribución de gas natural por medio de semirremolques; d) Permiso de distribución de gas licuado de petróleo mediante planta de distribución; e) Permiso de distribución de gas licuado de petróleo por ductos; f) Permiso de distribución de gas licuado de petróleo por medio de auto-tanque)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="f"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoDeExpendio">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso de Expendio (a) Permiso de expendio de petrolíferos en aeródromos; b) Permiso de expendio de petrolíferos en estaciones de servicios; c) Permiso de expendio de petrolíferos en estaciones de servicios autoconsumo; d) Permiso de estaciones de servicio de gas natural; e) Permiso de expendio al público de gas licuado de petróleo en estaciones de servicio; f) Permiso de expendio al público de gas licuado de petróleo en bodega de expendio; g) Permiso de autoconsumo de de gas licuado de petróleo)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="f"/>
+			<xs:enumeration value="g"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoDeComercializacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso de Comercialización (a) Permiso de comercialización de petrolíferos; b) Permiso de comercialización de petrolíferos combinado (PL. PQ. Petróleo, GN, CLP); c) Permiso de comercialización de gas natural; d) Permiso de comercialización de gas natural y petróleo; d) Permiso de comercialización de hidrocarburos; e) Permiso de comercialización de petróleo; f) Permiso de comercialización de hidrocarburos, petrolíferos, petroquímicos y Gas L.P.; f) Permiso de comercialización de Gas L.P; g) Permiso de comercialización de combinados)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+			<xs:enumeration value="d"/>
+			<xs:enumeration value="e"/>
+			<xs:enumeration value="f"/>
+			<xs:enumeration value="g"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PermisoDeTratamiento">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Permiso de tratamiento (a) Permiso de Tratamiento de Petróleo; b) Permiso de Refinación de Petróleo; c) Permiso de Procesamiento de Gas Natural)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="a"/>
+			<xs:enumeration value="b"/>
+			<xs:enumeration value="c"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_EstadoTanque">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para el estado del tanque (O - en operación,F - fuera de operación)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="1"/>
+			<xs:enumeration value="O"/>
+			<xs:enumeration value="F"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_ProductoOperacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la entrega del producto en operacion (1 - venta, 2 - entrega, 3 - suministro, 4 - exportación)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="4"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_TipoDeRegistro">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para el tipo de registro (D - tratándose de ventas, E - tratándose de entregas por prestaciones de servicio, J - en el caso de jarreos realizados por la Procuraduría Federal del Consumidor, la CRE o la autoridad competente, UVAS o laboratorios móviles, A - tratándose de auto-jarreos y N - tratándose de producto en consignación, C - tratándose de autoconsumo)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="D"/>
+			<xs:enumeration value="E"/>
+			<xs:enumeration value="J"/>
+			<xs:enumeration value="A"/>
+			<xs:enumeration value="N"/>
+			<xs:enumeration value="C"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_MedioTransporte">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los medios de transporte(1 – Marítimo, 2 – Ferroviario de doble estiba, 3 – Carretero-Ferroviario, 6 – Ferroviario,7 – Carretero, 8 – Tubería, 11 – Ductos).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+			<xs:enumeration value="6"/>
+			<xs:enumeration value="7"/>
+			<xs:enumeration value="8"/>
+			<xs:enumeration value="11"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_FechaHora">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la expresión de la fecha y hora. Se expresa en la forma AAAA-MM-DDThh:mm:ss</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:dateTime">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="((19|20)[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_Hora">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la expresión de la hora. Se expresa en la forma hh:mm:ss</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:time">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_RFC">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para expresar claves del Registro Federal de Contribuyentes.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="12"/>
+			<xs:maxLength value="13"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_NumPermisoContratoAsignacion">
+		<xs:annotation>
+			<xs:documentation>PER1 - Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+PER2 - Expendio al público de gasolinas y diésel mediante estación de servicio - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/AAAA)
+PER3 - Expendio al público de gasolinas y diésel mediante estación de servicio multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/MM/AAAA)
+PER4 - Expendio de autoconsumo de gasolinas y diésel - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/AAAA)
+PER5 - Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+PER6 - Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+PER7 - Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+PER8 - Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+PER9 - Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+PER10 - Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+PER11 - Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+PER12 - Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+PER13 - Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+PER14 - Expendio en aeródromos - (Con nomenclatura tipo: PL/XXXXX/EXP/AE/AAAA)
+PER15 - Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+PER16 - Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+PER17 - Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+PER18 - Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+PER19 - Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+PER20 - Compresión de gas natural - (Con nomenclatura tipo: G/XXXXX/COMP/AAAA)
+PER21 - Descompresión de gas natural - (Con nomenclatura tipo: G/XXXXX/DESC/AAAA)
+PER22 - Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+PER23 - Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+PER24 - Expendio al público de gas natural mediante estación de servicio con fin específico - (Con nomenclatura tipo: G/XXXXX/EXP/ES/FE/AAAA)
+PER25 - Expendio al público de gas natural mediante estación de servicio multimodal - (Con nomenclatura tipo: G/XXXXX/EXP/ES/MM/AAAA)
+PER26 - Gestión de sistemas integrados de sistemas de Transporte y Almacenamiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/GES/AAAA)
+PER27 - Licuefacción de gas natural - (Con nomenclatura tipo: G/XXXXX/LICUE/AAAA)
+PER28 - Regasificación de gas natural - (Con nomenclatura tipo: G/XXXXX/REG/AAAA)
+PER29 - Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+PER30 - Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+PER31 - Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+PER32 - Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+PER33 - Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+PER34 - Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+PER35 - Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+PER36 - Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+PER37 - Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+PER38 - Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+PER39 - Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+PER40 - Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+PER41 - Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+PER42 - Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+PER43 - Expendio al Público de Gas Licuado de Petróleo mediante Estación de Servicio con fin Específico - (Con nomenclatura tipo: LP/XXXXX/EXP/ES/AAAA)
+PER44 - Expendio de Gas Licuado de Petróleo mediante Estación de Servicio para autoconsumo - (Con nomenclatura tipo: LP/XXXXX/EXP/AUT/AAAA)
+PER45 - Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+PER46 - Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+PER47 - Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+PER48 - Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+PER49 - Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+PER50 - Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+PER51 - Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+PER52 - Expendio de petrolíferos en estaciones de servicio para autoconsumo multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/MM/AAAA)
+PER53 - Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+PER54 - Refinación del petróleo - (Con nomenclatura tipo: SENER-REF-XXX-AAAA)
+PER55- Tratamiento de petróleo - (Con nomenclatura tipo: SENER-TP-XXX-AAAA)
+PER56 - Procesamiento de Gas Natural - (Con nomenclatura tipo: SENER-CPG-XXX-AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="14"/>
+			<xs:maxLength value="24"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[MM]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[OM]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[DUC]{3}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[TM]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[DUC]{3}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[AE]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}[AE]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[GN]{2}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[PETRO]{1,5}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[CEE]{3}[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COMP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DESC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}FE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}GES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LICUE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}REG[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}[P]{1}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}REF[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}TP[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}CPG[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_claveUnidadMedida">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para las unidades de medida.UM01 – Barril(es),UM02 – Pie(s) cúbico(s),UM03 – Litro(s),UM04 – Metro(s) cúbico(s), UM05 - BTU, UM06 - Megajoule </xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="UM01"/>
+			<xs:enumeration value="UM02"/>
+			<xs:enumeration value="UM03"/>
+			<xs:enumeration value="UM04"/>
+			<xs:enumeration value="UM05"/>
+			<xs:enumeration value="UM06"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_claveComplementoGNC">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la composicion de gas natural y condensados (GNC01 - Metano,GNC02 - Etano,GNC03 - Propano,GNC04 - Butanos,GNC05 - Pentanos,GNC06 - Hexanos,GNC07 - Heptanos,GNC08 - Octanos,GNC09 - Nonanos,GNC10 - Decanos)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GNC01"/>
+			<xs:enumeration value="GNC02"/>
+			<xs:enumeration value="GNC03"/>
+			<xs:enumeration value="GNC04"/>
+			<xs:enumeration value="GNC05"/>
+			<xs:enumeration value="GNC06"/>
+			<xs:enumeration value="GNC07"/>
+			<xs:enumeration value="GNC08"/>
+			<xs:enumeration value="GNC09"/>
+			<xs:enumeration value="GNC10"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisos">
+		<xs:annotation>
+			<xs:documentation>PER1 - Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+PER2 - Expendio al público de gasolinas y diésel mediante estación de servicio - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/AAAA)
+PER3 - Expendio al público de gasolinas y diésel mediante estación de servicio multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/MM/AAAA)
+PER4 - Expendio de autoconsumo de gasolinas y diésel - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/AAAA)
+PER5 - Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+PER6 - Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+PER7 - Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+PER8 - Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+PER9 - Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+PER10 - Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+PER11 - Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+PER12 - Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+PER13 - Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+PER14 - Expendio en aeródromos - (Con nomenclatura tipo: PL/XXXXX/EXP/AE/AAAA)
+PER15 - Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+PER16 - Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+PER17 - Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+PER18 - Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+PER19 - Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+PER20 - Compresión de gas natural - (Con nomenclatura tipo: G/XXXXX/COMP/AAAA)
+PER21 - Descompresión de gas natural - (Con nomenclatura tipo: G/XXXXX/DESC/AAAA)
+PER22 - Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+PER23 - Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+PER24 - Expendio al público de gas natural mediante estación de servicio con fin específico - (Con nomenclatura tipo: G/XXXXX/EXP/ES/FE/AAAA)
+PER25 - Expendio al público de gas natural mediante estación de servicio multimodal - (Con nomenclatura tipo: G/XXXXX/EXP/ES/MM/AAAA)
+PER26 - Gestión de sistemas integrados de sistemas de Transporte y Almacenamiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/GES/AAAA)
+PER27 - Licuefacción de gas natural - (Con nomenclatura tipo: G/XXXXX/LICUE/AAAA)
+PER28 - Regasificación de gas natural - (Con nomenclatura tipo: G/XXXXX/REG/AAAA)
+PER29 - Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+PER30 - Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+PER31 - Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+PER32 - Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+PER33 - Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+PER34 - Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+PER35 - Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+PER36 - Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+PER37 - Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+PER38 - Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+PER39 - Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+PER40 - Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+PER41 - Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+PER42 - Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+PER43 - Expendio al Público de Gas Licuado de Petróleo mediante Estación de Servicio con fin Específico - (Con nomenclatura tipo: LP/XXXXX/EXP/ES/AAAA)
+PER44 - Expendio de Gas Licuado de Petróleo mediante Estación de Servicio para autoconsumo - (Con nomenclatura tipo: LP/XXXXX/EXP/AUT/AAAA)
+PER45 - Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+PER46 - Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+PER47 - Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+PER48 - Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+PER49 - Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+PER50 - Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+PER51 - Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+PER52 - Expendio de petrolíferos en estaciones de servicio para autoconsumo multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/MM/AAAA)
+PER53 - Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+PER54 - Refinación del petróleo - (Con nomenclatura tipo: SENER-REF-XXX-AAAA)
+PER55- Tratamiento de petróleo - (Con nomenclatura tipo: SENER-TP-XXX-AAAA)
+PER56 - Procesamiento de Gas Natural - (Con nomenclatura tipo: SENER-CPG-XXX-AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="PER1"/>
+			<xs:enumeration value="PER2"/>
+			<xs:enumeration value="PER3"/>
+			<xs:enumeration value="PER4"/>
+			<xs:enumeration value="PER5"/>
+			<xs:enumeration value="PER6"/>
+			<xs:enumeration value="PER7"/>
+			<xs:enumeration value="PER8"/>
+			<xs:enumeration value="PER9"/>
+			<xs:enumeration value="PER10"/>
+			<xs:enumeration value="PER11"/>
+			<xs:enumeration value="PER12"/>
+			<xs:enumeration value="PER13"/>
+			<xs:enumeration value="PER14"/>
+			<xs:enumeration value="PER15"/>
+			<xs:enumeration value="PER16"/>
+			<xs:enumeration value="PER17"/>
+			<xs:enumeration value="PER18"/>
+			<xs:enumeration value="PER19"/>
+			<xs:enumeration value="PER20"/>
+			<xs:enumeration value="PER21"/>
+			<xs:enumeration value="PER22"/>
+			<xs:enumeration value="PER23"/>
+			<xs:enumeration value="PER24"/>
+			<xs:enumeration value="PER25"/>
+			<xs:enumeration value="PER26"/>
+			<xs:enumeration value="PER27"/>
+			<xs:enumeration value="PER28"/>
+			<xs:enumeration value="PER29"/>
+			<xs:enumeration value="PER30"/>
+			<xs:enumeration value="PER31"/>
+			<xs:enumeration value="PER32"/>
+			<xs:enumeration value="PER33"/>
+			<xs:enumeration value="PER34"/>
+			<xs:enumeration value="PER35"/>
+			<xs:enumeration value="PER36"/>
+			<xs:enumeration value="PER37"/>
+			<xs:enumeration value="PER38"/>
+			<xs:enumeration value="PER39"/>
+			<xs:enumeration value="PER40"/>
+			<xs:enumeration value="PER41"/>
+			<xs:enumeration value="PER42"/>
+			<xs:enumeration value="PER43"/>
+			<xs:enumeration value="PER44"/>
+			<xs:enumeration value="PER45"/>
+			<xs:enumeration value="PER46"/>
+			<xs:enumeration value="PER47"/>
+			<xs:enumeration value="PER48"/>
+			<xs:enumeration value="PER49"/>
+			<xs:enumeration value="PER50"/>
+			<xs:enumeration value="PER51"/>
+			<xs:enumeration value="PER52"/>
+			<xs:enumeration value="PER53"/>
+			<xs:enumeration value="PER54"/>
+			<xs:enumeration value="PER55"/>
+			<xs:enumeration value="PER56"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_TipoCFDI">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de CFDI (Ingreso, Egreso,Traslado).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Ingreso"/>
+			<xs:enumeration value="Egreso"/>
+			<xs:enumeration value="Traslado"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_Fecha">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para la expresión de la fecha y hora. Se expresa en la forma AAAA/MM/DD</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[0-9]{4}/[01][0-9]/[0-3][0-9]"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_FechaHusoHorario">
+		<xs:annotation>
+			<xs:documentation>Requerido para expresar la fecha y hora de la transacción que ampara el CFDI, deberá expresarse yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601, deberá expresarse la hora en UTC con la indicación del huso horario.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="((19|20)[0-9][0-9])-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])[-|+]{1}(([01][0-9]|2[0-3]):[0-5][0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_ClaveInstalacion">
+		<xs:annotation>
+			<xs:documentation>Para expresar la clave de identificación de la instalación o proceso donde deben colocarse sistemas de medición</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:minLength value="8"/>
+			<xs:maxLength value="30"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="ACA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="AUP[-]{1}[0-9]{4}"/>
+			<xs:pattern value="ALM[-]{1}[0-9]{4}"/>
+			<xs:pattern value="ACL[-]{1}TRE[-]{1}[A-Za-z0-9]{4}"/>
+			<xs:pattern value="ACL[-]{1}MNA[-]{1}[A-Za-z0-9]{4}"/>
+			<xs:pattern value="ASN[-]{1}TRE[-]{1}[A-Za-z0-9]{4}"/>
+			<xs:pattern value="ASN[-]{1}MNA[-]{1}[A-Za-z0-9]{4}"/>
+			<xs:pattern value="ACO[-]{1}[0-9]{4}"/>
+			<xs:pattern value="BSP[-]{1}[0-9]{4}"/>
+			<xs:pattern value="BDE[-]{1}[0-9]{4}"/>
+			<xs:pattern value="CMN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="COM[-]{1}[0-9]{4}"/>
+			<xs:pattern value="CON[-]{1}[0-9]{4}"/>
+			<xs:pattern value="DEN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="DIS[-]{1}[0-9]{4}"/>
+			<xs:pattern value="EMA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="ESN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="EDS[-]{1}[0-9]{4}"/>
+			<xs:pattern value="ESA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="EXO[-]{1}[0-9]{4}"/>
+			<xs:pattern value="EXP[-]{1}[0-9]{4}"/>
+			<xs:pattern value="EXT[-]{1}[0-9]{4}"/>
+			<xs:pattern value="GSH[-]{1}[0-9]{4}"/>
+			<xs:pattern value="LON[-]{1}[0-9]{4}"/>
+			<xs:pattern value="RPO[-]{1}[0-9]{4}"/>
+			<xs:pattern value="MNA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="PTA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="PDD[-]{1}[0-9]{4}"/>
+			<xs:pattern value="PGN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="RCN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="REF[-]{1}[0-9]{4}"/>
+			<xs:pattern value="RGN[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SIS[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SFO[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SDA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="TDA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="TDD[-]{1}[0-9]{4}"/>
+			<xs:pattern value="TRE[-]{1}[0-9]{4}"/>
+			<xs:pattern value="TRA[-]{1}[0-9]{4}"/>
+			<xs:pattern value="TDP[-]{1}[0-9]{4}"/>
+			<xs:pattern value="USP[-]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosAlmacenamiento">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Almacenamiento. Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+
+Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+
+Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosProveedorAlmacenamiento">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Almacenamiento Proveedor. Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+
+Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+
+Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+
+Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+
+Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+
+Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}GN[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}PETRO[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}CEE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosComercializacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Comercialización. Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosClienteOProveedorComercializacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Proveedor Comercialización. Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio al público de gasolinas y diésel mediante estación de servicio - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/AAAA)
+Expendio al público de gasolinas y diésel mediante estación de servicio multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/MM/AAAA)
+
+Expendio de autoconsumo de gasolinas y diésel - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/AAAA)
+
+Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+
+Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio en aeródromos - (Con nomenclatura tipo: PL/XXXXX/EXP/AE/AAAA)
+
+Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+
+Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+
+Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+
+Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+
+Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio con fin específico - (Con nomenclatura tipo: G/XXXXX/EXP/ES/FE/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio multimodal - (Con nomenclatura tipo: G/XXXXX/EXP/ES/MM/AAAA)
+
+Licuefacción de gas natural - (Con nomenclatura tipo: G/XXXXX/LICUE/AAAA)
+
+Regasificación de gas natural - (Con nomenclatura tipo: G/XXXXX/REG/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+
+Expendio al Público de Gas Licuado de Petróleo mediante Estación de Servicio con fin Específico - (Con nomenclatura tipo: LP/XXXXX/EXP/ES/AAAA)
+
+Expendio de Gas Licuado de Petróleo mediante Estación de Servicio para autoconsumo - (Con nomenclatura tipo: LP/XXXXX/EXP/AUT/AAAA)
+
+Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+
+Expendio de petrolíferos en estaciones de servicio para autoconsumo multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/MM/AAAA)
+
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+
+Refinación del petróleo - (Con nomenclatura tipo: SENER-REF-XXX-AAAA)
+
+Tratamiento de petróleo - (Con nomenclatura tipo: SENER-TP-XXX-AAAA)
+
+Procesamiento de Gas Natural - (Con nomenclatura tipo: SENER-CPG-XXX-AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="H{1}[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL{2}[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}GN[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}PETRO[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}CEE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}FE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LICUE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}REG[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}REF[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}TP[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}CPG[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteComercializacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Transporte Comercialización. Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+
+Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+
+Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosCDLRGN">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos permisos para CDLRGN. Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteCDLRGN">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Transporte CDLRGN. Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosDistribucion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos permisos para Distribución. Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosClienteOProveedorDistribucion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Proveedor Distribución. Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio al público de gasolinas y diésel mediante estación de servicio - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/AAAA)
+Expendio al público de gasolinas y diésel mediante estación de servicio multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/MM/AAAA)
+
+Expendio de autoconsumo de gasolinas y diésel - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/AAAA)
+
+Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio en aeródromos - (Con nomenclatura tipo: PL/XXXXX/EXP/AE/AAAA)
+
+Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+
+Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+
+Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio con fin específico - (Con nomenclatura tipo: G/XXXXX/EXP/ES/FE/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio multimodal - (Con nomenclatura tipo: G/XXXXX/EXP/ES/MM/AAAA)
+
+Licuefacción de gas natural - (Con nomenclatura tipo: G/XXXXX/LICUE/AAAA)
+
+Regasificación de gas natural - (Con nomenclatura tipo: G/XXXXX/REG/AAAA)
+
+Expendio al Público de Gas Licuado de Petróleo mediante Estación de Servicio con fin Específico - (Con nomenclatura tipo: LP/XXXXX/EXP/ES/AAAA)
+
+Expendio de Gas Licuado de Petróleo mediante Estación de Servicio para autoconsumo - (Con nomenclatura tipo: LP/XXXXX/EXP/AUT/AAAA)
+
+Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+
+Expendio de petrolíferos en estaciones de servicio para autoconsumo multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/MM/AAAA)
+
+Refinación del petróleo - (Con nomenclatura tipo: SENER-REF-XXX-AAAA)
+
+Tratamiento de petróleo - (Con nomenclatura tipo: SENER-TP-XXX-AAAA)
+
+Procesamiento de Gas Natural - (Con nomenclatura tipo: SENER-CPG-XXX-AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}GN[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}PETRO[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}CEE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}FE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LICUE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}REG[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}REF[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}TP[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}CPG[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteDistribucion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Transporte Distribución. Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+
+Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+
+Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosExpendio">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Expendio. Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+
+Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+
+Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+
+Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+
+Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteExpendio">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Transporte Expendio. Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+
+Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+
+Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosProveedorExpendio">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Proveedor Expendio. Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+
+Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+
+Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+
+Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+
+Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+
+Refinación del petróleo - (Con nomenclatura tipo: SENER-REF-XXX-AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}GN[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="SENER[-]{1}REF[-]{1}[0-9]{3}[-]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosExtraccion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Extracción. Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteExtraccion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Extracción. Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosRefinacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Refinación. Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoTransporteRefinacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Refinación. Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/DUC/AAAA)
+
+Transporte por medios distintos a ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/TRA/TM/AAAA) (buquetanque)
+
+Transporte por ducto de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/TRA/DUC/AAAA)
+
+Transporte de gas natural para usos propios - (Con nomenclatura tipo: G/XXXXX/TUP/AAAA)
+
+Transporte de gas natural para usos propios mediante Sociedad de Autoabastecimiento de Gas Natural - (Con nomenclatura tipo: G/XXXXX/SAB/AAAA)
+
+Transporte de gas natural por medios distintos a ducto - (Con nomenclatura tipo: G/XXXXX/TRA/OM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto (Transporte Marítimo) - (Con nomenclatura tipo: P/XXXXX/TRA/TM/AAAA)
+
+Transporte de petróleo por medios distintos a ducto - (Con nomenclatura tipo: P/XXXXX/TRA/OM/AAAA)
+
+Transporte por ducto de gas natural procesado - (Con nomenclatura tipo: G/XXXXX/TRA/AAAA)
+
+Transporte por ducto de gas natural sin procesar (provisional) - (Con nomenclatura tipo: GN/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte por ducto de gas natural sin procesar - (Con nomenclatura tipo: GN/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo - (Con nomenclatura tipo: P/XXXXX/TRA/DUC/AAAA)
+
+Transporte por ducto de petróleo (provisional) - (Con nomenclatura tipo: P/XXXXX/P/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/DUC/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios de ductos - (Con nomenclatura tipo: G/XXXXX/LPT/AAAA)
+
+Transporte de Gas Licuado de Petróleo por medios distintos a ductos - (Con nomenclatura tipo: LP/XXXXX/TRA/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosClienteOProveedorRefinacion">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Proveedor Refinacion. Comercialización de hidrocarburos, petrolíferos y petroquímicos (combinados) - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio al público de gasolinas y diésel mediante estación de servicio - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/AAAA)
+Expendio al público de gasolinas y diésel mediante estación de servicio multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ES/MM/AAAA)
+
+Expendio de autoconsumo de gasolinas y diésel - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/AAAA)
+
+Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+
+Comercialización de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: H/XXXXX/COM/AAAA)
+
+Expendio en aeródromos - (Con nomenclatura tipo: PL/XXXXX/EXP/AE/AAAA)
+
+Comercialización de gas natural - (Con nomenclatura tipo: G/XXXXX/COM/GN/AAAA)
+
+Comercialización de petróleo - (Con nomenclatura tipo: G/XXXXX/COM/PETRO/AAAA)
+
+Comercialización de gas natural y petróleo para contratistas de exploración y extracción - (Con nomenclatura tipo: G/XXXXX/COM/CEE/AAAA)
+
+Distribución de gas natural por medio de ductos - (Con nomenclatura tipo: G/XXXXX/DIS/AAAA)
+
+Distribución de gas natural por medios distintos a ductos - (Con nomenclatura tipo: G/XXXXX/DIS/OM/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio con fin específico - (Con nomenclatura tipo: G/XXXXX/EXP/ES/FE/AAAA)
+
+Expendio al público de gas natural mediante estación de servicio multimodal - (Con nomenclatura tipo: G/XXXXX/EXP/ES/MM/AAAA)
+
+Licuefacción de gas natural - (Con nomenclatura tipo: G/XXXXX/LICUE/AAAA)
+
+Regasificación de gas natural - (Con nomenclatura tipo: G/XXXXX/REG/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+
+Expendio al Público de Gas Licuado de Petróleo mediante Estación de Servicio con fin Específico - (Con nomenclatura tipo: LP/XXXXX/EXP/ES/AAAA)
+
+Expendio de Gas Licuado de Petróleo mediante Estación de Servicio para autoconsumo - (Con nomenclatura tipo: LP/XXXXX/EXP/AUT/AAAA)
+
+Comercialización de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/COM/AAAA)
+
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+
+Expendio de petrolíferos en estaciones de servicio para autoconsumo multimodal - (Con nomenclatura tipo: PL/XXXXX/EXP/ESA/MM/AAAA)
+
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}GN[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}PETRO[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}CEE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}FE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LICUE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}REG[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}MM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisosTransporte">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos Transporte. Distribución por medios distintos a ductos de petrolíferos, petroquímicos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/DIS/OM/AAAA)
+Almacenamiento de petrolíferos y bioenergéticos - (Con nomenclatura tipo: PL/XXXXX/ALM/AAAA)
+Almacenamiento de petroquímicos y bioenergéticos - (Con nomenclatura tipo: PQ/XXXXX/ALM/AAAA)
+Almacenamiento en aeródromos - (Con nomenclatura tipo: PL/XXXXX/ALM/AE/AAAA)
+Almacenamiento de gas natural - (Con nomenclatura tipo: G/XXXXX/ALM/AAAA)
+Almacenamiento de petróleo - (Con nomenclatura tipo: P/XXXXX/ALM/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de Auto-Tanques - (Con nomenclatura tipo: LP/XXXXX/DIST/AUT/AAAA)
+Distribución de Gas Licuado de Petróleo mediante Planta de Distribución - (Con nomenclatura tipo: LP/XXXXX/DIST/PLA/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: LP/XXXXX/DIST/DUC/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de ductos - (Con nomenclatura tipo: G/XXXXX/LPD/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: LP/XXXXX/ALM/AAAA)
+Almacenamiento de Gas Licuado de Petróleo - (Con nomenclatura tipo: G/XXXXX/LPA/AAAA)
+Distribución de Gas Licuado de Petróleo por medio de vehículos de reparto - (Con nomenclatura tipo: LP/XXXXX/DIST/REP/AAAA)
+Distribución por Ductos - (Con nomenclatura tipo: PL/XXXXX/DIS/DUC/AAAA)
+			</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}AE[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}"/>
+			<xs:pattern value="G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}"/>
+			<xs:pattern value="LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}"/>
+			<xs:pattern value="PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_clavePermisoImportacionExportacionGeneral">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para los tipos de permisos de Importación en Almacenamiento.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="[0-9]{1,4}[C]{1}[0-9]{9}"/>
+			<xs:pattern value="[G]{1}[0-9]{1,17}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_CondicionalSeleccionar">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para expresar Si o No.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="Si"/>
+			<xs:enumeration value="No"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_HoraHusoHorario">
+		<xs:annotation>
+			<xs:documentation>Requerido para expresar la hora en que se realizó el registro de volumen acumulado, deberá expresarse la hora en UTC, de acuerdo con la especificación ISO 8601 con la indicación del huso horario hh:mm:ss+-hh:mm.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:pattern value="(([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])[-|+]{1}(([01][0-9]|2[0-3]):[0-5][0-9])"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_Incoterms">
+		<xs:annotation>
+			<xs:documentation>Tipo definido para Incoterms.  CFR        COSTE Y FLETE (PUERTO DE DESTINO CONVENIDO).
+
+            CIF          COSTE, SEGURO Y FLETE (PUERTO DE DESTINO CONVENIDO).
+
+            CPT         TRANSPORTE PAGADO HASTA (EL LUGAR DE DESTINO CONVENIDO).
+
+            CIP          TRANSPORTE Y SEGURO PAGADOS HASTA (LUGAR DE DESTINO CONVENIDO).
+
+           DAF         ENTREGADA EN FRONTERA (LUGAR CONVENIDO).
+
+            DAP         ENTREGADA EN LUGAR.
+
+            DAT         ENTREGADA EN TERMINAL.
+
+            DES         ENTREGADA SOBRE BUQUE (PUERTO DE DESTINO CONVENIDO).
+
+            DEQ        ENTREGADA EN MUELLE (PUERTO DE DESTINO CONVENIDO).
+
+            DDU        ENTREGADA DERECHOS NO PAGADOS (LUGAR DE DESTINO CONVENIDO).
+
+            DDP        ENTREGADA DERECHOS PAGADOS (LUGAR DE DESTINO CONVENIDO).
+
+                       EXW        EN FABRICA (LUGAR CONVENIDO).
+
+            FCA         FRANCO TRANSPORTISTA (LUGAR DESIGNADO).
+
+            FAS         FRANCO AL COSTADO DEL BUQUE (PUERTO DE CARGA CONVENIDO).
+
+            FOB        FRANCO A BORDO (PUERTO DE CARGA CONVENIDO).</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:whiteSpace value="collapse"/>
+			<xs:enumeration value="CFR"/>
+			<xs:enumeration value="CIF"/>
+			<xs:enumeration value="CPT"/>
+			<xs:enumeration value="CIP"/>
+			<xs:enumeration value="DAF"/>
+			<xs:enumeration value="DAP"/>
+			<xs:enumeration value="DAT"/>
+			<xs:enumeration value="DES"/>
+			<xs:enumeration value="DEQ"/>
+			<xs:enumeration value="DDU"/>
+			<xs:enumeration value="DDP"/>
+			<xs:enumeration value="EXW"/>
+			<xs:enumeration value="FCA"/>
+			<xs:enumeration value="FAS"/>
+			<xs:enumeration value="FOB"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="c_PER1">
+		<xs:annotation>
+			<xs:documentation>PER1</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string">
+			<xs:pattern value="H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="t_CFDI">
+	  <xs:restriction base="xs:string">
+	    <xs:whiteSpace value="collapse"/>
+		<xs:pattern value="[a-f0-9A-F]{8}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{4}-[a-f0-9A-F]{12}"/>
+		<xs:assertion test="not(matches($value, '00000000-0000-0000-0000-000000000000'))"/>
+		<xs:assertion test="not(matches($value, '11111111-1111-1111-1111-111111111111'))"/>
+		<xs:assertion test="not(matches($value, '22222222-2222-2222-2222-222222222222'))"/>							        			          
+		<xs:assertion test="not(matches($value, '33333333-3333-3333-3333-333333333333'))"/>							        
+		<xs:assertion test="not(matches($value, '44444444-4444-4444-4444-444444444444'))"/>							        	
+		<xs:assertion test="not(matches($value, '55555555-5555-5555-5555-555555555555'))"/>							        
+		<xs:assertion test="not(matches($value, '66666666-6666-6666-6666-666666666666'))"/>							        	
+		<xs:assertion test="not(matches($value, '77777777-7777-7777-7777-777777777777'))"/>							        	
+		<xs:assertion test="not(matches($value, '88888888-8888-8888-8888-888888888888'))"/>							        
+		<xs:assertion test="not(matches($value, '99999999-9999-9999-9999-999999999999'))"/>							        	
+		<xs:assertion test="not(matches($value, 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'))"/>							        
+		<xs:assertion test="not(matches($value, 'AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA'))"/>							        	
+		<xs:assertion test="not(matches($value, 'bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb'))"/>							        
+		<xs:assertion test="not(matches($value, 'BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB'))"/>							        	
+		<xs:assertion test="not(matches($value, 'cccccccc-cccc-cccc-cccc-cccccccccccc'))"/>							        
+		<xs:assertion test="not(matches($value, 'CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC'))"/>							        	
+		<xs:assertion test="not(matches($value, 'dddddddd-dddd-dddd-dddd-dddddddddddd'))"/>
+		<xs:assertion test="not(matches($value, 'DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD'))"/>		
+		<xs:assertion test="not(matches($value, 'eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee'))"/>
+		<xs:assertion test="not(matches($value, 'EEEEEEEE-EEEE-EEEE-EEEE-EEEEEEEEEEEE'))"/>	
+		<xs:assertion test="not(matches($value, 'ffffffff-ffff-ffff-ffff-ffffffffffff'))"/>
+		<xs:assertion test="not(matches($value, 'FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF'))"/>								        								        						        	
+	   </xs:restriction>								
+	</xs:simpleType>
+
+</xs:schema>

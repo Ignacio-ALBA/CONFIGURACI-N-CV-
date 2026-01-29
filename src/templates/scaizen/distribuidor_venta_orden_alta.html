@@ -1,0 +1,287 @@
+{% extends 'scaizen.html' %}
+{% block title %}Alta de orden de venta{% endblock %}
+{% block tables %}
+<label class="titulo">Alta de orden de venta</label><br />
+
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <hr class="text-black d-none d-sm-block" />
+
+    <div class="formulario_alta">
+        <!-- Estación de servicio -->
+        <div class="form-group row align-items-center">
+            <label class="col-2 col-form-label texto-negro">Proveedor:</label>
+            <div class="col-10">
+                <select name="proveedor" id="proveedor" class="btn" style="width: 80%; resize: none;" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                </select>
+                <div id="proveedor-error" class="text-danger" style="display: none;">El rol es obligatorio</div>
+                <!--<button type="button" class="btn-icon-restart" onclick="resetSelect('proveedor')">
+                    <i class="fas fa-redo"></i>   Ícono de reinicio 
+                </button>-->
+            </div>
+        </div>
+
+
+
+        <div class="form-group row align-items-center">
+            <label class="col-2 col-form-label texto-negro">Estación de servicio:</label>
+            <div class="col-10">
+                <select name="transport" id="transport" class="btn" style="width: 80%; resize: none;" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                </select>
+                <div id="transport-error" class="text-danger" style="display: none;">El rol es obligatorio</div>
+                <button type="button" class="btn-icon-restart" onclick="resetSelect('transport')">
+                    <i class="fas fa-times"></i> <!-- Ícono de "X" -->
+                </button>
+            </div>
+        </div>
+
+        <!-- Cliente -->
+        <div class="form-group row align-items-center">
+            <label class="col-2 col-form-label texto-negro">Cliente:</label>
+            <div class="col-10">
+                <select name="cliente" id="cliente" class="btn" style="width: 80%; resize: none;" required>
+                    <option value="" disabled selected>Seleccione una opción</option>
+                </select>
+                <div id="cliente-error" class="text-danger" style="display: none;">El rol es obligatorio</div>
+                <button type="button" class="btn-icon-restart" onclick="resetSelect('cliente')">
+                    <i class="fas fa-times"></i> <!-- Ícono de "X" -->
+                </button>
+        
+            </div>
+        </div>
+
+        <!-- Producto -->
+        <div class="form-group row align-items-center">
+            <label class="col-2 col-form-label texto-negro">Producto:</label>
+            <div class="col-10">
+                <select name="producto" id="producto" class="btn" style="width: 80%; resize: none;" required>
+                    <option value="" disabled selected>Seleccione un producto</option>
+                    <option value="Magna">Magna</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Premium">Premium</option>
+                </select>
+                 <!-- <button type="button" class="btn-icon-restart" onclick="resetSelect('producto')">
+                    <i class="fas fa-redo"></i>Ícono de reinicio
+                </button> -->
+            </div>
+        </div>
+
+        <!-- Cantidad (lts) -->
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="cantidad_programada">Cantidad (lts):</label>
+            <div class="col-10">
+                <input type="number" id="cantidad_programada" name="cantidad_programada" placeholder="ej. 14000" class="form-control" style="width: 100%; resize: none;" required min="1" max="100000">
+            </div>
+        </div>
+
+        <!-- Autotanque -->
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="autotanque">Autotanque:</label>
+            <div class="col-10">
+                <input type="text" id="autotanque" name="autotanque" placeholder="" class="form-control" style="width: 100%; resize: none;">
+            </div>
+        </div>
+
+        <!-- Fecha -->
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="datepicker_start1">Fecha:</label>
+            <div class="col-10">
+                <input type="text" id="datepicker_start1" name="selected_start" class="form-control fechaformulario" style="width: 100%; resize: none;" required />
+            </div>
+        </div>
+
+        <!-- Costo -->
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="Costo">Costo:</label>
+            <div class="col-10">
+                <input type="text" id="Costo" name="Costo" placeholder="" class="form-control" style="width: 100%; resize: none;">
+            </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="informacion">Información adicional:</label>
+            <div class="col-10">
+                <textarea id="informacion" name="informacion" class="form-control" placeholder="" style="width: 100%; height: 70px;"></textarea>
+            </div>
+        </div>
+
+        <!-- Botones de submit y reset -->
+        <div class="text-center mt-4">
+            <button type="submit" id="crearorden" class="btn-confirm texto-negro">ALTA DE REGISTRO</button>
+            <button type="reset" class="btn-reset texto-negro">Limpiar</button>
+        </div>
+    </div>
+</form>
+
+<script>
+function resetSelect(selectId) {
+    const selectElement = document.getElementById(selectId);
+    selectElement.selectedIndex = 0; // Resetea al primer valor (opción deshabilitada)
+
+    if (selectId === 'transport') {
+        $("#cliente").prop('disabled', false);
+    } else if (selectId === 'cliente') {
+        $("#transport").prop('disabled', false);
+    }
+}
+</script>
+
+<script>
+$(document).ready(function() {
+    var csrfToken = $("input[name='csrf_token']").val();
+    var id_cliente = "id_cliente"
+    var formData = {
+        'csrf_token': csrfToken,
+        'id_cliente':id_cliente
+    };
+
+    $.ajax({
+        url: "{{ url_for('app_scaizen.distribuidor_venta_alta') }}",
+        data: formData,
+        type: 'POST',
+        success: function(response) {
+            var select = $('#cliente');
+            select.empty();
+            select.append('<option value="" disabled selected>Seleccione el cliente</option>');
+
+            if (response.datos_cliente && Array.isArray(response.datos_cliente)) {
+                response.datos_cliente.forEach(function(cliente) {
+                    if (cliente.id_cliente && cliente.codigo_cliente) {
+                        select.append(`<option value="${cliente.id_cliente}">${cliente.codigo_cliente}</option>`);
+                    } else {
+                        console.warn('Datos de cliente incompletos:', cliente);
+                    }
+                });
+            } else {
+                console.log("Sin datos sobre clientes");
+            }
+
+            var select_2 = $('#transport');
+            select_2.empty();
+            select_2.append('<option value="" disabled selected>Seleccione la estación</option>');
+
+            if (response.datos_estaciones && Array.isArray(response.datos_estaciones)) {
+                response.datos_estaciones.forEach(function(cliente) {
+                    if (cliente.id_tanque && cliente.codigo_estacion) {
+                      select_2.append(`<option value="${cliente.id_tanque}">${cliente.codigo_estacion}</option>`);
+                    } else {
+                        console.warn('Datos de cliente incompletos:', cliente);
+                    }
+                });
+            } else {
+                console.log("Sin datos sobre estaciones");
+            }
+
+            var select_3 = $('#proveedor');
+            select_3.empty();
+            select_3.append('<option value="" disabled selected>Seleccione al proveedor</option>');
+
+            if (response.datos_proveedores && Array.isArray(response.datos_proveedores)) {
+                response.datos_proveedores.forEach(function(cliente) {
+                    if (cliente.id_proveedor && cliente.codigo_proveedor) {
+                      select_3.append(`<option value="${cliente.id_proveedor}">${cliente.codigo_proveedor}</option>`);
+                    } else {
+                        console.warn('Datos de proveedor incompletos:', cliente);
+                    }
+                });
+            } else {
+                console.log("Sin datos sobre estaciones");
+            }
+
+
+
+
+        },
+        error: function(xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+        }
+    });
+});
+</script>
+<script>
+$(document).ready(function () {
+    let valor = null;
+
+    // Manejo de habilitación y deshabilitación de selects
+    $("#transport").on('change', function () {
+        $("#cliente").prop('disabled', !!$(this).val());
+        valor = 1; // Asignar valor apropiado
+    });
+
+    $("#cliente").on('change', function () {
+        $("#transport").prop('disabled', !!$(this).val());
+        valor = 2; // Asignar valor apropiado
+    });
+
+    // Manejo del formulario
+    $("#cargasForm").submit(function (event) {
+        event.preventDefault();
+        const proveedor = $("#proveedor").val().trim();
+        const producto = $("#producto").val().trim();
+        const cantidad_programada = $("#cantidad_programada").val().trim();
+        const autotanque = $("#autotanque").val().trim();
+        const datepicker_start1 = $("#datepicker_start1").val().trim();
+        const Costo = $("#Costo").val().trim();
+        const informacion = $("#informacion").val().trim();
+        const csrfToken = $("input[name='csrf_token']").val().trim();
+
+        let data = {
+            proveedor: proveedor,
+            producto: producto,
+            cantidad_programada: cantidad_programada,
+            autotanque: autotanque,
+            datepicker_start1: datepicker_start1,
+            Costo: Costo,
+            informacion: informacion,
+            csrf_token: csrfToken
+        };
+
+        if (valor === 1) {
+            data.transport = $("#transport").val();
+        } else if (valor === 2) {
+            data.cliente = $("#cliente").val();
+        }
+
+        $.ajax({
+            url: "{{ url_for('app_scaizen.distribuidor_venta_alta') }}",
+            type: "POST",
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: data,
+            beforeSend: function () {
+                $("#loader-row").show();
+            },
+            success: function (response) {
+                $("#loader-row").hide();
+                if (response && response.estatus) {
+                    alert("Venta guardada con éxito");
+                    $("#cargasForm")[0].reset(); // Resetear el formulario después de enviar con éxito
+                    $("#cliente").prop('disabled', false); // Habilitar el cliente si estaba deshabilitado
+                    $("#transport").prop('disabled', false); // Habilitar el transporte si estaba deshabilitado
+                } else {
+                    alert("Error al registrar Venta");
+                }
+            },
+            error: function (xhr, status, error) {
+                $("#loader-row").hide();
+                console.error("Error en la solicitud AJAX:", error);
+                alert("Hubo un problema al guardar venta. Por favor, intente de nuevo.");
+            }
+        });
+    });
+
+    // Manejo del evento reset del formulario
+    $("#cargasForm").on('reset', function() {
+        $("#cliente").prop('disabled', false);
+        $("#transport").prop('disabled', false);
+    });
+});
+</script>
+
+
+{% endblock %}

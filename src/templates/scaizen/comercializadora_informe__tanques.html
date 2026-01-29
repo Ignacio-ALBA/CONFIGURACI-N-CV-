@@ -1,0 +1,657 @@
+{% extends 'scaizen.html' %} {% block title %}Historico {% endblock %} {% block
+  tables %}
+  <!--<button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn">
+    <i class="fa-solid fa-circle-arrow-left"></i>
+  </button>-->
+  <label class="titulo">Reporte Individual del Tanque </label> 
+  <hr class="text-black d-none d-sm-block" />
+  
+  <div   class="formulario">
+  
+  <form
+    id="cargasForm"
+    method="POST"
+    action="{{ url_for('app_scaizen.diario_tanques') }}"
+  >
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <!--<input
+      type="hidden"
+      name="id_tanque"
+      id="id_tanque_input"
+      value="{{ request.args.get('id_tanque') }}"
+    />-->
+    
+    <label> Seleccionar fecha:</label>
+  
+    <input type="text" id="datepicker_start" name="selected_start" required />
+    <select style="text-align: center" name="transport1" id="transport1" class="btn btn-outline-success">
+      <option value="" disabled selected>Seleccione el Tanque</option>
+    </select>
+    
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">
+      Enviar
+    </button>
+    <!-- Etiqueta para el select -->
+  
+   
+  
+    <button style="text-align: right" type="button" id="PDF" class="btn btn-outline-success button-spacing">
+      <i class="fas fa-file-pdf"></i><a href="{{ url_for('app_scaizen.informe_de_tanque_PDF') }}">  PDF</a>
+    </button>
+    <button style="text-align: right" type="button" id="JSON" class="btn btn-outline-success button-spacing">
+      <i class="fab fa-js"></i><a href="{{ url_for('app_scaizen.informe_de_tanque_JSON') }}"> JSON</a>
+    </button>
+    <button style="text-align: right" type="button" id="XML" class="btn btn-outline-success button-spacing">
+      <i class="fas fa-file-excel"></i><a href="{{ url_for('app_scaizen.informe_de_tanque_XML') }}">XML</a> 
+    </button>
+  </form>
+  
+  <!-- Tu tabla va aquí -->
+  <table class="table table-striped table-bordered table-hover border-radius-4" id="tabla-tanques">
+    <thead>
+      <tr>
+        <th colspan="5" style="color: black; background-color: rgb(255, 222, 227)">
+          Volumen Inicial de Tanque
+        </th>
+        <th colspan="6" style="color: black; background-color: rgb(133, 255, 133)">
+          Volumen Recepción / Descargas (Recibido)
+        </th>
+        <th colspan="6" style="color: black; background-color: rgb(155, 155, 252)">
+          Volumen Entrega / Cargas (Salidas)
+        </th>
+      </tr>
+      <tr>
+        <th>Fecha y hora</th>
+        <th>Vol. Natural(m3)</th>
+        <th>Vol. Neto(m3)</th>
+        <th>Temp</th>
+        <th>UM</th>
+  
+  
+        <th>#Registro</th>
+        <th>Vol. Natural(m3)</th>
+        <th>Vol. Neto(m3)</th>
+        <th>Temp</th>
+        <th>UM</th>
+        <th>Presión Absoluta</th>
+      </tr>
+    </thead>
+    <tbody id="cargasBody">
+      <tr id="loader-row" style="display: none">
+        <td colspan="17" style="text-align: center">
+          <div class="typing-indicator">
+            <div class="typing-circle"></div>
+            <div class="typing-circle"></div>
+            <div class="typing-circle"></div>
+            <div class="typing-shadow"></div>
+            <div class="typing-shadow"></div>
+            <div class="typing-shadow"></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th>Fecha y hora</th>
+        <th>Vol. Natural(m3)</th>
+        <th>Vol. Neto(m3)</th>
+        <th>Temp</th>
+        <th>UM</th>
+  
+  
+        <th>#Registro</th>
+        <th>Vol. Natural(m3)</th>
+        <th>Vol. Neto(m3)</th>
+        <th>Temp</th>
+        <th>UM</th>
+        <th>Presión Absoluta</th>
+      </tr>
+      <tr>
+        <th colspan="5" style="color: black; background-color: rgb(255, 222, 227)">
+          Volumen Inicial de Tanque
+        </th>
+        <th colspan="6" style="color: black; background-color: rgb(133, 255, 133)">
+          Volumen Recepción / Descargas (Recibido)
+        </th>
+        <th colspan="6" style="color: black; background-color: rgb(155, 155, 252)">
+          Volumen Entrega / Cargas (Salidas)
+        </th>
+      </tr>
+      </tr>
+    </thead>
+  </table>
+  </div>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+  
+  <script>
+    $(function () {
+      var startDate, endDate;
+      $("#datepicker_start").datepicker({
+        dayNames: [
+          "Domingo",
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado",
+        ],
+        dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+        monthNames: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ],
+        monthNamesShort: [
+          "Ene",
+          "Feb",
+          "Mar",
+          "Abr",
+          "May",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dic",
+        ],
+        dateFormat: "yy-mm-dd",
+        firstDay: 1, // Lunes como primer día de la semana
+        onSelect: function (selectedDate) {
+          // Al seleccionar una fecha en el primer datepicker
+          startDate = $(this).datepicker("getDate");
+          // Configura la opción minDate del segundo datepicker para ser un día después de la fecha seleccionada en el primer datepicker
+          $("#datepicker_end").datepicker(
+            "option",
+            "minDate",
+            addDays(startDate, 1)
+          );
+          startDate = $(this).datepicker("getDate");
+        },
+      });
+      $("#obtenerfechas").click(function () {
+        // Aquí puedes usar las variables startDate y endDate como desees
+        if (startDate) {
+          console.log("Fecha de inicio: ", startDate);
+        } else {
+          console.log("Seleccione ambas fechas");
+        }
+      });
+  
+      function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return $.datepicker.formatDate("yy-mm-dd", result); // Formatear la fecha al mismo formato utilizado en los datepickers
+      }
+    });
+  </script>
+  
+  <script>
+  $(document).ready(function() {
+      // Obtener el token CSRF y el número de página del formulario oculto
+      var csrfToken = $("input[name='csrf_token']").val();
+      var id_tanque = "id_tanques"
+  
+      var formData = {
+          'csrf_token': csrfToken,
+          'id_tanque':id_tanque,
+       };
+  
+      $.ajax({
+          url: "{{ url_for('app_scaizen.diario_tanques') }}",
+          data: formData,
+          type: 'POST',
+  
+          success: function(response) {
+              // Ocultar el loader cuando se carguen los datos
+              // Seleccionar el elemento <select> con id="transport"
+              var select = $('#transport1');
+              select.empty(); // Vaciar el select antes de llenarlo
+  
+              // Añadir la opción por defecto
+              select.append('<option value="" disabled selected>Seleccione el Tanque</option>');
+  
+              if (response.datos_tanque && Array.isArray(response.datos_tanque)) {
+                  response.datos_tanque.forEach(function(tanque) {
+                      // Asegurarse de que los campos existen en cada objeto
+                      if (tanque.id_tanque && tanque.codigo_tanque) {
+                          select.append(`<option value="${tanque.id_tanque}">${tanque.codigo_tanque}</option>`);
+                      } else {
+                          console.warn('Datos de tanque incompletos:', tanque);
+                      }
+                  });
+              } else {
+                  console.log("Sin datos");
+              }
+          },
+          error: function(xhr, status, error) {
+              console.error("Error en la solicitud AJAX:", error);
+          }
+      });
+  });
+    </script>
+  <script>
+    $(document).ready(function() {
+        // Manejar el clic en el botón
+        $('#obtenerfechas').on('click', function() {
+            var startDate = $("#datepicker_start").datepicker("getDate");
+            var selectedId = $('#transport1').val();
+            var csrfToken = $("input[name='csrf_token']").val(); // Verifica el nombre correcto del token CSRF
+    
+            if (selectedId) {
+                var formData = {
+                    'csrf_token': csrfToken, // Asegúrate de que este nombre es el esperado por tu servidor
+                    'selectedId': selectedId,
+                    'startDate': startDate ? startDate.toISOString() : '', // Manejar la posibilidad de que startDate sea null
+                };
+    
+                $.ajax({
+                    url: "{{ url_for('app_scaizen.diario_tanques') }}",
+                    data: formData,
+                    type: 'POST',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8', // Puedes ajustar según sea necesario
+                    beforeSend: function () {
+                        $("#loader-row").show();
+                    },
+                    success: function(response) {
+                        $("#loader-row").hide();
+                        if (response.diario && response.diario.length > 0) {
+                            var rows = '';
+    
+                            // Fila inicial estática basada en el primer elemento
+                            var firstData = response.diario[0];
+                            rows += `
+                            <tr style="font-size: 11px;">
+                                    <th>${formatDate(firstData.fecha_termino)}</th>
+                                    <th>${firstData.volumen_natural}</th>
+                                    <th>${firstData.volumen_neto}</th>
+                                    <th>${firstData.temperatura}&deg;C</th>
+                                    <th>lts</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                  </tr>
+                            `;
+    
+                            // Filas dinámicas
+                            response.diario.forEach(function(medicion_dia) {
+                                if (medicion_dia.tipo === "descarga") {
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th>${formatDate(medicion_dia.fecha_termino)}</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>${medicion_dia.volumen_natural}</th>
+                                            <th>${medicion_dia.volumen_neto}</th>
+                                            <th>${medicion_dia.temperatura}&deg;C</th>
+                                            <th>lts</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+  
+                                        </tr>
+                                    `;
+                                } else if (medicion_dia.tipo === "carga") {
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th>${formatDate(medicion_dia.fecha_termino)}</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>${medicion_dia.volumen_natural}</th>
+                                            <th>${medicion_dia.volumen_neto}</th>
+                                            <th>${medicion_dia.temperatura}&deg;C</th>
+                                            <th>lts</th>
+                                            <th></th>
+                                        </tr>
+                                        <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                                }
+                            });
+    
+                            // Fila final estática basada en el último elemento
+                            var lastData = response.diario[response.diario.length - 1];
+                            rows += `
+                            <tr style="font-size: 11px;">
+                                    <th>${formatDate(lastData.fecha_termino)}</th>
+                                    <th>${lastData.volumen_natural}</th>
+                                    <th>${lastData.volumen_neto}</th>
+                                    <th>${lastData.temperatura}&deg;C</th>
+                                    <th>lts</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+  
+                                </tr>
+                             <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                  </tr>
+                            `;
+                            //Fila de resultados
+                            rows += `
+                            <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Vol.   Natural m3</th>
+                                            <th>Vol.   Neto m3</th>
+                                            <th>UM</th>
+                                            <th>Temp   Promedio</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                            var firstData_suma = response.diario[0];
+         
+                            rows += `
+                            <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Volumen  Inicial</th>
+                                            <th>${firstData.volumen_natural}</th>
+                                            <th>${firstData.volumen_neto}</th>
+                                            <th>lts</th>
+                                            <th>${firstData.temperatura}&deg;C</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+  
+                                    $("#tabla-tanques tbody").html(rows);
+  
+                                        }
+                        if (response.total_tanques && response.total_tanques.length > 0) {
+                            // Asegúrate de que el tbody está vacío antes de agregar nuevas filas
+                            var firstData = response.total_tanques[0];
+  
+                            rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Recepción (descargas)</th>
+                                            <th>${firstData.total_volumen_natural_descarga}</th>
+                                            <th>${firstData.total_volumen_neto_descarga}</th>
+                                            <th>lts</th>
+                                            <th>${firstData.temperaturas_promedio_descarga_1}&deg;C</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Entrega (cargas)</th>
+                                            <th>${firstData.total_volumen_natural_carga}</th>
+                                            <th>${firstData.total_volumen_neto_carga}</th>
+                                            <th>lts</th>
+                                            <th>${firstData.temperaturas_promedio_carga_1}&deg;C</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Volumen Existencias</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>lts</th>
+                                            <th>&deg;C</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                                    var lastData2 = response.diario[response.diario.length - 1];
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Volumen Final</th>
+                                            <th>${lastData2.volumen_natural}</th>
+                                            <th>${lastData2.volumen_neto}</th>
+                                            <th>lts</th>
+                                            <th>${lastData2.temperatura}&deg;C</th>
+                                            <th></th>
+                                        </tr>
+                                    `;
+                                    rows += `
+                                    <tr style="font-size: 11px;">
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Diferencia</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th>lts</th>
+                                            <th>-----</th>
+                                            <th></th>
+                                         </tr>
+                                    `;
+                            $("#tabla-tanques tbody").html(rows);
+                        } else {
+                            // Manejo de caso en que no hay datos
+                            $("#tabla-tanques tbody").html('<tr><td colspan="16">No hay datos disponibles.</td></tr>');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $("#loader-row").hide();
+                        console.error("Error en la solicitud AJAX:", error);
+                        alert('Hubo un error al procesar la solicitud. Por favor, inténtelo de nuevo.');
+                    }
+                });
+            } else {
+                alert('Por favor, seleccione un tanque.');
+            }
+        });
+        
+  
+      function formatDate(dateString) {
+        const months = [
+          "enero", "febrero", "marzo", "abril", "mayo", "junio",
+          "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+        ];
+        const date = new Date(dateString);
+        const day = date.getDate();
+        const month = months[date.getMonth()];
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+      }
+    });
+  </script> 
+  
+  <script>
+     $("#PDF").click(function (event) {
+     
+      
+    
+    });
+  </script>  
+   
+  <script>
+    $("#XML").click(function (event) {
+   });
+  </script>
+  
+  
+   
+  
+  {% endblock %}
+  

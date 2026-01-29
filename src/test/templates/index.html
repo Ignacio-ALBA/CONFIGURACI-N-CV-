@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paginación Dinámica</title>
+<style>
+    /* Estilos CSS para la paginación */
+    .pagination {
+        display: inline-block;
+    }
+
+    .pagination button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div id="data"></div>
+<div class="pagination" id="pagination"></div>
+
+<script>
+    // Datos ficticios
+    const data = [];
+    for (let i = 1; i <= 100; i++) {
+        data.push(i);
+    }
+
+    // Función para mostrar los datos en una página específica
+    function showPage(pageNumber) {
+        const pageSize = 10; // Tamaño de página
+        const startIndex = (pageNumber - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        const pageData = data.slice(startIndex, endIndex);
+
+        // Mostrar los datos en la página
+        document.getElementById('data').innerHTML = '';
+        pageData.forEach(item => {
+            document.getElementById('data').innerHTML += `<div>${item}</div>`;
+        });
+
+        // Actualizar la paginación
+        updatePagination(pageNumber);
+    }
+
+    // Función para actualizar la paginación
+    function updatePagination(currentPage) {
+        const totalPages = Math.ceil(data.length / 10); // Número total de páginas
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        // Crear botones de página
+        for (let i = 1; i <= totalPages; i++) {
+            const button = document.createElement('button');
+            button.innerText = i;
+            button.onclick = function() {
+                showPage(i);
+            };
+            pagination.appendChild(button);
+        }
+
+        // Resaltar el botón de página actual
+        const buttons = pagination.getElementsByTagName('button');
+        for (let i = 0; i < buttons.length; i++) {
+            if (parseInt(buttons[i].innerText) === currentPage) {
+                buttons[i].style.backgroundColor = '#008CBA'; // Color de fondo azul para la página actual
+            }
+        }
+    }
+
+    // Mostrar la primera página al cargar la página
+    showPage(1);
+</script>
+
+</body>
+</html>

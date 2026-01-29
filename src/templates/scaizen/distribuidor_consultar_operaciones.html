@@ -1,0 +1,556 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}
+Consulta de orden de venta
+{% endblock %}
+
+{% block tables %}
+<div class="formulario">
+{% if endpoint == 'consultar_ventas' %}
+  <label class="titulo">Consulta de orden de venta</label><br />
+  <p class="dir_vista">Distribuidor/Consultar Cargas</p>
+{% else %}
+  <label class="titulo">Consulta de orden de compras</label><br />
+  <p class="dir_vista">Distribuidor/Consultar Descargas</p>
+{% endif %}
+</div>
+<hr class="text-black d-none d-sm-block" />
+
+<div class="formulario">
+  
+  <form id="cargasForm" method="POST" action="{{ url_for('app_scaizen.distribuidor_venta_consultar') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <label>Fecha de inicio:</label>
+    <input type="date" id="datepicker_start" name="selected_start" required />
+
+    <label>Fecha de finalización:</label>
+    <input type="date" id="datepicker_end" name="selected_end" required />
+
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">
+      Enviar
+    </button>
+
+    <input 
+    type="file" 
+    id="fileInput" 
+    accept=".xml" 
+    style="display: none;" 
+    onchange="handleFileSelect(event, this.dataset.ordenId)" 
+    data-orden-id=""/>
+  </form>
+
+  <!-- Tu tabla va aquí -->
+  <table class="table table-striped table-bordered table-hover border-radius-4" id="tabla-cargas">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Fecha y Hora Inicio</th>
+        <th>Tipo De Registro</th>
+        {% if endpoint == 'consultar_ventas' %}
+        <th>Cliente</th>
+        <th>RFC</th>
+        {% else %}
+        <th>Proveedor</th>
+        <th>RFC</th>
+        {% endif %}
+        <th>Autotanque</th>
+        <th>Producto</th>
+        <th>Volumen Natural</th>
+        <th>Volumen Neto</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Costo</th>
+        <th>Costo Traslado</th>
+        <th>Total Impuestos</th>
+        <th>Costo Total</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody id="cargasBody">
+      <tr id="search" style="display: table-row">
+        <td
+          style="font-weight: bold; text-align: center; background-color: #ccc"
+          valign="Top"
+          colspan="15"
+        >
+          Selecciona las fechas de inicio y fin
+        </td>
+      </tr>
+      <tr id="loader-row" style="display: none">
+        <td colspan="15" style="text-align: center">
+          <div class="typing-indicator">
+            <div class="typing-circle"></div>
+            <div class="typing-circle"></div>
+            <div class="typing-circle"></div>
+            <div class="typing-shadow"></div>
+            <div class="typing-shadow"></div>
+            <div class="typing-shadow"></div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Fecha y Hora Inicio</th>
+        <th>Tipo De Registro</th>
+        {% if endpoint == 'consultar_ventas' %}
+        <th>Cliente</th>
+        <th>RFC</th>
+        {% else %}
+        <th>Proveedor</th>
+        <th>RFC</th>
+        {% endif %}
+        <th>Autotanque</th>
+        <th>Producto</th>
+        <th>Volumen Natural</th>
+        <th>Volumen Neto</th>
+        <th>Temperatura</th>
+        <th>Presión</th>
+        <th>Costo</th>
+        <th>Costo Traslado</th>
+        <th>Total Impuestos</th>
+        <th>Costo Total</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+  </table>
+
+  <nav aria-label="Paginación" class="ulpgcds-pager" id="navbar" style="display: none;">
+    <div id="mostrando" class="ulpgcds-pager"></div>
+    <div id="paginacion" class="pagination-container"></div>
+  </nav>
+
+</div>
+
+<div style="
+    width: 500px; 
+    height: auto; 
+    background-color: #F8F9FA; 
+    border-radius: 10px; 
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); 
+    border: black solid 3px;
+    display: none; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
+    position: fixed; 
+    top: 40%; 
+    left: 50%; 
+    transform: translate(-50%, -80%);" id="div_change_value">
+    <div style="position: absolute; top: 2px; right: 5px; cursor: pointer;" onclick="hide_div_change_value()"><h4>X</h4></div>
+    <h3 id="label_ventana" style="margin-bottom: 10px;">Ingresa el nuevo valor</h3>
+    <input id="input_ventana" style="width: 80%; margin-bottom: 20px; text-align: center;" type="number" step="0.01" required>
+    <button style="display: flex; background-color: #122B49; height: 40px; width: 60%; border-radius: 10px; border-style: none; margin-bottom:5px; 
+    color: white; align-items: center; justify-content: center;" onclick="update_values()">Cambiar</button>
+</div>
+
+<script>
+  
+
+  function openFileDialog(button) {
+      const fileInput = document.getElementById('fileInput');
+      fileInput.dataset.ordenId = button.getAttribute('orden_id'); // Almacena el orden_id en el dataset del input
+      fileInput.click(); // Abre el explorador de archivos
+  }
+
+  function handleFileSelect(event, ordenId) {
+      const file = event.target.files[0];
+      if (file) {
+          console.log('Archivo seleccionado:', file.name);
+          console.log('Orden ID:', ordenId);
+
+          // Crear un objeto FormData
+          const formData = new FormData();
+          formData.append('file', file); // Agrega el archivo al FormData
+          formData.append('orden_id', ordenId); // Agrega orden_id al FormData
+          formData.append('csrf_token',csrfToken);
+
+          // Enviar el archivo al servidor
+          fetch("{{ url_for('app_scaizen.app_distribuidor.subir_factura', prefijo='',orden_id='')}}", {  // Cambia 'URL_DEL_SERVIDOR' a la URL de tu API o script PHP
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log('Éxito:', data);
+              document.getElementById(ordenId).style.display = 'none';
+              // Manejar la respuesta del servidor aquí
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+          });
+      }
+  }
+
+  function show_div_change_value(accion) {
+    const div_change_value = document.getElementById('div_change_value');
+    div_change_value.style.display = 'flex'; // Muestra el div
+    const input_ventana = document.getElementById('input_ventana');
+    const label_ventana = document.getElementById('label_ventana');
+    const parametro = accion.getAttribute('parametro');
+    const orden_id = accion.getAttribute('orden_id');
+    if (parametro == "presion"){
+      label_text = `Ingresa el nuevo valor de Presión`;
+    }else if(parametro == "costo"){
+      label_text = `Ingresa el nuevo valor de Costo`;
+    }
+    else if(parametro == "costotraslado"){
+      label_text = `Ingresa el nuevo valor de Costo de Traslado`;
+    }
+    label_ventana.innerText = label_text
+    input_ventana.setAttribute('parametro', parametro);
+    input_ventana.setAttribute('orden_id', orden_id);
+  }
+
+  function hide_div_change_value() {
+    const div_change_value = document.getElementById('div_change_value');
+    div_change_value.style.display = 'None'; // Muestra el div
+    const input_ventana = document.getElementById('input_ventana');
+    input_ventana.value =''
+  }
+
+  function update_values() {
+    // Obtiene la URL de la ruta del servidor usando Jinja para Flask
+    const url = "{{ url_for('app_scaizen.app_distribuidor.'+ endpoint) }}";
+    // Obtiene el token CSRF del campo oculto en el formulario
+    var csrfToken = $("input[name='csrf_token']").val();
+    // Crea un objeto FormData
+    const formData = new FormData();
+
+    // Obtiene el parámetro del elemento HTML
+    const input_ventana = document.getElementById('input_ventana');
+    const parametro = input_ventana.getAttribute('parametro');
+    const orden_id = input_ventana.getAttribute('orden_id');
+    let value = input_ventana.value
+    
+    
+
+    // Agrega los datos al FormData
+    if(value){
+    formData.append('operacion', 'cambiar_valor');
+    formData.append('parametro', parametro);
+    formData.append('value', value);
+    formData.append('csrf_token', csrfToken);
+    formData.append('order_id', orden_id);
+    input_ventana.value = ""
+    // Realiza la solicitud fetch
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        // Verifica si la respuesta fue exitosa (código de estado 200-299)
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json(); // Convierte la respuesta a JSON
+    })
+    .then(data => {
+        // Maneja los datos recibidos
+        console.log(data);
+        const div_change_value = document.getElementById('div_change_value');
+        div_change_value.style.display = 'none'; // Muestra el div
+        //loadPage(1);
+    })
+    .catch(error => {
+        // Maneja cualquier error ocurrido durante la solicitud
+        console.error('There was a problem with the fetch operation:', error);
+    });
+    }else{
+      alert("Ingresa un valor")
+    }
+    
+  }
+
+  const productos_colors = {{ productos_color | tojson }};
+  $(document).ready(function () {
+    
+    // Obtener la fecha de ayer
+    let today = new Date();
+    today.setDate(today.getDate() /*- 1*/);
+    let formattedDate = today.toISOString().split('T')[0];
+
+    // Establecer el atributo max para los campos de fecha
+    $("#datepicker_start").attr("max", formattedDate);
+    $("#datepicker_end").attr("max", formattedDate);
+
+    let startDate, endDate;
+    let maxPagesToShow = 5; // Máximo número de páginas a mostrar a la vez
+    let totalPaginas = 0; // Total de páginas
+    let paginaActual = 1; // Página actual
+    const range = 2; // Rango de páginas a mostrar alrededor de la página actual
+
+    function updatePagination(response) {
+      endpoint = '{{endpoint}}';
+      paginaActual = response.paginactual;
+      totalPaginas = response.total_paginas;
+      $("#tabla-cargas tbody").empty();
+      if (response.operacion && response.operacion.length > 0) {
+        
+        console.log(response);
+        
+        response.operacion.forEach((operacion, index) => {
+          var numeroDeFila = index + 1;
+          let acciones_bt = ``
+
+
+          if (operacion['registro'].Id_cfdi_distribuidor_fk == null ){
+            id = operacion['registro'].Id
+            let url = ''
+            if (endpoint == 'consultar_ventas'){
+              url = `{{ url_for('app_scaizen.app_distribuidor.subir_factura', prefijo='Venta',orden_id='') }}${id}`;
+            }else{
+              url = `{{ url_for('app_scaizen.app_distribuidor.subir_factura', prefijo='Compra',orden_id='') }}${id}`;
+            }
+            
+
+            acciones_bt += `
+                <button 
+                  style="background-color: #0D1D30;" 
+                  class="button_color_alba"
+                  onclick="location.href='${url}'" parametro='presion'>Subir Factura XML </button>
+                `
+            }else{
+              acciones_bt += `
+                <div 
+                  class="button_color_alba2"
+                  parametro='presion'>Factura Subida </div>
+                `
+            }
+          /*
+          if(operacion['registro'].PresionAbsoluta == null){
+            acciones_bt += `<button 
+                  orden_id="${operacion.Id}" 
+                  style="background-color: #1C3F6B;" 
+                  class="button_color_alba"
+                  onclick="show_div_change_value(this)" parametro='presion'>Cambiar Presión</button>`
+          }
+
+          if(operacion['registro'].Costo == null){
+            acciones_bt += `<button 
+                  orden_id="${operacion['registro'].Id}" 
+                  style="background-color: #122B49;" 
+                  class="button_color_alba"
+                  onclick="show_div_change_value(this)" parametro='costo'>Cambiar Costo</button>`
+          }
+          else if(operacion['registro'].CostoTraslado == null){
+            acciones_bt += `<button 
+                  orden_id="${operacion['registro'].Id}" 
+                  style="background-color: #122B49;" 
+                  class="button_color_alba"
+                  onclick="show_div_change_value(this)" parametro='costotraslado'>Cambiar Costo Trasl</button>`
+          }*/
+
+          
+          producto = getProductoName(operacion['registro'].Producto)
+          costo = operacion['registro'].Costo == null ? 'Desconocido' : '$ ' + parseFloat(operacion['registro'].Costo).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          costotraslado = operacion['registro'].CostoTraslado == null ? 'Desconocido' : '$ ' + parseFloat(operacion['registro'].CostoTraslado).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          totalimpuestos = operacion['registro'].TotalImpuestos == null ? 'Desconocido' : '$ ' + parseFloat(operacion['registro'].TotalImpuestos).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          costototal = operacion['registro'].CostoTotal == null ? 'Desconocido' : '$ ' + parseFloat(operacion['registro'].CostoTotal).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          if( endpoint =='consultar_ventas'){
+            $("#tabla-cargas tbody").append(`
+            <tr>
+              <td>${operacion['NoConsecutivo']}</td>
+              <td>${operacion['registro'].FechaYHoraInicialEntrega}</td>
+              <td>${operacion['registro'].TipoDeRegistro}</td>
+              <td style="max-width: 200px; word-wrap: break-word; word-break: break-all; white-space: normal;">${operacion['cliente'] || 'Desconocido'}</td>
+              <td>${operacion.rfc || 'Desconocido'}</td>
+              <td>${operacion['registro'].Autotanque || 'Desconocido'}</td>          
+              <td><div style="background-color:${productos_colors[operacion['registro'].Producto]};" class="div_label_producto">${getProductoName(operacion['registro'].Producto) || 'Desconocido'}</div></td>
+              <td>${operacion['registro'].VolumenEntregado} lts</td>
+              <td>${operacion['registro'].VolumenEntregadoNeto} lts</td>
+              <td>${operacion['registro'].Temperatura} °C</td>
+              <td>${operacion['registro'].PresionAbsoluta || 'Desconocida'}</td>
+              <td>${costo}</td>
+              <td>${costotraslado}</td>
+              <td>${totalimpuestos}</td>
+              <td>${costototal}</td>
+              <td>${acciones_bt}</td>
+              <!-- <td colspan="1">
+                  <button class="cancelar" type="button" value="${ventas.id}">Cancelar</button>
+              </td>
+            -->
+            </tr>
+          `);
+          }else{
+            $("#tabla-cargas tbody").append(`
+            <tr>
+              <td>${operacion['NoConsecutivo']}</td>
+              <td>${operacion['registro'].FechaYHoraInicialRecepcion}</td>
+              <td>${operacion['registro'].TipoDeRegistro}</td>
+              <td style="max-width: 200px; word-wrap: break-word; word-break: break-all; white-space: normal;">${operacion['proveedor'] || 'Desconocido'}</td>
+              <td>${operacion.rfc || 'Desconocido'}</td>
+              <td>${operacion['registro'].Autotanque || 'Desconocido'}</td>
+              <td><div style="background-color:${productos_colors[operacion['registro'].Producto]};" class="div_label_producto">${getProductoName(operacion['registro'].Producto) || 'Desconocido'}</div></td>
+              <td>${operacion['registro'].VolumenRecepcion} lts</td>
+              <td>${operacion['registro'].VolumenRecepcionNeto} lts</td>
+              <td>${operacion['registro'].Temperatura} °C</td>
+              <td>${operacion['registro'].PresionAbsoluta + ' kg/cm<sup>2</sup>' || 'Desconocida'}</td>
+              <td>${costo}</td>
+              <td>${costotraslado}</td>
+              <td>${totalimpuestos}</td>
+              <td>${costototal}</td>
+              <td>${acciones_bt}</td>
+              <!-- <td colspan="1">
+                  <button class="cancelar" type="button" value="${ventas.id}">Cancelar</button>
+              </td>
+            -->
+            </tr>
+          `);
+          }
+          
+        });
+      } else {
+        $("#tabla-cargas tbody").append(`
+          <tr>
+            <td colspan="14" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+          </tr>
+        `);
+
+      }
+
+      $("#mostrando").html(`
+        Mostrando ${response.mostrando} de ${response.cantidad} registros | Páginas: ${paginaActual} / ${totalPaginas}
+      `);
+
+      $("#paginacion").empty();
+      let paginationHtml = '';
+
+      if (paginaActual > 1) {
+        paginationHtml += `<a href="#" class="pagination-link" data-page="1">Primera</a>`;
+      }
+
+      if (paginaActual > 1) {
+        paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual - 1}">Anterior</a>`;
+      }
+
+      let startPage = Math.max(1, paginaActual - range);
+      let endPage = Math.min(totalPaginas, paginaActual + range);
+
+      for (let i = startPage; i <= endPage; i++) {
+        if (i === paginaActual) {
+          paginationHtml += `<span class="pagination-current">${i}</span>`;
+        } else {
+          paginationHtml += `<a href="#" class="pagination-link" data-page="${i}">${i}</a>`;
+        }
+      }
+
+      if (paginaActual < totalPaginas) {
+        paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual + 1}">Siguiente</a>`;
+      }
+
+      if (paginaActual < totalPaginas) {
+        paginationHtml += `<a href="#" class="pagination-link" data-page="${totalPaginas}">Última</a>`;
+      }
+
+      $("#paginacion").append(paginationHtml);
+      $("#navbar").show();
+
+      $(".pagination-link").click(function (e) {
+        e.preventDefault();
+        let pageNumber = $(this).data("page");
+        loadPage(pageNumber);
+      });
+    }
+
+    $("#obtenerfechas").click(function (event) {
+      event.preventDefault();
+
+      const startDateValue = $("#datepicker_start").val();
+      const endDateValue = $("#datepicker_end").val();
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(startDateValue) && /^\d{4}-\d{2}-\d{2}$/.test(endDateValue)) {
+          starDate = new Date(startDateValue);
+          endDate = new Date(endDateValue);
+          if (startDate > today || endDate > today){
+            alert("Las fechas seleccionadas no pueden ser posteriores al día de ayer.");
+            return;
+          }
+        //console.log(`startDateValue: ${startDateValue}`);
+        //console.log(`endDateValue: ${endDateValue}`);
+
+        //startDate = new Date(startDateValue);
+        //startDate.setHours(0, 0, 0,0);
+        //endDate = new Date(endDateValue);
+        //endDate.setHours(23, 59, 59, 9999);
+
+        startDate = startDateValue + ' 00:00:00';
+        endDate = endDateValue + ' 23:59:59';
+        //console.log(`startDate: ${startDate}`);
+        //console.log(`endDate: ${endDate}`);
+
+
+        if (startDate && endDate) {
+          loadPage(1); // Cargar la primera página
+        } else {
+          console.log("Seleccione ambas fechas");
+        }
+      } else {
+        alert("Formato de fecha incorrecto. Asegúrate de que esté en formato YYYY-MM-DD.");
+      }
+    });
+
+    function loadPage(pageNumber) {
+      const csrfToken = $("input[name='csrf_token']").val();
+      var mostrar = "mostrar";
+      $.ajax({
+        url: "{{ url_for('app_scaizen.app_distribuidor.'+ endpoint) }}",
+        type: "POST",
+        data: {
+          selected_start: startDate,
+          selected_end: endDate,
+          csrf_token: csrfToken,
+          page: pageNumber,
+          mostrar: mostrar,
+          operacion:"consultar_registros"
+        },
+        beforeSend: function () {
+          $("#search").css("display", "none");
+          $("#loader-row").show();
+        },
+        success: function (response) {
+          console.log("Respuesta del servidor:", response);
+          $("#loader-row").hide();
+          updatePagination(response);
+        },
+        error: function (xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", error);
+        }
+      });
+    }
+
+    $(document).on('click', 'button.cancelar', function() {
+      const id = $(this).val();
+      var cancelar = "cancelar";
+      var csrfToken = $("input[name='csrf_token']").val();
+
+      if (confirm('¿Estás seguro de que deseas cancelar esta venta?')) {
+        $.ajax({
+          url: "{{ url_for('app_scaizen.distribuidor_venta_consultar') }}",
+          type: 'POST',
+          data: {
+            csrf_token: csrfToken,
+            id: id,
+            cancelar: cancelar
+          },
+          success: function(response) {
+            if (response && response.estatus) {
+              alert("Venta cancelada con éxito");
+              $(`tr:has(button.cancelar[value="${id}"])`).remove();
+            } else {
+              alert("Error al cancelar Venta");
+            }
+          },
+          error: function(xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+          }
+        });
+      }
+    });
+  });
+</script>
+
+{% endblock %}

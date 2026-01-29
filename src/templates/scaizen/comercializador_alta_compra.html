@@ -1,0 +1,319 @@
+{% extends 'scaizen.html' %}
+{% block title %}Alta de Compras{% endblock %}
+
+{% block styles %}
+    <style>
+        .show {
+            display: initial; /* Cambia a visible */
+            opacity: 1; /* Se hace completamente visible */
+        }
+    </style>
+{% endblock %} 
+
+{% block tables %}
+
+<div class="formulario" style="width: 700px;">
+    <label class="titulo">Alta de Compras</label><br />
+    <p class="dir_vista">Comercializador/Alta Descargas</p>
+</div>
+
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    <input 
+        type="file" 
+        id="fileInput" 
+        accept=".xml" 
+        style="display: none;" 
+        onchange="handleFileSelect(event, this.dataset.ordenId)" 
+        data-orden-id=""/>
+
+    <hr class="text-black d-none d-sm-block" />
+    <div class="formulario_alta" style="min-width: 700px;">
+        <div>
+            <label style="margin-bottom: 15px; font-weight: bold; font-size: 16px; color: black;">Sube tu factura en XML para dar de alta una compra</label>
+            <div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <button type="button" onclick="openFileDialog()" style="margin-bottom: 10px; width: 200px;" class="button_color_alba">Selecciona la Factura (XML)</button>
+                <label id="error_label" style="display: none; color: red; margin: 10px 0;  opacity: 0; transition: opacity 0.5s ease;">El archivo seleccionado no tiene la extension correcta.</label>
+                <label id="file_name_label">Nombre del Archivo: Ningún Archivo Seleccionado</label>
+            </div>
+            <br>
+            <div id="data_inputs">
+            </div>
+            <br>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        let selectedFile = null; // Variable para almacenar el archivo seleccionado
+
+        function limpiar_formulario() {
+            let data_inputs = document.getElementById('data_inputs');
+            data_inputs.innerHTML = '';
+            selectedFile = null;
+            const fileInput = document.getElementById('fileInput');
+            fileInput.value = ''; // Restablecer el input de archivo
+            const label = document.getElementById('file_name_label');
+            label.textContent = 'Nombre del Archivo: Ningún Archivo Seleccionado';
+        }
+
+        function openFileDialog() {
+            const fileInput = document.getElementById('fileInput');
+            fileInput.click(); // Abre el explorador de archivos
+        }
+
+        function handleFileSelect(event) {
+            selectedFile = event.target.files[0]; // Guarda el archivo seleccionado
+
+            if (selectedFile) {
+                // Validar el tipo MIME
+                const validMimeTypes = ['application/xml', 'text/xml'];
+                const mimeType = selectedFile.type;
+
+                if (!validMimeTypes.includes(mimeType)) {
+                    const error_label = document.getElementById('error_label');
+                    error_label.innerText = 'El archivo seleccionado no tiene la extensión correcta.';
+                    error_label.style.color = 'red';
+                    error_label.style.display = 'initial';
+                    error_label.style.opacity = '1';
+                    // Quitar la clase después de un tiempo
+                    setTimeout(function() {
+                        error_label.style.opacity = '0';
+                        setTimeout(function() {
+                            error_label.style.display = 'none';
+                            limpiar_formulario(); 
+                        }, 1000); 
+                    }, 3000);
+                    
+                    
+                    return;
+                }
+
+
+                // Mostrar el nombre del archivo seleccionado en el label
+                const label = document.getElementById('file_name_label');
+                label.textContent = `Nombre del Archivo: ${selectedFile.name}`;
+
+                // Leer el archivo XML
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const xmlContent = e.target.result; // Contenido del archivo XML como texto
+
+                    // Parsear el contenido como XML
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+                    let data_inputs = document.getElementById('data_inputs');
+
+                    // Definir el espacio de nombres (namespace) del prefijo cfdi
+                    const namespace = "http://www.sat.gob.mx/cfd/4";
+                    let Comprobante = xmlDoc.getElementsByTagNameNS(namespace, "Comprobante")[0];
+
+                    if (!Comprobante) {
+                        const error_label = document.getElementById('error_label');
+                        error_label.innerText = 'El archivo seleccionado no tiene el formato correcto.';
+                        error_label.style.color = 'red';
+                        error_label.style.display = 'initial';
+                        error_label.style.opacity = '1';
+                        // Quitar la clase después de un tiempo
+                        setTimeout(function() {
+                            error_label.style.opacity = '0';
+                            setTimeout(function() {
+                                error_label.style.display = 'none';
+                                limpiar_formulario(); 
+                            }, 1000); 
+                        }, 3000);
+                        
+                        
+                        return;
+                    }
+
+                    // Obtener los elementos con las etiquetas necesarias
+                    let Emisor = xmlDoc.getElementsByTagNameNS(namespace, "Emisor")[0];
+                    let Receptor = xmlDoc.getElementsByTagNameNS(namespace, "Receptor")[0];
+                    let Concepto = xmlDoc.getElementsByTagNameNS(namespace, "Concepto")[0];
+                    let ConceptoTraslado = xmlDoc.getElementsByTagNameNS(namespace, "Concepto")[1];
+                    let Addenda = xmlDoc.getElementsByTagNameNS(namespace, "Addenda")[0];
+                    let AddendaMGCLO = Addenda ? Addenda.getElementsByTagNameNS(null, "AddendaMGCLO")[0] : null;
+
+                    let CantidadAlNatural = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'CantidadAlNatural')[0] : null;
+                    let Cantidad20gC = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'Cantidad20gC')[0] : null;
+                    let TemperaturaGcentigrados = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'TemperaturaGcentigrados')[0] : null;
+                    let Vehiculo = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'Vehiculo')[0] : null;
+                    let DatosOperativos = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'DatosOperativos')[0] : null;
+                    let fechas = DatosOperativos ? DatosOperativos.getAttribute("Valor").split(" PC:")[0] : null
+
+                    // Asignación de valores con condicionales
+                    let emisor = Emisor ? Emisor.getAttribute("Nombre") : 'Desconocido';
+                    let receptor = Receptor ? Receptor.getAttribute("Nombre") : 'Desconocido';
+                    let producto = Concepto ? Concepto.getAttribute("Descripcion") : 'Desconocido';
+                    let Costo = Concepto ? Concepto.getAttribute("Importe") : 'Desconocido';
+                    let CostoTraslado = ConceptoTraslado ? ConceptoTraslado.getAttribute("Importe") : 'Desconocido';
+                    let cantidad_nat_recibida = CantidadAlNatural ? CantidadAlNatural.getAttribute("Valor") : 'Desconocido';
+                    let cantidad_neto_recibida = Cantidad20gC ? Cantidad20gC.getAttribute("Valor") : 'Desconocido';
+                    let temperatura = TemperaturaGcentigrados ? TemperaturaGcentigrados.getAttribute("Valor") : 'Desconocido';
+                    let autotanque = Vehiculo ? Vehiculo.getAttribute("Valor") : 'Desconocido';
+                    let fecha_inicio = fechas ? fechas.split(" - ")[0] : 'Desconocida';
+                    let fecha_fin = fechas ? fechas.split(" - ")[1] : 'Desconocida';
+
+                    // Insertar valores en el formulario
+                    data_inputs.innerHTML= `
+                        <!-- Estación de servicio -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="emisor">Emisor:</label>
+                            <div class="col-10">
+                                <input value="${emisor}" disabled type="text" id="emisor" name="emisor" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Cliente -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="receptor">Receptor:</label>
+                            <div class="col-10">
+                                <input value="${receptor}" disabled type="text" id="receptor" name="receptor" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Producto -->
+                        <div class="form-group row align-items-center">
+                            <label class="col-2 col-form-label texto-negro">Producto:</label>
+                            <div class="col-10">
+                                <input value="${producto}" disabled type="text" id="producto" name="producto" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Cantidad Natural Recibida (lts) -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="cantidad_nat_recibida">Cantidad Natura Recibida (lts):</label>
+                            <div class="col-10">
+                                <input value="${cantidad_nat_recibida}" disabled type="number" id="cantidad_nat_recibida" name="cantidad_nat_recibida" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Cantidad Neto Recibida (lts) -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="cantidad_neto_recibida">Cantidad Neto Recibida (lts):</label>
+                            <div class="col-10">
+                                <input value="${cantidad_neto_recibida}" disabled type="number" id="cantidad_neto_recibida" name="cantidad_neto_recibida" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Temperatura  -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="temperatura">Temperatura (°C):</label>
+                            <div class="col-10">
+                                <input value="${temperatura}" disabled type="number" id="temperatura" name="temperatura" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Autotanque -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="autotanque">Autotanque:</label>
+                            <div class="col-10">
+                                <input value="${autotanque}" disabled type="text" id="autotanque" name="autotanque" placeholder="" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Fecha Inicio-->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="datepicker_start1">Fecha de inicio:</label>
+                            <div class="col-10">
+                                <input value="${fecha_inicio}" disabled type="text" id="fefecha_iniciocha" name="selected_start" class="form-control fechaformulario" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Fecha Fin-->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="datepicker_start1">Fecha de fin:</label>
+                            <div class="col-10">
+                                <input value="${fecha_fin}" disabled type="text" id="fecha_fin" name="selected_start" class="form-control fechaformulario" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Costo -->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="Costo">Costo:</label>
+                            <div class="col-10">
+                                <input value="${Costo}" disabled type="text" id="Costo" name="Costo" placeholder="" class="form-control" style="width: 100%; resize: none;"/>
+                            <div id="costo-error" class="text-danger" style="display: none;"></div>
+                        </div>
+                        <!-- Costo Traslado-->
+                        <div class="form-group row align-items-center mb-3">
+                            <label class="col-2 col-form-label texto-negro" for="Costo">Costo Traslado:</label>
+                            <div class="col-10">
+                                <input value="${CostoTraslado}" disabled type="text" id="Costo" name="Costo" placeholder="" class="form-control" style="width: 100%; resize: none;"/>
+                            </div>
+                        </div>
+                        <!-- Botones de submit y reset -->
+                        <div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <button style="margin-bottom:10px; margin-top:10px; border-color:#122B49;" 
+                                type="button" onclick="limpiar_formulario()" class="button_color_alba2">Limpiar</button>
+                            <button 
+                                type="button" 
+                                onclick="uploadFile()" class="button_color_alba">Subir Factura</button>
+                        </div>
+                    `;
+                };
+
+                // Leer el archivo como texto
+                reader.readAsText(selectedFile);
+            }
+        }
+
+        function uploadFile() {
+            if (!selectedFile) {
+                alert('Por favor, selecciona un archivo antes de enviar.');
+                return;
+            }
+            let csrfToken = $("input[name='csrf_token']").val().trim();
+            console.log(csrfToken);
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('csrf_token', csrfToken);
+
+            // Enviar el archivo al servidor
+            fetch("{{ url_for('app_scaizen.app_comercializador.compra_alta') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data['error']){
+                    const error_label = document.getElementById('error_label');
+                        error_label.innerText = data['error'];
+                        error_label.style.color = 'red';
+                        error_label.style.display = 'initial';
+                        error_label.style.opacity = '1';
+                        // Quitar la clase después de un tiempo
+                        setTimeout(function() {
+                            error_label.style.opacity = '0';
+                            setTimeout(function() {
+                                error_label.style.display = 'none';
+                                limpiar_formulario(); 
+                            }, 1000); 
+                        }, 3000);
+                        
+                        
+                        return;
+
+                }else if(data['success'] == true)
+                {
+                    const error_label = document.getElementById('error_label');
+                        error_label.innerText = data['message'];
+                        error_label.style.color = 'green';
+                        error_label.style.display = 'initial';
+                        error_label.style.opacity = '1';
+                        // Quitar la clase después de un tiempo
+                        setTimeout(function() {
+                            error_label.style.opacity = '0';
+                            setTimeout(function() {
+                                error_label.style.display = 'none';
+                                limpiar_formulario(); 
+                            }, 1000); 
+                        }, 5000);
+                        
+                        
+                        return;
+
+                }
+                console.log('Éxito:', data);
+                // Manejar la respuesta del servidor aquí
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        </script>
+{% endblock %}

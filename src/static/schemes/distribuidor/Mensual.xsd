@@ -1,0 +1,975 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:Covol="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales" xmlns:ns="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales" xmlns:tr="Complemento_Transporte" xmlns:alm="Complemento_Almacenamiento" xmlns:CDLRGN="Complemento_CDLRGN" xmlns:co="Complemento_Comercializacion" xmlns:dis="Complemento_Distribucion" xmlns:exp="Complemento_Expendio" xmlns:ext="Complemento_Extraccion" xmlns:ref="Complemento_Refinacion" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" targetNamespace="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales" elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+    <xs:import schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Catalogo.xsd"/>
+	<xs:import namespace="Complemento_Transporte" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Transporte.xsd"/>
+	<xs:import namespace="Complemento_Almacenamiento" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Almacenamiento.xsd"/>
+	<xs:import namespace="Complemento_CDLRGN" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/CDLRGN.xsd"/>
+	<xs:import namespace="Complemento_Comercializacion" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Comercializacion.xsd"/>
+	<xs:import namespace="Complemento_Distribucion" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Distribucion.xsd"/>
+	<xs:import namespace="Complemento_Expendio" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Expendio.xsd"/>
+	<xs:import namespace="Complemento_Extraccion" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Extraccion.xsd"/>
+	<xs:import namespace="Complemento_Refinacion" schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Mensuales/Refinacion.xsd"/>
+	<xs:element name="ControlesVolumetricos">
+		<xs:annotation>
+			<xs:documentation>Estándar para Controles Volumétricos</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Version" fixed="1.0">
+					<xs:annotation>
+						<xs:documentation>Requerido para todos los contribuyentes, debe expresar la versión del programa informático que genera el XML.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="1"/>
+							<xs:maxLength value="5"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="RfcContribuyente">
+					<xs:annotation>
+						<xs:documentation>Requerido para todos los contribuyentes, para expresar su RFC. Puede ser de persona moral o física.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="t_RFC"/>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="RfcRepresentanteLegal" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Condicional para todos los contribuyentes que sean persona moral, para expresar el RFC de su representante legal. El RFC deberá contener 13 caracteres al tratarse de una persona física.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:pattern value="[A-ZÑ&amp;]{4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="RfcProveedor">
+					<xs:annotation>
+						<xs:documentation>Requerido para todos los contribuyentes, para expresar el RFC del proveedor del programa informático para llevar controles volumétricos. El RFC podrá contener 12 o 13 caracteres.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="RfcProveedores" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Opcional para expresar el RFC de los proveedores de equipos, sistemas, programas o cualquier otro componente de los controles volumétricos. El RFC deberá contener 12 ó 13 caracteres. Este campo deberá repetirse por cada proveedor con que se cuente.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:whiteSpace value="collapse"/>
+							<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Caracter">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TipoCaracter" type="c_Caracter">
+								<xs:annotation>
+									<xs:documentation>Requerido para expresar el carácter con el que actúa para efectos regulatorios.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ModalidadPermiso" type="t_clavePermisos" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional cuando en el elemento “TipoCaracter” se haya seleccionado “permisionario”, para expresar el tipo de permiso conforme a lo señalado en la sección 4. “VALIDACIONES ADICIONALES A REALIZAR”, subsección 4.1 “Tipo definido para los tipos de permisos”.						</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="NumPermiso" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional cuando en el elemento “TipoCaracter” se haya seleccionado “permisionario” para expresar el número de permiso otorgado por la Comisión Reguladora de Energía o la Secretaría de Energía, siguiendo el patrón asociado al permiso, conforme a la sección 4. “VALIDACIONES ADICIONALES A REALIZAR”, subsección 4.1 “Tipo definido para los tipos de permisos”.						</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="t_NumPermisoContratoAsignacion"/>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="NumContratoOAsignacion" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional cuando en el elemento “TipoCaracter” se haya seleccionado “contratista” o “asignatario” para expresar el número de asignación otorgada por la Secretaría de Energía o el número de contrato celebrado con la Comisión Nacional de Hidrocarburos, según corresponda.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="14"/>
+										<xs:maxLength value="24"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="InstalacionAlmacenGasNatural" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional cuando en el elemento “TipoCaracter” se haya seleccionado “usuario”, para identificar de forma descriptiva la instalación que recibe, almacena, entrega o usa hidrocarburos o petrolíferos.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="16"/>
+										<xs:maxLength value="250"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+						<xs:assert test="if (Covol:TipoCaracter = 'permisionario')then
+          if((Covol:ModalidadPermiso='PER1') and matches(Covol:NumPermiso,'^H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER2') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER3') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[MM]{2}[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER4') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER5') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER6') and matches(Covol:NumPermiso,'^H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER7') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[OM]{2}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER8') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[DUC]{3}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER9') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[TM]{2}[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER10') and matches(Covol:NumPermiso,'^PQ[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[DUC]{3}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER11') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER12') and matches(Covol:NumPermiso,'^PQ[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER13') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[AE]{2}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER14') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}[AE]{2}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER15') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}$')) then true()         
+          else if((Covol:ModalidadPermiso='PER16') and matches(Covol:NumPermiso,'^P[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER17') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[GN]{2}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER18') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[PETRO]{1,5}[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER19') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[CEE]{3}[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER20') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}COMP[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER21') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}DESC[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER22') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER23') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}OM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER24') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}FE[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER25') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}MM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER26') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}GES[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER27') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}LICUE[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER28') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}REG[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER29') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}TUP[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER30') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}SAB[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER31') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER32') and matches(Covol:NumPermiso,'^P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}TM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER33') and matches(Covol:NumPermiso,'^P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}OM[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER34') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER35') and matches(Covol:NumPermiso,'^GN[/]{1}[0-9]{1,5}[/]{1}P[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER36') and matches(Covol:NumPermiso,'^GN[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER37') and matches(Covol:NumPermiso,'^P[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER38') and matches(Covol:NumPermiso,'^P[/]{1}[0-9]{1,5}[/]{1}[P]{1}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER39') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}AUT[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER40') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}PLA[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER41') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER42') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}LPD[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER43') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ES[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER44') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}AUT[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER45') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER46') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER47') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}LPT[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER48') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}TRA[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER49') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}ALM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER50') and matches(Covol:NumPermiso,'^G[/]{1}[0-9]{1,5}[/]{1}LPA[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER51') and matches(Covol:NumPermiso,'^LP[/]{1}[0-9]{1,5}[/]{1}DIST[/]{1}REP[/]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER52') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}EXP[/]{1}ESA[/]{1}MM[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER53') and matches(Covol:NumPermiso,'^PL[/]{1}[0-9]{1,5}[/]{1}DIS[/]{1}DUC[/]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER54') and matches(Covol:NumPermiso,'^SENER[-]{1}REF[-]{1}[0-9]{3}[-]{1}[0-9]{4}$')) then true()          
+          else if((Covol:ModalidadPermiso='PER55') and matches(Covol:NumPermiso,'^SENER[-]{1}TP[-]{1}[0-9]{3}[-]{1}[0-9]{4}$')) then true()
+          else if((Covol:ModalidadPermiso='PER56') and matches(Covol:NumPermiso,'^SENER[-]{1}CPG[-]{1}[0-9]{3}[-]{1}[0-9]{4}$')) then true()
+          
+          else false()
+          
+          
+          else true()
+            "/>
+						<xs:assert test="if (Covol:TipoCaracter = 'permisionario') then(Covol:ModalidadPermiso and Covol:NumPermiso) and not(Covol:NumContratoOAsignacion) and not(Covol:InstalacionAlmacenGasNatural)
+									else  if (Covol:TipoCaracter = 'usuario') 
+									then (Covol:InstalacionAlmacenGasNatural)
+									and not(Covol:ModalidadPermiso) 
+									and not(Covol:NumContratoOAsignacion) 
+									and not(Covol:NumeroPermiso) 
+									else  if (Covol:TipoCaracter = 'asignatario' or Covol:TipoCaracter = 'contratista') 
+									then (Covol:NumContratoOAsignacion)
+									and not(Covol:ModalidadPermiso) 
+									and not(Covol:NumeroPermiso) 
+									and not(Covol:InstalacionAlmacenGasNatural) 
+									else true()"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ClaveInstalacion" type="c_ClaveInstalacion">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar la clave de identificación de la instalación o proceso donde deban instalarse sistemas de medición, conforme a la sección 5 “Claves”, subsección 5.1.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DescripcionInstalacion">
+					<xs:annotation>
+						<xs:documentation>Requerido para describir la instalación o proceso donde deban instalarse sistemas de medición.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:minLength value="5"/>
+							<xs:maxLength value="250"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Geolocalizacion" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Nodo opcional, para registrar la ubicación geográfica (Latitud y Longitud) de la instalación expresada en Grados decimales (DD), con los elementos GeolocalizacionLatitud y GeolocalizacionLongitud. Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="GeolocalizacionLatitud">
+								<xs:annotation>
+									<xs:documentation>Requerido para expresar la ubicación geográfica de la instalación, expresada en Grados decimales (DD). Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice. Este elemento se puede repetir por cada vértice del área o asignación.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:minInclusive value="-90"/>
+										<xs:maxInclusive value="90"/>
+										<xs:fractionDigits value="7"/>
+										<xs:whiteSpace value="collapse"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="GeolocalizacionLongitud">
+								<xs:annotation>
+									<xs:documentation>Requerido para expresar la ubicación geográfica de la instalación expresada en Grados decimales (DD). Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice. Este elemento se puede repetir por cada vértice del área o asignación.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:decimal">
+										<xs:minInclusive value="-180"/>
+										<xs:maxInclusive value="180"/>
+										<xs:whiteSpace value="collapse"/>
+										<xs:fractionDigits value="7"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="NumeroPozos" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar el número de pozos que cuentan con sistemas de medición a boca de pozo. En caso de no tener debe manifestar 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NumeroTanques" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar el número de tanques con los que cuenta o, en su caso, módulos. Incluye cualquier medio de almacenamiento, transporte o distribución en los que se almacenen hidrocarburos o petrolíferos, tales como tanques, autotanques, carrotanques, buquetanques o en caso de que el punto de medición aprobado o determinado por la CNH sea un medio de almacenamiento, En caso de no tener debe manifestar 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NumeroDuctosEntradaSalida" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar el número de ductos de entrada y salida a medios de almacenamiento o de carga y descarga a medios de transporte o distribución con los que cuenta o en caso de que el punto de medición aprobado o determinado por la CNH sea un ducto. En caso de no tener debe manifestar 0.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NumeroDuctosTransporteDistribucion" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar el número de ductos de transporte o distribución con los que cuenta o en caso de que el punto de medición aprobado o determinado por la CNH sea un ducto. En caso de no tener debe manifestar 0.
+</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="NumeroDispensarios" type="xs:int">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar el número de dispensarios con los que cuenta. En caso de no tener debe manifestar “0”.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="FechaYHoraReporteMes" type="t_FechaHusoHorario">
+					<xs:annotation>
+						<xs:documentation>Requerido para expresar la fecha y hora en la que se genera el reporte, deberá expresarse la hora en UTC con la identificación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="PRODUCTO" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ClaveProducto" type="c_claveProductos">
+								<xs:annotation>
+									<xs:documentation>Requerido para expresar la clave del producto conforme a lo señalado en el catálogo c_claveProductos, en la sección 4. “VALIDACIONES ADICIONALES A REALIZAR”, subsección 4.2 “Tipo definido para los productos”.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ClaveSubProducto" type="c_claveSubproductos" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional cuando hayan seleccionado los productos PR03, PR07, PR08, PR09, PR11, PR13, PR15, PR16, PR17, PR18, PR19 u PR20, para expresar la clave del subproducto conforme a lo señalado en el catálogo c_claveSubproductos, en la sección 4. “VALIDACIONES ADICIONALES A REALIZAR”, subsección 4.2 “Tipo definido para los productos”.
+									</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:choice>
+								<xs:element name="Gasolina" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="ComposOctanajeGasolina" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR07. Deberá tener un valor mínimo de 70 y un máximo de 130.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:int">
+														<xs:minInclusive value="70"/>
+														<xs:maxInclusive value="130"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+											<xs:element name="GasolinaConCombustibleNoFosil" type="c_CondicionalSeleccionar" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR07 para expresar si el producto contiene combustible no fósil.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="ComposDeCombustibleNoFosilEnGasolina" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya declarado “Sí” en el elemento “GasolinaConCombustibleNoFosil”, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:int">
+														<xs:minInclusive value="1"/>
+														<xs:maxInclusive value="99"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+										</xs:sequence>
+										<xs:assert test="if (Covol:GasolinaConCombustibleNoFosil = 'Si') then (Covol:ComposDeCombustibleNoFosilEnGasolina) else not(Covol:ComposDeCombustibleNoFosilEnGasolina)"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Diesel" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="DieselConCombustibleNoFosil" type="c_CondicionalSeleccionar">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR03 para expresar si el producto contiene combustible no fósil.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="ComposDeCombustibleNoFosilEnDiesel" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya declarado “Sí” en el elemento “DieselConCombustibleNoFosil”, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:int">
+														<xs:minInclusive value="1"/>
+														<xs:maxInclusive value="99"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+										</xs:sequence>
+										<xs:assert test="if (Covol:DieselConCombustibleNoFosil ='Si') then (Covol:ComposDeCombustibleNoFosilEnDiesel) 
+	                      else if (Covol:DieselConCombustibleNoFosil ='No') then not(Covol:ComposDeCombustibleNoFosilEnDiesel)
+		else true()"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Turbosina" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="TurbosinaConCombustibleNoFosil" type="c_CondicionalSeleccionar">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR11 para expresar si el producto contiene combustible no fósil.</xs:documentation>
+												</xs:annotation>
+											</xs:element>
+											<xs:element name="ComposDeCombustibleNoFosilEnTurbosina" minOccurs="0">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya declarado “Sí” en el elemento “TurbosinaConCombustibleNoFosil”, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:int">
+														<xs:minInclusive value="1"/>
+														<xs:maxInclusive value="99"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+										</xs:sequence>
+										<xs:assert test="if (Covol:TurbosinaConCombustibleNoFosil = 'Si') then (Covol:ComposDeCombustibleNoFosilEnTurbosina) else not(Covol:ComposDeCombustibleNoFosilEnTurbosina)"/>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="GasLP" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="ComposDePropanoEnGasLP">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR12, para expresar el porcentaje normalizado de propano en el gas licuado de petróleo, conforme a los resultados del dictamen emitido por el proveedor del servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero de que se trate. Deberá tener un valor mínimo de 0.01 a 99.99.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:decimal">
+														<xs:minInclusive value="0.01"/>
+														<xs:maxInclusive value="99.99"/>
+														<xs:fractionDigits value="2"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+											<xs:element name="ComposDeButanoEnGasLP">
+												<xs:annotation>
+													<xs:documentation>Condicional en caso de que haya seleccionado el producto PR12, para expresar el porcentaje normalizado de butano en el gas licuado de petróleo, conforme a los resultados del dictamen emitido por el proveedor del servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero de que se trate. Deberá tener un valor mínimo de 0.01 a 99.99.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:decimal">
+														<xs:minInclusive value="0.01"/>
+														<xs:maxInclusive value="99.99"/>
+														<xs:fractionDigits value="2"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Petroleo" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="DensidadDePetroleo">
+												<xs:annotation>
+													<xs:documentation>Condicional tratándose de sujetos que hayan manifestado ser “contratista” o “asignatario” en el elemento “TipoCaracter”, en caso de que haya seleccionado el producto PR08, para expresar la densidad del petróleo, expresada en °API. Deberá tener un valor mínimo de 0.1 a 80.0.											</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:decimal">
+														<xs:minInclusive value="0.1"/>
+														<xs:maxInclusive value="80.0"/>
+														<xs:fractionDigits value="1"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+											<xs:element name="ComposDeAzufreEnPetroleo">
+												<xs:annotation>
+													<xs:documentation>Condicional tratándose de sujetos que hayan manifestado ser “contratista” o “asignatario” en el elemento “TipoCaracter" en caso de que haya seleccionado el producto PR08, para expresar el porcentaje de azufre en el petróleo. Deberá tener un valor mínimo de 0.1 a 10.0.</xs:documentation>
+												</xs:annotation>
+												<xs:simpleType>
+													<xs:restriction base="xs:decimal">
+														<xs:minInclusive value="0.1"/>
+														<xs:maxInclusive value="10.0"/>
+														<xs:fractionDigits value="1"/>
+														<xs:whiteSpace value="collapse"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="GasNatural" minOccurs="0">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="GasNaturalOCondensados" minOccurs="2" maxOccurs="10">
+												<xs:annotation>
+													<xs:documentation>Nodo condicional, tratándose de sujetos que hayan manifestado “contratista” o “asignatario” en Carácter, en caso de que haya seleccionado los productos PR09 o PR10 para registrar la información detallada de la composición del gas natural o de los condensados. La suma de la fracción molar de todos los componentes debe ser igual a 1.</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="ComposGasNaturalOCondensados" type="t_claveComplementoGNC">
+															<xs:annotation>
+																<xs:documentation>Requerido en caso de que haya seleccionado los productos PR09 o PR10, para expresar cada componente en la mezcla, conforme a lo señalado en el catálogo t_claveComplementoGNC, en la sección 4. “VALIDACIONES ADICIONALES A REALIZAR”, subsección 4.3 “Tipo definido para Gas Natural o Condensados”. Únicamente para quienes se hayan ostentado con el carácter de contratista o asignatario. Este campo deberá repetirse cuantos componentes tenga el gas natural o el condensado.
+																</xs:documentation>
+															</xs:annotation>
+														</xs:element>
+														<xs:element name="FraccionMolar">
+															<xs:annotation>
+																<xs:documentation>Requerido para expresar la fracción molar por cada componente expresado en “ComposGasNaturalOCondensados”. Deberá tener un valor mínimo de 0 a 0.999 por cada componente de la mezcla. La suma de la fracción molar de todos los componentes debe ser igual a 1.
+																</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:decimal">
+																	<xs:minInclusive value="0"/>
+																	<xs:maxInclusive value="0.999"/>
+																	<xs:fractionDigits value="3"/>
+																	<xs:whiteSpace value="collapse"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+														<xs:element name="PoderCalorifico" minOccurs="0">
+															<xs:annotation>
+																<xs:documentation>Requerido para expresar el poder calorífico por cada componente expresado en “ComposGasNaturalOCondensados”, expresado en BTU/pie cúbico para el gas natural y MMBTU tratándose de condensados.</xs:documentation>
+															</xs:annotation>
+															<xs:simpleType>
+																<xs:restriction base="xs:decimal">
+																	<xs:maxInclusive value="150000.000"/>
+																	<xs:minInclusive value="0.001"/>
+																	<xs:fractionDigits value="3"/>
+																	<xs:whiteSpace value="collapse"/>
+																</xs:restriction>
+															</xs:simpleType>
+														</xs:element>
+													</xs:sequence>
+													<xs:assert test="if (Covol:ComposGasNaturalOCondensados) then (Covol:FraccionMolar and Covol:PoderCalorifico) else not(Covol:FraccionMolar and Covol:PoderCalorifico)"/>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Otros" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Condicional cuando se haya seleccionado el producto PR15 o PR20 y el subproducto SP20 para expresar componentes diferentes a los productos señalados en el catálogo.</xs:documentation>
+									</xs:annotation>
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:minLength value="1"/>
+											<xs:maxLength value="30"/>
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:element>
+							</xs:choice>
+							<xs:element name="MarcaComercial" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Opcional para expresar la marca comercial de los petrolíferos.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+										<xs:maxLength value="200"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Marcaje" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Opcional para expresar la sustancia química empleada como marcador.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="2"/>
+										<xs:maxLength value="40"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="ConcentracionSustanciaMarcaje" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Condicional para expresar la concentración de la sustancia cuando se haya manifestado marcaje. Se mide en ppm.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:int">
+										<xs:minInclusive value="1"/>
+										<xs:maxInclusive value="1000"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="REPORTEDEVOLUMENMENSUAL">
+								<xs:annotation>
+									<xs:documentation>En esta sección se deben declarar los registros de los volúmenes de las operaciones de los hidrocarburos o petrolíferos, incluyendo la información sobre la determinación del tipo de hidrocarburo o petrolífero, de que se trate, así como de los CFDI o pedimentos asociados a la adquisición y enajenación de dichos bienes o, en su caso, a los servicios que tuvieron por objeto tales bienes.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="CONTROLDEEXISTENCIAS" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Esta sección la deberán declarar sólo aquellos sujetos que realicen procesos o cuenten con instalaciones que incluyan almacenamiento de hidrocarburos o petrolíferos, así como los sujetos que se dediquen a la comercialización en términos del artículo 19, fracción I del Reglamento de las actividades a que se refiere el Titulo Tercero de la Ley de Hidrocarburos, con la información del volumen que hayan obtenido de los contribuyentes que les presten servicios.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="VolumenExistenciasMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar las existencias del mes que se está reportando. Deberá corresponder a la existencia del día en que se genera este reporte.  (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados).</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ValorNumerico">
+																	<xs:annotation>
+																		<xs:documentation>Valor adimensional del volumen.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:minInclusive value="-100000000000.00000"/>
+																			<xs:maxInclusive value="100000000000.00000"/>
+																			<xs:whiteSpace value="collapse"/>
+																			<xs:fractionDigits value="5"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="FechaYHoraEstaMedicionMes" type="t_FechaHusoHorario">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar la fecha y hora de esta existencia. Deberá expresarse la hora en UTC con la identificación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601.</xs:documentation>
+														</xs:annotation>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="RECEPCIONES">
+											<xs:annotation>
+												<xs:documentation>En esta sección se deben declarar los registros de los volúmenes de las operaciones de recepción de los hidrocarburos o petrolíferos.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="TotalRecepcionesMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el número total de recepciones del mes en el cabezal del pozo o ducto de recolección (por ejemplo reinyecciones), la estación de proceso, en la refinería, en la terminal de almacenamiento o área de almacenamiento para usos propios, en la instalación fija para recibir gas natural, en los ductos de transporte y distribución, en los medios de transporte o distribución distintos a ductos o en la estación de servicio.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:int">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="100000000"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SumaVolumenRecepcionMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar la suma del volumen recibido en el mes por compras o por prestaciones de servicio o recepciones provenientes de la misma instalación producto de las actividades del asignatario, contratista (volumen reinyectado en el pozo) o permisionario (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados).</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ValorNumerico">
+																	<xs:annotation>
+																		<xs:documentation>Valor adimensional del volumen.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:minInclusive value="0"/>
+																			<xs:maxInclusive value="100000000000.00000"/>
+																			<xs:whiteSpace value="collapse"/>
+																			<xs:fractionDigits value="5"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="UM" type="ns:UM">
+																	<xs:annotation>
+																		<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="PoderCalorifico" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Requerido tratándose de permisionarios y usuarios que hayan seleccionado el producto PR09 para registrar el poder calorífico del gas natural recibido en el mes, expresado en Megajoule.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ValorNumerico">
+																	<xs:annotation>
+																		<xs:documentation>Valor adimensional del poder calorífico.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:minInclusive value="0"/>
+																			<xs:maxInclusive value="100000000000.00000"/>
+																			<xs:whiteSpace value="collapse"/>
+																			<xs:fractionDigits value="5"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="UM" type="ns:UM">
+																	<xs:annotation>
+																		<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="TotalDocumentosMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el total de documentos que amparen las recepciones en el mes.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:int">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="1000000"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ImporteTotalRecepcionesMensual">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el importe total del mes por compras o por prestaciones de servicio o recepciones provenientes de la misma instalación producto de las actividades del asignatario, contratista, permisionario o usuario (cantidad expresada en pesos mexicanos).</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:maxInclusive value="100000000000.00000"/>
+																<xs:minInclusive value="0"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Complemento" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:choice minOccurs="1" maxOccurs="unbounded">
+																<xs:element name="Complemento_Transporte" type="tr:Complemento_Transporte"/>
+																<xs:element name="Complemento_Almacenamiento" type="alm:Complemento_Almacenamiento"/>
+																<xs:element name="Complemento_CDLRGN" type="CDLRGN:Complemento_CDLRGN"/>
+																<xs:element name="Complemento_Comercializacion" type="co:Complemento_Comercializacion"/>
+																<xs:element name="Complemento_Distribucion" type="dis:Complemento_Distribucion"/>
+																<xs:element name="Complemento_Expendio" type="exp:Complemento_Expendio"/>
+																<xs:element name="Complemento_Extraccion" type="ext:Complemento_Extraccion"/>
+																<xs:element name="Complemento_Refinacion" type="ref:Complemento_Refinacion"/>
+															</xs:choice>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="ENTREGAS">
+											<xs:annotation>
+												<xs:documentation>En esta sección se deben declarar los registros de los volúmenes de las operaciones de entrega de los hidrocarburos o petrolíferos.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="TotalEntregasMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el número total de registros de volumen producido de hidrocarburos, entregado por ventas, autoconsumo o por prestaciones de servicio en el mes, incluyendo ductos de entrada y salida a medios de almacenamiento, ductos de carga y descarga de medios de transporte.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:int">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="10000000"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="SumaVolumenEntregadoMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar la suma del volumen producido de hidrocarburos, entregado por ventas, autoconsumo o por prestaciones de servicio en el mes; tratándose de contribuyentes que hayan manifestado permiso de expendio al público, deberán indicar el volumen del totalizador instantáneo (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados).</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ValorNumerico">
+																	<xs:annotation>
+																		<xs:documentation>Valor adimensional del volumen.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:minInclusive value="0"/>
+																			<xs:maxInclusive value="100000000000.00000"/>
+																			<xs:whiteSpace value="collapse"/>
+																			<xs:fractionDigits value="5"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="UM" type="ns:UM">
+																	<xs:annotation>
+																		<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="PoderCalorifico" minOccurs="0">
+														<xs:annotation>
+															<xs:documentation>Requerido tratándose de sujetos que hayan seleccionado el producto PR09 para registrar el poder calorífico del gas natural entregado en el mes, expresado en Megajoule tratándose de permisionarios y usuarios y en BTU tratándose de contratistas y asignatarios.</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="ValorNumerico">
+																	<xs:annotation>
+																		<xs:documentation>Valor adimensional del poder calorífico.</xs:documentation>
+																	</xs:annotation>
+																	<xs:simpleType>
+																		<xs:restriction base="xs:decimal">
+																			<xs:minInclusive value="0"/>
+																			<xs:maxInclusive value="100000000000.00000"/>
+																			<xs:whiteSpace value="collapse"/>
+																			<xs:fractionDigits value="5"/>
+																		</xs:restriction>
+																	</xs:simpleType>
+																</xs:element>
+																<xs:element name="UM" type="ns:UM">
+																	<xs:annotation>
+																		<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+																	</xs:annotation>
+																</xs:element>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="TotalDocumentosMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el total de documentos  que amparen las entregas por volumen producido de hidrocarburos, ventas, autoconsumo o por prestaciones de servicio del mes.</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:int">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="100000000"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="ImporteTotalEntregasMes">
+														<xs:annotation>
+															<xs:documentation>Requerido para expresar el importe total del mes de entregas por volumen producido de hidrocarburos, ventas, autoconsumo o por prestaciones de servicio (cantidad expresada en pesos mexicanos).</xs:documentation>
+														</xs:annotation>
+														<xs:simpleType>
+															<xs:restriction base="xs:decimal">
+																<xs:minInclusive value="0"/>
+																<xs:maxInclusive value="100000000000.00000"/>
+																<xs:whiteSpace value="collapse"/>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Complemento" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:choice minOccurs="1" maxOccurs="unbounded">
+																<xs:element name="Complemento_Transporte" type="tr:Complemento_Transporte"/>
+																<xs:element name="Complemento_Almacenamiento" type="alm:Complemento_Almacenamiento"/>
+																<xs:element name="Complemento_CDLRGN" type="CDLRGN:Complemento_CDLRGN"/>
+																<xs:element name="Complemento_Comercializacion" type="co:Complemento_Comercializacion"/>
+																<xs:element name="Complemento_Distribucion" type="dis:Complemento_Distribucion"/>
+																<xs:element name="Complemento_Expendio" type="exp:Complemento_Expendio"/>
+																<xs:element name="Complemento_Extraccion" type="ext:Complemento_Extraccion"/>
+																<xs:element name="Complemento_Refinacion" type="ref:Complemento_Refinacion"/>
+															</xs:choice>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						
+						
+						<!--REPORTE DE VOLUMEN MENSUAL RECEPCIONES-->
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Almacenamiento/alm:EXTRANJERO) ) then 	
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Almacenamiento/alm:EXTRANJERO/alm:PermisoImportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_CDLRGN/CDLRGN:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_CDLRGN/CDLRGN:EXTRANJERO/CDLRGN:PermisoImportacionOExportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Comercializacion/co:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Comercializacion/co:EXTRANJERO/co:PermisoImportacionOExportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Distribucion/dis:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Distribucion/dis:EXTRANJERO/dis:PermisoImportacionOExportacion) else true()"/>	
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Expendio/exp:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Expendio/exp:EXTRANJERO/exp:PermisoImportacion) else true()"/>		
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Extraccion/ext:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Extraccion/ext:EXTRANJERO/ext:PermisoExportacion) else true()"/>	
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Refinacion/ref:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:Complemento/Covol:Complemento_Refinacion/ref:EXTRANJERO/ref:PermisoImportacionOExportacion) else true()"/>		
+						 
+						 <!--REPORTE DE VOLUMEN MENSUAL ENTREGAS-->
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Almacenamiento/alm:EXTRANJERO) ) then 	
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Almacenamiento/alm:EXTRANJERO/alm:PermisoImportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_CDLRGN/CDLRGN:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_CDLRGN/CDLRGN:EXTRANJERO/CDLRGN:PermisoImportacionOExportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Comercializacion/co:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Comercializacion/co:EXTRANJERO/co:PermisoImportacionOExportacion) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Distribucion/dis:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Distribucion/dis:EXTRANJERO/dis:PermisoImportacionOExportacion) else true()"/>	
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Expendio/exp:EXTRANJERO) ) then  
+						(Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Expendio/exp:EXTRANJERO/exp:PermisoImportacion) else true()"/>		
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Extraccion/ext:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Extraccion/ext:EXTRANJERO/ext:PermisoExportacion) else true()"/>	
+						<xs:assert test="if (Covol:ClaveProducto != 'PR20' and (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Refinacion/ref:EXTRANJERO) ) then 
+						 (Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:Complemento/Covol:Complemento_Refinacion/ref:EXTRANJERO/ref:PermisoImportacionOExportacion) else true()"/>	
+						
+						<xs:assert test="if (string-length(Covol:Marcaje)>0  ) then (Covol:ConcentracionSustanciaMarcaje) else not(Covol:ConcentracionSustanciaMarcaje)"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR03') then (Covol:Diesel/Covol:DieselConCombustibleNoFosil) else not(Covol:Diesel/Covol:DieselConCombustibleNoFosil)"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR11') then (Covol:Turbosina/Covol:TurbosinaConCombustibleNoFosil) else not(Covol:Turbosina/Covol:TurbosinaConCombustibleNoFosil)"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR12') then (Covol:GasLP/Covol:ComposDePropanoEnGasLP and Covol:GasLP/Covol:ComposDeButanoEnGasLP) else not(Covol:GasLP/Covol:ComposDePropanoEnGasLP and Covol:GasLP/Covol:ComposDeButanoEnGasLP)"/>
+						<xs:assert test="if ((Covol:ClaveProducto = 'PR15' or Covol:ClaveProducto = 'PR20') and Covol:ClaveSubProducto ='SP20') then (Covol:Otros) else not(Covol:Otros)"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR07') then (Covol:ClaveSubProducto ='SP16' or Covol:ClaveSubProducto ='SP17' ) and (Covol:Gasolina)
+
+		else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR16') then (Covol:ClaveSubProducto ='SP48') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR17') then (Covol:ClaveSubProducto ='SP45' or Covol:ClaveSubProducto ='SP46') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR18') then (Covol:ClaveSubProducto ='SP26') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR19') then (Covol:ClaveSubProducto ='SP42') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR20') then (Covol:ClaveSubProducto ='SP20' or Covol:ClaveSubProducto = 'SP49') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR12') then not(Covol:ClaveSubProducto) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR13') then (Covol:ClaveSubProducto ='SP30' or Covol:ClaveSubProducto ='SP31' or Covol:ClaveSubProducto ='SP32' or Covol:ClaveSubProducto ='SP33') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR11') then (Covol:ClaveSubProducto ='SP34' or Covol:ClaveSubProducto ='SP35') and (Covol:Turbosina) else not(Covol:Turbosina)"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR10') then not(Covol:ClaveSubProducto) else true() "/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR14') then not(Covol:ClaveSubProducto) else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR09') then (Covol:ClaveSubProducto ='SP27' or Covol:ClaveSubProducto ='SP28' or Covol:ClaveSubProducto ='SP29' or Covol:ClaveSubProducto ='SP37' or Covol:ClaveSubProducto ='SP38' or Covol:ClaveSubProducto ='SP41' or Covol:ClaveSubProducto ='SP42' or Covol:ClaveSubProducto ='SP43' or Covol:ClaveSubProducto ='SP44' or Covol:ClaveSubProducto ='SP47') else true()"/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR15') then  (Covol:ClaveSubProducto ='SP20' or Covol:ClaveSubProducto ='SP21' or Covol:ClaveSubProducto ='SP36' or Covol:ClaveSubProducto ='SP39' or Covol:ClaveSubProducto ='SP40') else true() "/>
+						<xs:assert test="if (Covol:ClaveProducto = 'PR03') then (Covol:ClaveSubProducto ='SP18' or Covol:ClaveSubProducto ='SP19' or Covol:ClaveSubProducto ='SP22' or Covol:ClaveSubProducto ='SP23' or Covol:ClaveSubProducto ='SP24' or Covol:ClaveSubProducto ='SP25' ) and (Covol:Diesel) else not(Covol:Diesel) "/>
+						<!--<xs:assert test="if ((Covol:ClaveProducto = 'PR09' or Covol:ClaveProducto = 'PR10')) then (Covol:GasNatural) else not(Covol:GasNatural)"/>-->
+						<!-- <xs:assert test="if (Covol:ClaveProducto = 'PR08') then (Covol:ClaveSubProducto ='SP1' or Covol:ClaveSubProducto ='SP2' or Covol:ClaveSubProducto ='SP3' or Covol:ClaveSubProducto ='SP4' or Covol:ClaveSubProducto ='SP5' or Covol:ClaveSubProducto ='SP6' or Covol:ClaveSubProducto ='SP7' or Covol:ClaveSubProducto ='SP8' or Covol:ClaveSubProducto ='SP9' or Covol:ClaveSubProducto ='SP10' or Covol:ClaveSubProducto ='SP11' or Covol:ClaveSubProducto ='SP12' or Covol:ClaveSubProducto ='SP13' or Covol:ClaveSubProducto ='SP14' or Covol:ClaveSubProducto ='SP15') and  (Covol:Petroleo) else not(Covol:Petroleo)"/> -->
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="BITACORA" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Esta sección se debe declarar con los datos de todas las bitácoras del mes, incluyendo los eventos que se hayan registrado, así como las alarmas que estos hayan generado.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="BITACORAMENSUAL">
+								<xs:annotation>
+									<xs:documentation>Deberán describirse todos los eventos y alarmas emitidas durante el mes.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="NumeroRegistro">
+											<xs:annotation>
+												<xs:documentation>Requerido para expresar el número de registro, único y consecutivo del evento.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:int">
+													<xs:minInclusive value="0"/>
+													<xs:maxInclusive value="1000000"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="FechaYHoraEvento" type="t_FechaHusoHorario">
+											<xs:annotation>
+												<xs:documentation>Requerido para expresar la fecha y hora del evento, deberá expresarse la hora en UTC con la indicación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="UsuarioResponsable" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Condicional tratándose de registros que no se generen automáticamente, para expresar el usuario responsable de registrar el evento.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="1"/>
+													<xs:maxLength value="1000"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="TipoEvento">
+											<xs:annotation>
+												<xs:documentation>Requerido para expresar el tipo de evento conforme a la siguiente clasificación: 1) administración del sistema, 2) eventos de la UCC, 3) eventos relacionados a los programas informáticos, 4) eventos de comunicación, 5) operaciones cotidianas, 6) verificaciones realizadas por la autoridad fiscal o por proveedores autorizados por el SAT; 7) exista una diferencia de más de 0.5% tratándose de Hidrocarburos y Petrolíferos líquidos o de 1% tratándose de Hidrocarburos y Petrolíferos gaseosos, en el volumen final del periodo, obtenido de sumar al volumen inicial en dicho periodo, las recepciones de producto y restar las entregas de producto, incluyendo las pérdidas por proceso; 8) el volumen de existencias registrado al corte del día, es igual al registrado en el corte del día anterior y existen registros de entradas o salidas en el corte del día; 9) el volumen de existencias registrado por cada tipo de Hidrocarburo o Petrolífero y sistema de medición es menor a cero; 10) el volumen de existencias registrado en el corte del día varía con respecto al corte del día anterior y no existen registros de entradas o salidas en el corte del día; 11) el volumen de salidas en un lapso de veinticuatro horas es mayor al volumen de entradas del mismo lapso más el volumen de existencias del corte del día anterior; 12) calibración no vigente; 13) intento de alteración de cualquier registro; 14) registros incompletos o duplicados; 15) problemas de comunicación; 16) falla del medio de almacenamiento; 17) falla en la red de comunicación; 18) falla de energía; 19) error en la transmisión de información; 20) rechazos de inicio de sesión; 21) paro de emergencia.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:whiteSpace value="collapse"/>
+													<xs:pattern value="([1-9]|1[0-9]|2[0-1])"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="DescripcionEvento" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Requerido para expresar la descripción del evento de que se trate. Cuando se haya seleccionado el TipoEvento 7, deberá manifestarse como parte de la descripción del evento el porcentaje exacto de diferencia.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="2"/>
+													<xs:maxLength value="250"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="IdentificacionComponenteAlarma" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Condicional cuando se haya seleccionado 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 en TipoEvento, para identificar el componente que originó la alarma (Canal de comunicación, dispensarios, sistemas de medición).</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:minLength value="2"/>
+													<xs:maxLength value="250"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+									</xs:sequence>
+									<xs:assert test="if (Covol:TipoEvento ='7' or Covol:TipoEvento ='8' or Covol:TipoEvento ='9' or Covol:TipoEvento ='10' or Covol:TipoEvento ='11' or Covol:TipoEvento ='12' or Covol:TipoEvento ='13' or Covol:TipoEvento ='14' or Covol:TipoEvento ='15' or Covol:TipoEvento ='16' or Covol:TipoEvento ='17' or Covol:TipoEvento ='18' or Covol:TipoEvento ='19' or Covol:TipoEvento ='20' or Covol:TipoEvento ='21') then (Covol:IdentificacionComponenteAlarma) else not (Covol:IdentificacionComponenteAlarma)"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:assert test="if (string-length(Covol:RfcContribuyente)=12) then (Covol:RfcRepresentanteLegal) else not(Covol:RfcRepresentanteLegal)"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ( (Covol:Caracter/Covol:TipoCaracter = 'permisionario' or  Covol:Caracter/Covol:TipoCaracter = 'usuario') and $p/Covol:ClaveProducto = 'PR09' ) or  ( $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:PoderCalorifico )"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ( (Covol:Caracter/Covol:TipoCaracter = 'permisionario' or  Covol:Caracter/Covol:TipoCaracter = 'usuario' or Covol:Caracter/Covol:TipoCaracter = 'contratista' or  Covol:Caracter/Covol:TipoCaracter = 'asignatario') and $p/Covol:ClaveProducto = 'PR09' ) or  $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:PoderCalorifico"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ((Covol:Caracter/Covol:TipoCaracter = 'contratista' or 
+			Covol:Caracter/Covol:TipoCaracter = 'asignatario') and ($p/Covol:ClaveProducto = 'PR09' or $p/Covol:ClaveProducto = 'PR10')) or  ($p/Covol:GasNatural/Covol:GasNaturalOCondensados)"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  (((Covol:Caracter/Covol:TipoCaracter = 'contratista' or Covol:Caracter/Covol:TipoCaracter = 'asignatario') and ($p/Covol:ClaveProducto = 'PR09' or $p/Covol:ClaveProducto = 'PR10')) or not($p/Covol:GasNatural/Covol:GasNaturalOCondensados))"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies not ((Covol:Caracter/Covol:TipoCaracter = 'contratista' or Covol:Caracter/Covol:TipoCaracter = 'asignatario') and ($p/Covol:ClaveProducto = 'PR08')) or ($p/Covol:Petroleo)"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies (((Covol:Caracter/Covol:TipoCaracter = 'contratista' or Covol:Caracter/Covol:TipoCaracter = 'asignatario') and ($p/Covol:ClaveProducto = 'PR08')) or not($p/Covol:Petroleo))"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies not ((Covol:Caracter/Covol:TipoCaracter = 'usuario' or Covol:Caracter/Covol:TipoCaracter = 'permisionario') and ($p/Covol:ClaveProducto = 'PR09' or $p/Covol:ClaveProducto = 'PR10')) or not($p/Covol:GasNatural/Covol:GasNaturalOCondensados)"/>
+			<!-- RECEPCIONES PoderCalorifico tipoCaracter == permisionario o usuario -->
+			<!-- Validación de UM
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ( (Covol:Caracter/Covol:TipoCaracter = 'permisionario' or  Covol:Caracter/Covol:TipoCaracter = 'usuario') and $p/Covol:ClaveProducto = 'PR09' ) or  ( $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:PoderCalorifico and  $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:RECEPCIONES/Covol:PoderCalorifico/Covol:UM = 'UM06' )"/>
+            -->
+			<!-- RECEPCIONES PoderCalorifico-->
+			<!-- ENTREGAS PoderCalorifico tipoCaracter == permisionario o usuario  o contratista o asignatario -->
+			<!-- Validación de UM
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ( (Covol:Caracter/Covol:TipoCaracter = 'permisionario' or  Covol:Caracter/Covol:TipoCaracter = 'usuario') and $p/Covol:ClaveProducto = 'PR09' ) or  ( $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:PoderCalorifico and  $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:PoderCalorifico/Covol:UM = 'UM06' )"/>
+			<xs:assert test="every $p in Covol:PRODUCTO satisfies  not ( (Covol:Caracter/Covol:TipoCaracter = 'contratista' or  Covol:Caracter/Covol:TipoCaracter = 'asignatario') and $p/Covol:ClaveProducto = 'PR09' ) or  ( $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:PoderCalorifico and  $p/Covol:REPORTEDEVOLUMENMENSUAL/Covol:ENTREGAS/Covol:PoderCalorifico/Covol:UM = 'UM05' )"/>
+            -->
+			<!-- ENTREGAS PoderCalorifico-->
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="UM" abstract="false">
+		<xs:annotation>
+			<xs:documentation>Unidad de Medida</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="t_claveUnidadMedida"/>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

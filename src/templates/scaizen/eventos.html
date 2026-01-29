@@ -1,0 +1,383 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}Eventos diarios {% endblock %}
+
+
+{% block tables %}     
+        <label class="titulo">Reporte de eventos diarios </label><br>
+
+
+        <form method="POST" action="{{ url_for('app_scaizen.reporte_eventos') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label> Seleccionar fecha:</label>
+
+            <input  type="text" id="datepicker_start" name="selected_start" required>
+
+            <button  type="submit" id="obtenerfechas" class="btn btn-outline-success">Enviar</button>
+        </form>
+
+        <a>Fecha seleccionada: </a>
+        <!-- Tu tabla va aquí -->
+        <table class="table" id="tabla-eventos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Mensaje</th>
+                    <th>Origen</th>
+                    <th>Tipo</th>
+                  
+                </tr>
+            </thead>
+            <tbody>
+                
+                  
+            <tr id="search" style="display: table-row;">
+                <td style="font-weight:bold ; text-align: center;  background-color:#ccc;" valign="Top" colspan="13">Selecciona la fecha de busqueda</td>
+            </tr>
+            <tr id="loader-row" style="display: none;">
+                <td colspan="13" style="text-align:center;">
+                    <div class="typing-indicator">
+                        <div class="typing-circle"></div>
+                        <div class="typing-circle"></div>
+                        <div class="typing-circle"></div>
+                        <div class="typing-shadow"></div>
+                        <div class="typing-shadow"></div>
+                        <div class="typing-shadow"></div>
+                    </div>
+                </td>
+            </tr>
+              
+            </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Mensaje</th>
+                    <th>Origen</th>
+                    <th>Tipo</th>
+                  
+                </tr>
+            </thead>
+        </table>
+   
+  
+<script>
+     $(function() {
+           var startDate, endDate;
+   
+           $("#datepicker_start").datepicker({
+               dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+               dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sá'],
+               monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+               monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+               dateFormat: 'yy-mm-dd',
+               firstDay: 1,  // Lunes como primer día de la semana
+               onSelect: function(selectedDate) {
+                   // Al seleccionar una fecha en el primer datepicker
+                   startDate = $(this).datepicker('getDate');
+   
+                   // Configura la opción minDate del segundo datepicker para ser un día después de la fecha seleccionada en el primer datepicker
+                   $("#datepicker_end").datepicker("option", "minDate", addDays(startDate, 1));
+                   startDate = $(this).datepicker('getDate');
+   
+               }
+           });
+   
+          
+   
+           $("#obtenerfechas").click(function() {
+               // Aquí puedes usar las variables startDate y endDate como desees
+               if (startDate) {
+                   console.log("Fecha de inicio: ", startDate);
+               } else {
+                   console.log("Seleccione ambas fechas");
+               }
+           });
+           function addDays(date, days) {
+            var result = new Date(date);
+            result.setDate(result.getDate() + days);
+            return $.datepicker.formatDate('yy-mm-dd', result); // Formatear la fecha al mismo formato utilizado en los datepickers
+        }
+       });
+   </script>
+   <script>
+    $(document).ready(function(pageNumber) {
+    $('#obtenerfechas').click(function(event) {
+        event.preventDefault();
+
+        var startDate = $("#datepicker_start").datepicker('getDate');
+        var pageNum = $(this).data('page');
+        console.log(startDate)
+
+        if (startDate ) {
+            var csrfToken = $("input[name='csrf_token']").val();
+
+
+            var formData = {
+                'selected_start': startDate.toISOString(),
+                'csrf_token': csrfToken,
+                'page': pageNum 
+            };
+            //Paginacion
+            var maxPagesToShow = 10;
+            var pagina_actual
+            var total_paginas
+            $.ajax({
+                url: "{{ url_for('app_scaizen.reporte_eventos') }}",
+                data: formData,
+                type: 'POST',
+                beforeSend: function() {
+                    $('#search').css('display', 'none'); // Ocultar el elemento con el id "search"
+                    // Mostrar el loader antes de enviar la solicitud AJAX
+                    $('#loader-row').show();
+                    },
+                success: function(response) {
+                    $('#loader-row').hide();
+
+                    pagina_actual = response.paginactual
+                    total_paginas = response.total_paginas
+                    $('#tabla-eventos tbody').empty();
+                    if (response.eventos && response.eventos.length > 0) {
+                        response.eventos.forEach(function(evento) {
+                            $('#tabla-eventos tbody').append(`
+                                <tr> 
+                                    <td>${evento.id_eventos}</td>
+                                    <td>${evento.fecha_eventos }</td>
+                                    <td>${evento.nombre_eventos}</td>
+                                    <td>${evento.mensaje_eventos}</td>
+                                    <td>${evento.proceso_eventos == 'SCAIZEN' ? '<span class="label label-sucess">SCAIZEN</span>' : (evento.proceso_eventos== 'BACKEND' ? '<span class="label label-primary">BACKEND</span>' : '')}</td>
+                                    <td>${evento.tipo_eventos } </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        $('#tabla-eventos tbody').append(`
+                            <tr>
+                                <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                            </tr>
+                        `);
+                    }
+                    
+ 
+                    if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                            $('#mostrando').empty().append(`
+                                <nav aria-label="Paginación" class="ulpgcds-pager" >
+                                    <div class="ulpgcds-pager__results">
+                                        ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas} 
+                                    </div>
+                                </nav>
+                            `);
+                            $('#navbar').css('display', 'block'); // Mostrar el elemento
+
+                    } else {
+                        console.log("Error al mostrar");
+                    }
+
+                    $('#paginacion').empty(); // Limpiar el contenido anterior
+
+               
+                    // Generar enlaces de paginación dinámicamente
+                    for (var i = 1; i <= Math.min(response.total_pages,maxPagesToShow ); i++) {
+                        var link = $('<a>', {
+                            href: '#',
+                            class: 'pagination-link',
+                            'data-page': i,
+                            text: i
+                        });
+                        
+                                link.click(function(event) {
+                                    event.preventDefault();
+                                    var pageNumber = $(this).data('page');
+                                    $.ajax({
+                                    url: "{{ url_for('app_scaizen.reporte_eventos') }}",
+                                    data: {
+                                        'selected_start': startDate.toISOString(),
+                                        'csrf_token': csrfToken,
+                                        'page': pageNumber 
+                                    },
+                                    type: 'POST',
+                                    success: function(response) {
+                                        pagina_actual = response.paginactual
+                                        total_paginas = response.total_paginas
+                                        $('#tabla-eventos tbody').empty();
+                                            if (response.eventos && response.eventos.length > 0) {
+                                                response.eventos.forEach(function(evento) {
+                                                    $('#tabla-eventos tbody').append(`
+                                                        <tr>
+                                                             <td>${ evento.id_eventos}</td>
+                                                            <td>${ evento.fecha_eventos }</td>
+                                                            <td>${ evento.nombre_eventos}</td>
+                                                            <td>${ evento.mensaje_eventos}</td>
+                                                            <td>${evento.proceso_eventos == 'SCAIZEN' ? '<span class="label label-sucess">SCAIZEN</span>' : (evento.proceso_eventos== 'BACKEND' ? '<span class="label label-primary">BACKEND</span>' : '')}</td>
+                                                            <td>${ evento.tipo_eventos } </td>
+                                                        </tr>
+                                                    `);
+                                                });
+                                            } else {
+                                                $('#tabla-eventos tbody').append(`
+                                                    <tr>
+                                                        <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                                                    </tr>
+                                                `);
+                                            }
+                                            if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                                                    $('#mostrando').empty().append(`
+                                                        <nav aria-label="Paginación" class="ulpgcds-pager" >
+                                                            <div class="ulpgcds-pager__results">
+                                                                ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas} 
+                                                            </div>
+                                                        </nav>
+                                                    `);
+                                                    $('#navbar').css('display', 'block'); // Mostrar el elemento
+
+                                            } else {
+                                                console.log("Error al mostrar");
+                                            }
+      
+                                            // Mostrar el botón "prev" solo si el número de página seleccionado es mayor que 1
+                                            if (pageNumber > 1) {
+                                                $('#prev-button').show();
+                                            } else {
+                                                $('#prev-button').hide();
+                                            }
+                                            
+                                                                                    
+                                            // Mostrar el botón "next" solo si el número de página seleccionado es menor que el total de páginas
+                                            if (currentPage < totalPages) {
+                                                $('#next-button').show();
+                                            } else {
+                                                $('#next-button').hide();
+                                            }
+
+                                                        },
+                                        error: function(xhr, status, error) {
+                                            console.error("Error en la solicitud AJAX:", error);
+                                        }
+                                        
+
+                                        
+                                    });
+                        })
+                            // Agregar un controlador de eventos al enlace para enviar la página al servidor
+                        $('#paginacion').append(link);
+                    } 
+
+                    var prevButton = $('<a>', {
+                        href: '#',
+                        class: 'pagination-link',
+                        id: 'prev-button',
+                    }).html('<i class="fas fa-chevron-circle-left"></i>').css({color: 'black',display: 'none'});
+                    var nextButton = $('<a>', {
+                        href: '#',
+                        class: 'pagination-link',
+                        id: 'next-button',
+                    }).html('<i class="fas fa-chevron-circle-right"></i>').css({color: 'black'});
+
+                    
+                    $('#paginacion').prepend(prevButton);// jQuery inserta el elemento prevButton antes de todos los demás elementos hijos del contenedor #paginacion,
+                    $('#paginacion').append(nextButton);//después de todos los demás elementos hijos del contenedor #paginacion,
+
+                    console.log(pagina_actual)
+                    // Manejar el evento de clic en el botón de avance
+                    $('#next-button').click(function(e) {
+                        e.preventDefault();
+                        pagina_actual++;
+                        if (pagina_actual >= 1) {
+                            pagination_link(pagina_actual);
+                        }
+                        console.log(pagina_actual);
+
+                        if (pagina_actual == total_paginas) {
+                            $(this).hide(); // Ocultar el botón de avance cuando se alcanza el límite
+                            console.log("Desactivado Siguiente" );
+                        }
+
+                        $('#prev-button').show(); // Mostrar el botón de retroceso
+                    });
+
+                    $('#prev-button').click(function(e) {
+                        e.preventDefault();
+                        pagina_actual--;
+                        if (pagina_actual > 0) {
+                            pagination_link(pagina_actual);
+                        }
+                        console.log(pagina_actual);
+
+                        if (pagina_actual == 1) {
+                            $(this).hide(); // Ocultar el botón de retroceso cuando la página actual es cero
+                            console.log("Desactivado Retroceso");
+                        }
+
+                        $('#next-button').show(); // Mostrar el botón de avance
+                    });
+
+                    function pagination_link(pagina_actual) {
+                            // Esta función se llama cuando se hace clic en un enlace de paginación
+                            event.preventDefault();
+                            var pageNumber = pagina_actual
+                            $.ajax({
+                                url: "{{ url_for('app_scaizen.reporte_eventos') }}",
+                                data: {
+                                    'selected_start': startDate.toISOString(),
+                                    'csrf_token': csrfToken,
+                                    'page': pageNumber
+                                },
+                                type: 'POST',
+                                success: function(response) {
+                                    pagina_actual = response.paginactual;
+                                    $('#tabla-eventos tbody').empty();
+                                    if (response.eventos && response.eventos.length > 0) {
+                                        response.eventos.forEach(function(evento) {
+                                            $('#tabla-eventos tbody').append(`
+                                                <tr>
+                                                    <td>${ evento.id_eventos}</td>
+                                                    <td>${ evento.fecha_eventos }</td>
+                                                    <td>${ evento.nombre_eventos}</td>
+                                                    <td>${ evento.mensaje_eventos}</td>
+                                                    <td>${evento.proceso_eventos == 'SCAIZEN' ? '<span class="label label-sucess">SCAIZEN</span>' : (evento.proceso_eventos== 'BACKEND' ? '<span class="label label-primary">BACKEND</span>' : '')}</td>
+                                                    <td>${ evento.tipo_eventos } </td>
+                                                </tr>
+                                            `);
+                                        });
+                                    } else {
+                                        $('#tabla-eventos tbody').append(`
+                                            <tr>
+                                                <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                                            </tr>
+                                        `);
+                                    }
+                                    if (response.mostrando && response.total_paginas && response.cantidad && response.paginactual) {
+                                        $('#mostrando').empty().append(`
+                                            <nav aria-label="Paginación" class="ulpgcds-pager">
+                                                <div class="ulpgcds-pager__results">
+                                                    ${response.mostrando} de ${response.cantidad} registros | Páginas: ${response.paginactual} /${response.total_paginas}
+                                                </div>
+                                            </nav>
+                                        `);
+                                        $('#navbar').css('display', 'block'); // Mostrar el elemento
+                                    } else {
+                                        console.log("Error al mostrar");
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error("Error en la solicitud AJAX:", error);
+                                }
+                            });
+                        }  
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error en la solicitud AJAX:", error);
+                }
+            });
+        } else {
+            console.log("Seleccione ambas fechas");
+        }
+    });
+});
+
+   </script>
+{% endblock %}

@@ -1,0 +1,1212 @@
+{% extends 'scaizen.html' %}
+{% block title %}EDITAR PERMISOS{% endblock %}
+{% block tables %}
+  <div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn" style="margin-right: 10px;">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+        </button>
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">EDITAR PERMISOS</label>
+            <p class="dir_vista">Catalogo/Permisos Editar</p>
+        </div>
+    </div>  
+  </div>
+
+<hr class="text-black d-none d-sm-block" />
+
+<form id="userForm" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
+  <div class="formulario_alta">
+    <div class="form-group row align-items-center mb-3">
+      <h5 class="col-10  texto-negro" for="user_name">Nombre del Rol: {{rol.NombreRol}}</h5>
+    </div>
+    <!--Distribuidor-->
+    <div class="div_perm_item">
+      <h6 class="col-12 texto-negro" for="informacion">Distribuidor</h6>
+      <div class="col-7">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="Distribuidor" {% if 'Distribuidor' in rol.Permisos%} checked {% endif %}>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    {% set display_distribuidor = "display: none;" if 'Distribuidor' not in rol.Permisos else "" %}
+    <div style="width: 100%; {{display_distribuidor}}" id="distribuidor" >
+      <div class="div_perm_item distribuidor">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="DCompras">Compras</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="DCompras" {% if 'DCompras' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_dcompras = "display: none;" if 'DCompras' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_dcompras}}" id="dcompras" >
+        <div class="div_perm_item dcompras">
+          <label  style="padding-left: 20px;" class="col-12" for="DComprasConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DComprasConsultar" {% if 'DComprasConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item dcompras">
+          <label  style="padding-left: 20px;" class="col-12" for="DComprasSubirFacturaXML">Subir Factura XML</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DComprasSubirFacturaXML" {% if 'DComprasSubirFacturaXML' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="div_perm_item distribuidor">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="DVentas">Ventas</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="DVentas" {% if 'DVentas' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_dventas = "display: none;" if 'DVentas' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_dventas}}" id="dventas" >
+        <div class="div_perm_item dventas">
+          <label  style="padding-left: 20px;" class="col-12" for="DVentasConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DVentasConsultar" {% if 'DVentasConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item dventas">
+          <label  style="padding-left: 20px;" class="col-12" for="DVentasSubirFacturaXML">Subir Factura XML</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DVentasSubirFacturaXML" {% if 'DVentasSubirFacturaXML' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      
+  
+      <div class="div_perm_item distribuidor">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="DReportes">Reportes</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="DReportes" {% if 'DReportes' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_dreportes = "display: none;" if 'DReportes' not in rol.Permisos else "" %}
+      
+      <div style="width: 100%; {{display_dreportes}}" id="dreportes" >
+        <div class="div_perm_item dreportes">
+          <label  style="padding-left: 20px;" class="col-12" for="DReportediario">Reporte diario</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DReportediario" {% if 'DReportediario' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_dreportediario = "display: none;" if 'DReportediario' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_dreportediario}}" id="dreportediario">
+          <div class="div_perm_item dreportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportediarioVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportediarioVer" {% if 'DReportediarioVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportediarioPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportediarioPDF" {% if 'DReportediarioPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportediarioJSON">JSON</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportediarioJSON" {% if 'DReportediarioJSON' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportediarioXML">XML</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportediarioXML" {% if 'DReportediarioXML' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="div_perm_item dreportes">
+          <label  style="padding-left: 20px;" class="col-12" for="DReportemensual">Reporte mensual</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DReportemensual" {% if 'DReportemensual' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_dreportemensual = "display: none;" if 'DReportemensual' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_dreportemensual}}" id="dreportemensual">
+          <div class="div_perm_item dreportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportemensualVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportemensualVer" {% if 'DReportemensualVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportemensualPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportemensualPDF" {% if 'DReportemensualPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportemensualJSON">JSON</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportemensualJSON" {% if 'DReportemensualJSON' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportemensualXML">XML</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportemensualXML" {% if 'DReportemensualXML' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="div_perm_item dreportes">
+          <label  style="padding-left: 20px;" class="col-12" for="DReportedealarmas">Reporte de alarmas</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DReportedealarmas" {% if 'DReportedealarmas' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_dreportedealarmas= "display: none;" if 'DReportedealarmas' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_dreportedealarmas}}" id="dreportedealarmas">
+          <div class="div_perm_item dreportedealarmas">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportedealarmaslVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportedealarmasVer" {% if 'DReportedealarmasVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportedealarmas">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportedealarmasPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportedealarmasPDF" {% if 'DReportedealarmasPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+    
+        <div class="div_perm_item dreportes">
+          <label  style="padding-left: 20px;" class="col-12" for="DReportedeeventos">Reporte de eventos</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="DReportedeeventos" {% if 'DReportedeeventos' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_dreportedeeventos = "display: none;" if 'DReportedeeventos' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_dreportedealarmas}}" id="dreportedeeventos">
+          <div class="div_perm_item dreportedeeventos">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportedeeventosVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportedeeventosVer" {% if 'DReportedeeventosVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item dreportedeeventos">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="DReportedeeventosPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="DReportedeeventosPDF" {% if 'DReportedeeventosPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <!--Fin Distribuidor-->
+    <!--Comercializador-->
+    <div class="div_perm_item">
+      <h6 class="col-12 texto-negro" for="Comercializador">Comercializador</h6>
+      <div class="col-7">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="Comercializador" {% if 'Comercializador'in rol.Permisos%} checked {% endif %}>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    {% set display_comercializador = "display: none;" if 'Comercializador' not in rol.Permisos else "" %}
+    <div style="width: 100%; {{display_comercializador}}" id="comercializador">
+      <div class="div_perm_item comercializador">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="CCompras">Compras</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="CCompras" {% if 'CCompras' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_ccompras = "display: none;" if 'CCompras' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_ccompras}}" id="ccompras" >
+        <div class="div_perm_item ccompras">
+          <label  style="padding-left: 20px;" class="col-12" for="CComprasAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CComprasAlta" {% if 'CComprasAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item ccompras">
+          <label  style="padding-left: 20px;" class="col-12" for="CComprasConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CComprasConsultar" {% if 'CComprasConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+  
+      <div class="div_perm_item comercializador">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="CVentas">Ventas</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="CVentas" {% if 'CVentas' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_cventas = "display: none;" if 'CVentas' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_cventas}}" id="cventas" >
+        <div class="div_perm_item cventas">
+          <label  style="padding-left: 20px;" class="col-12" for="CVentasConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CVentasConsultar" {% if 'CVentasConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item cventas">
+          <label  style="padding-left: 20px;" class="col-12" for="CVentasSubirFacturaXML">Subir Factura XML</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CVentasSubirFacturaXML" {% if 'CVentasSubirFacturaXML' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>  
+      
+      <div class="div_perm_item comercializador">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="CReportes">Reportes</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="CReportes" {% if 'CReportes' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_creportes = "display: none;" if 'CReportes' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_dreportes}}" id="creportes" >
+
+        <div class="div_perm_item creportes">
+          <label  style="padding-left: 20px;" class="col-12" for="CReportediario">Reporte diario</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CReportediario" {% if 'CReportediario' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_creportediario = "display: none;" if 'CReportediario' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_creportediario}}" id="creportediario" >
+          <div class="div_perm_item creportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportediarioVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportediarioVer" {% if 'CReportediarioVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportediarioPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportediarioPDF" {% if 'CReportediarioPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportediarioJSON">JSON</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportediarioJSON" {% if 'CReportediarioJSON' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportediario">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportediarioXML">XML</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportediarioXML" {% if 'CReportediarioXML' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="div_perm_item creportes">
+          <label  style="padding-left: 20px;" class="col-12" for="CReportemensual">Reporte mensual</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CReportemensual" {% if 'CReportemensual' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_creportemensual = "display: none;" if 'CReportemensual' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_creportediario}}" id="creportemensual" >
+          <div class="div_perm_item creportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportemensualVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportemensualVer" {% if 'CReportemensualVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportemensualPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportemensualPDF" {% if 'CReportemensualPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportemensualJSON">JSON</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportemensualJSON" {% if 'CReportemensualJSON' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportemensual">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportemensualXML">XML</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportemensualXML" {% if 'CReportemensualXML' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="div_perm_item creportes">
+          <label  style="padding-left: 20px;" class="col-12" for="CReportedeeventos">Reporte de eventos</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="CReportedeeventos" {% if 'CReportedeeventos' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        {% set display_creportedeeventos = "display: none;" if 'CReportedeeventos' not in rol.Permisos else "" %}
+        <div style="width: 100%; {{display_creportediario}}" id="creportedeeventos" >
+          <div class="div_perm_item creportedeeventos">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportedeeventosVer">Ver reporte</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportedeeventosVer" {% if 'CReportedeeventosVer' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+      
+          <div class="div_perm_item creportedeeventos">
+            <label  style="padding-left: 30px; font-size: 11px;" class="col-12" for="CReportedeeventosPDF">PDF</label>
+            <div class="col-7">
+              <div class="switch">
+                <label>
+                  Off
+                  <input type="checkbox" id="CReportedeeventosPDF" {% if 'CReportedeeventosPDF' in rol.Permisos%} checked {% endif %}>
+                  <span class="lever"></span>
+                  On
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!--Fin Comercializador-->
+    <!--Catalogo-->
+    <div class="div_perm_item">
+      <h6 class="col-12 texto-negro" for="Catalogo">Catalogo</h6>
+      <div class="col-7">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="Catalogo" {% if 'Catalogo'in rol.Permisos%} checked {% endif %}>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    {% set display_catalogo = "display: none;" if 'Catalogo' not in rol.Permisos else "" %}
+    <div style="width: 100%; {{display_catalogo}}" id="catalogo">
+      <div class="div_perm_item catalogo">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="Cliente">Cliente</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="Cliente" {% if 'Cliente' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_cliente = "display: none;" if 'Cliente' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_cliente}}" id="cliente" >
+        <div class="div_perm_item cliente">
+          <label  style="padding-left: 20px;" class="col-12" for="ClienteAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ClienteAlta" {% if 'ClienteAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item cliente">
+          <label  style="padding-left: 20px;" class="col-12" for="ClienteEditar">Editar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ClienteEditar" {% if 'ClienteEditar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item cliente">
+          <label  style="padding-left: 20px;" class="col-12" for="ClienteConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ClienteConsultar" {% if 'ClienteConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item cliente">
+          <label  style="padding-left: 20px;" class="col-12" for="ClienteEliminar">Eliminar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ClienteEliminar" {% if 'ClienteEliminar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+  
+      <div class="div_perm_item catalogo">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="Proveedor">Proveedor</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="Proveedor" {% if 'Proveedor' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_proveedor= "display: none;" if 'Proveedor' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_proveedor}}" id="proveedor" >
+        <div class="div_perm_item proveedor">
+          <label  style="padding-left: 20px;" class="col-12" for="ProveedorAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ProveedorAlta" {% if 'ProveedorAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item proveedor">
+          <label  style="padding-left: 20px;" class="col-12" for="ProveedorEditar">Editar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ProveedorEditar" {% if 'ProveedorEditar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item proveedor">
+          <label  style="padding-left: 20px;" class="col-12" for="ProveedorConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ProveedorConsultar" {% if 'ProveedorConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item proveedor">
+          <label  style="padding-left: 20px;" class="col-12" for="ProveedorEliminar">Eliminar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="ProveedorEliminar" {% if 'ProveedorEliminar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="div_perm_item catalogo">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="Estacióndeservicio">Estación de servicio</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="Estacióndeservicio" {% if 'Estacióndeservicio' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_estacióndeservicior = "display: none;" if 'Estacióndeservicio' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_estacióndeservicior}}" id="estacióndeservicio" >
+        <div class="div_perm_item estacióndeservicio">
+          <label  style="padding-left: 20px;" class="col-12" for="EstacióndeservicioAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="EstacióndeservicioAlta" {% if 'EstacióndeservicioAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item estacióndeservicio">
+          <label  style="padding-left: 20px;" class="col-12" for="EstacióndeservicioEditar">Editar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="EstacióndeservicioEditar" {% if 'EstacióndeservicioEditar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item estacióndeservicio">
+          <label  style="padding-left: 20px;" class="col-12" for="EstacióndeservicioConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="EstacióndeservicioConsultar" {% if 'EstacióndeservicioConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item estacióndeservicio">
+          <label  style="padding-left: 20px;" class="col-12" for="EstacióndeservicioEliminar">Eliminar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="EstacióndeservicioEliminar" {% if 'EstacióndeservicioEliminar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="div_perm_item catalogo">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="Roles">Roles</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="Roles" {% if 'Roles' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_roles = "display: none;" if 'Roles' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_roles}}" id="roles" >
+        <div class="div_perm_item roles">
+          <label  style="padding-left: 20px;" class="col-12" for="RolesAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="RolesAlta" {% if 'RolesAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item roles">
+          <label  style="padding-left: 20px;" class="col-12" for="RolesEditar">Editar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off 
+                <input type="checkbox" id="RolesEditar" {% if 'RolesEditar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item roles">
+          <label  style="padding-left: 20px;" class="col-12" for="RolesEditarPermisos">Editar permisos</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off 
+                <input type="checkbox" id="RolesEditarPermisos" {% if 'RolesEditarPermisos' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item roles">
+          <label  style="padding-left: 20px;" class="col-12" for="RolesConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="RolesConsultar" {% if 'RolesConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item roles">
+          <label  style="padding-left: 20px;" class="col-12" for="RolesEliminar">Eliminar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="RolesrEliminar" {% if 'RolesrEliminar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="div_perm_item catalogo">
+        <label  style="padding-left: 10px;" class="col-12 texto-negro" for="Usuarios">Usuarios</label>
+        <div class="col-7">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="Usuarios" {% if 'Usuarios' in rol.Permisos%} checked {% endif %}>
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      {% set display_usuarios = "display: none;" if 'Usuarios' not in rol.Permisos else "" %}
+      <div style="width: 100%; {{display_usuarios}}" id="usuarios" >
+        <div class="div_perm_item usuarios">
+          <label  style="padding-left: 20px;" class="col-12" for="UsuariosAlta">Alta</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="UsuariosAlta" {% if 'UsuariosAlta' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item usuarios">
+          <label  style="padding-left: 20px;" class="col-12" for="UsuariosEditar">Editar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="UsuariosEditar" {% if 'UsuariosEditar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item usuarios">
+          <label  style="padding-left: 20px;" class="col-12" for="UsuariosConsultar">Consultar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="UsuariosConsultar" {% if 'UsuariosConsultar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="div_perm_item usuarios">
+          <label  style="padding-left: 20px;" class="col-12" for="UsuariosEliminar">Eliminar</label>
+          <div class="col-7">
+            <div class="switch">
+              <label>
+                Off
+                <input type="checkbox" id="UsuariosEliminar" {% if 'UsuariosEliminar' in rol.Permisos%} checked {% endif %}>
+                <span class="lever"></span>
+                On
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!--Fin Catalogo-->
+    <!--Configuración-->
+    <div class="div_perm_item">
+      <h6 class="col-12 texto-negro" for="Configuración">Configuración</h6>
+      <div class="col-7">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="Configuración" {% if 'Configuración' in rol.Permisos%} checked {% endif %}>
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    <!--Fin Configuración-->
+    
+    
+    <div class="text-center mt-4">
+      <button type="submit" id="crearorden" class="button_color_alba">
+        Editar registro   
+      </button>
+      <button type="reset" class="button_color_alba">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</form>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+
+  function verificarCambioCheckbox(event) {
+    const checkboxId = event.target.id;
+    const checkboxpart_id = checkboxId.toLowerCase();
+    const checkboxpart_element = document.getElementById(checkboxpart_id)
+
+    
+    if (event.target.checked) {
+        console.log(`El checkbox con ID '${checkboxpart_id}' ha sido marcado.`);
+        console.log(checkboxpart_element);
+        if(checkboxpart_element){
+          checkboxpart_element.style.display = 'initial';
+        }
+        
+    } else {
+        console.log(`El checkbox con ID '${checkboxpart_id}' ha sido desmarcado.`);
+        console.log(checkboxpart_element);
+        if(checkboxpart_element){
+          checkboxpart_element.style.display = 'none';
+        }
+    }
+}
+  // Añade un event listener a cada checkbox
+  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', verificarCambioCheckbox);
+});
+
+
+  function obtenerIdsCheckboxMarcados() {
+    // Selecciona todos los checkbox en el documento
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    // Inicializa un arreglo para almacenar los IDs de los checkboxes marcados
+    const idsMarcados = [];
+    
+    // Recorre cada checkbox y verifica si está marcado
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            idsMarcados.push(checkbox.id); // Agrega el ID al arreglo si está marcado
+        }
+    });
+
+    return idsMarcados; // Retorna el arreglo de IDs marcados
+}
+
+
+</script>
+<!-- Asegúrate de incluir Font Awesome para los iconos -->
+<script>
+  function resetSelect() {
+      document.getElementById('role').selectedIndex = 0;
+      document.getElementById('role-error').style.display = 'none';
+  }
+</script>
+
+
+<script>
+  $(document).ready(function () {
+
+    $("#userForm").submit(function(event) {
+      event.preventDefault();  // Evita el envío por defecto del formulario
+
+      
+      
+      const csrfToken = $("input[name='csrf_token']").val().trim();
+      let urlParams = new URLSearchParams(window.location.search);
+      let actualizar_id = urlParams.get('id');
+      let operacion = "edit_perm";
+      let perms = obtenerIdsCheckboxMarcados()
+
+      console.log(perms);
+
+      // Envío de datos al servidor
+      $.ajax({
+        url: window.location.href,
+        type: "POST",
+        data: {
+          csrf_token: csrfToken,
+          perms: perms,
+          operacion: operacion,
+          actualizar_id:actualizar_id
+        },
+        beforeSend: function () {
+          $("#loader-row").show();  // Mostrar loader durante la solicitud AJAX
+        },
+        success: function (response) {
+          $("#loader-row").hide();  // Ocultar loader al recibir respuesta
+
+          if (response.estatus) {
+
+
+
+            var url = "{{ url_for('app_scaizen.app_catalogo.roles_consultar' ) }}";
+
+            window.location.href = url;
+            alert("Rol actualizado con éxito");
+            $("#userForm")[0].reset();  // Reiniciar formulario después de éxito
+          } else {
+            alert("Error al actualizado el rol");
+          }
+        },
+        error: function (xhr, status, error) {
+          $("#loader-row").hide();  // Ocultar loader en caso de error
+          console.error("Error en la solicitud AJAX:", error);
+          alert("Hubo un problema al guardar el rol. Por favor, intente de nuevo.");
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

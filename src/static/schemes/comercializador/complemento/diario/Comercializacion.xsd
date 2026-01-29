@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:Covol="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Diarios" 
+	xmlns:ns="Complemento_Comercializacion" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" 
+	targetNamespace="Complemento_Comercializacion" 
+	xpathDefaultNamespace="Complemento_Comercializacion" 
+	elementFormDefault="qualified" attributeFormDefault="unqualified" vc:minVersion="1.1">
+	<xs:import schemaLocation="https://repositorio.cloudb.sat.gob.mx/Covol/xml/Diarios/Catalogo.xsd"/>
+	<xs:complexType name="Complemento_Comercializacion">
+		<xs:annotation>
+			<xs:documentation>Estándar de Complemento Comercialización</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="TERMINALALMYDIST" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando se contraten servicios de almacenamiento, distribución, transporte, licuefacción o regasificación.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Almacenamiento" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="TerminalAlmYDist">
+										<xs:annotation>
+											<xs:documentation>Requerido para especificar la terminal de almacenamiento y distribución de embarque del producto o distribuidor autorizado, cuando el permisionario de comercialización gestione la entrega en una terminal de almacenamiento o distribución o contrate servicios de licuefacción o regasificación de gas natural.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:minLength value="5"/>
+												<xs:maxLength value="250"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="PermisoAlmYDist" type="t_clavePermisosComercializacion">
+										<xs:annotation>
+											<xs:documentation>Requerido para especificar la terminal de almacenamiento o distribución de embarque del producto o distribuidor autorizado, cuando el permisionario de comercialización gestione la entrega en una terminal de almacenamiento o distribución o contrate servicios de licuefacción o regasificación de gas natural.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="TarifaDeAlmacenamiento" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar la cantidad de pesos mexicanos mediante la cual un permisionario otorga el servicio de almacenamiento.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoPorCapacidadAlmac" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo por capacidad de almacenamiento pagado por el servicio (cantidad de pesos mexicanos por día que ha de pagarse para reservar capacidad para almacenar diariamente en el sistema de almacenamiento. Sin incluir impuestos). No deberá manifestarse tratándose de terminales o estaciones de licuefacción o regasificación de gas natural.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoPorUsoAlmac" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo por uso pagado por el servicio (cantidad de pesos mexicanos que ha de pagarse por el servicio de recepción-entrega de un barril en el sistema de almacenamiento. Sin incluir impuestos). No deberá manifestarse tratándose de terminales o estaciones de licuefacción o regasificación de gas natural.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoVolumetricoAlmac" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo volumétrico pagado por el servicio (cargo único en pesos mexicanos que ha de pagarse por los servicios conjuntos de recepción-entrega y almacenamiento de un barril en el sistema de almacenamiento. Sin incluir impuestos). No deberá manifestarse tratándose de terminales o estaciones de licuefacción o regasificación de gas natural.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="Transporte" minOccurs="0">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PermisoTransporte" type="t_clavePermisoTransporteComercializacion">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el número de permiso otorgado por la CRE a la persona moral o física con el cual se realiza la transportación del producto hacia el punto de recepción.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="ClaveDeVehiculo" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para especificar clave del vehículo cuando se trate de transporte por medios distintos a ductos (número económico o en su defecto número de placa).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:minLength value="5"/>
+												<xs:maxLength value="12"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="TarifaDeTransporte">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar la tarifa pagada por el servicio de transporte (cantidad de pesos mexicanos mediante la cual un permisionario otorga el servicio de transporte).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoPorCapacidadTrans" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo por capacidad pagado por el servicio de transporte cuando haya sido por medio de ducto (cantidad en pesos mexicanos por día que ha de pagarse para reservar capacidad para transportar diariamente en el sistema de transporte. Sin incluir impuestos).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoPorUsoTrans" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo por uso pagado por el servicio de transporte por medio de ducto (cantidad de pesos mexicanos que ha de pagarse por el servicio de recepción-entrega de un barril en el sistema de transporte. Sin incluir impuestos).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="CargoVolumetricoTrans" minOccurs="0">
+										<xs:annotation>
+											<xs:documentation>Opcional para expresar el cargo volumétrico pagado por el servicio de transporte cuando haya sido por medio de ducto (cargo único en pesos mexicanos que ha de pagarse por los servicios conjuntos de recepción-entrega y almacenamiento de un barril en el sistema de transporte. Sin incluir impuestos).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="1000000000000.00000"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="TRASVASE" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando se contraten servicios de trasvase.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="NombreTrasvase">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el nombre o denominación social de la persona moral o física que realiza la actividad de trasvase. </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="5"/>
+									<xs:maxLength value="150"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="RfcTrasvase">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el RFC de la persona moral o física que realiza la actividad de trasvase. El RFC deberá contener 12 ó 13 caracteres.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="t_RFC"/>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="PermisoTrasvase" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Opcional para expresar el número de permiso otorgado por la Secretaría de Comunicaciones y Transportes o por la autoridad competente a la persona moral o física que realiza la actividad de trasvase. </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="5"/>
+									<xs:maxLength value="30"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="DescripcionTrasvase" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar la localización y/o descripción de las instalaciones empleadas en la actividad de trasvase. </xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="20"/>
+									<xs:maxLength value="250"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="CfdiTrasvase" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Opcional para expresar el folio UUID del CFDI que ampara el servicio de trasvase.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="t_CFDI"/>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="DICTAMEN" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>requerido para expresar el resultado de las pruebas aplicadas a las muestras. Deberás registrar la información obtenida directamente de un dictamen de laboratorio o de instrumentos en línea para cromatografía y densidad o de la Información que te proporcionen los sujetos que sean tus clientes o proveedores, siempre que se trate del mismo lote.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RfcDictamen">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el RFC del proveedor que presta el servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero, de que se trate, el poder calorífico del gas natural y el octanaje en el caso de gasolina. Puede ser de persona moral o física.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:whiteSpace value="collapse"/>
+									<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="LoteDictamen">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el número de lote del dictamen.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:maxLength value="50"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="NumeroFolioDictamen">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el número de folio del dictamen. Deberá conformarse de los doce o trece caracteres del RFC del proveedor, seguido de cinco números únicos y consecutivos que correspondan al orden cronológico de emisión del dictamen en el año, seguidos de cuatro números que correspondan al año de emisión del mismo.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}[0-9]{5}[12][0-9]{3}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FechaEmisionDictamen">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar la fecha en que fue emitido el dictamen, deberá expresarse yyyy-mm-dd, de acuerdo con la especificación ISO 8601.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:date">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ResultadoDictamen">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el resultado de las pruebas aplicadas a las muestras. Deberás registrar la información obtenida directamente de un dictamen de laboratorio o de instrumentos en línea para cromatografía y densidad o de la Información que te proporcionen los sujetos que sean tus clientes o proveedores, siempre que se trate del mismo lote.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="10"/>
+									<xs:maxLength value="300"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="CERTIFICADO" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando se obtengan los certificados del programa informático anualmente a más tardar el 30 de septiembre.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RfcCertificado">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el RFC del proveedor que presta el servicio de verificación de la correcta operación y funcionamiento del programa informático para llevar los controles volumétricos. Puede ser de persona moral o física.</xs:documentation>
+							</xs:annotation>
+							<xs:complexType>
+								<xs:simpleContent>
+									<xs:extension base="t_RFC"/>
+								</xs:simpleContent>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="NumeroFolioCertificado">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el número de folio del certificado. Deberá conformarse de los doce o trece caracteres del RFC del proveedor, seguido de cinco números únicos y consecutivos que correspondan al orden cronológico de emisión del certificado en el año, seguidos de cuatro números que correspondan al año de emisión del mismo.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern value="[A-ZÑ&amp;]{3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}[0-9]{5}[12][0-9]{3}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="FechaEmisionCertificado">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar la fecha en que fue emitido el certificado, deberá expresarse yyyy-mm-dd, de acuerdo con la especificación ISO 8601.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:date">
+									<xs:whiteSpace value="collapse"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="ResultadoCertificado">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el resultado de la verificación, según el certificado.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="10"/>
+									<xs:maxLength value="300"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="NACIONAL" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando el cliente o proveedor sea nacional.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="RfcClienteOProveedor" type="t_RFC">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar la clave en el RFC del cliente o proveedor.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="NombreClienteOProveedor">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el nombre, denominación o razón social del cliente o proveedor.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:minLength value="1"/>
+									<xs:maxLength value="150"/>
+									<xs:pattern value="[^|]{1,150}"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="PermisoClienteOProveedor" type="t_clavePermisosClienteOProveedorComercializacion" minOccurs="0">
+							<xs:annotation>
+								<xs:documentation>Opcional para expresar el permiso del cliente o proveedor.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="CFDIs" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="CFDI">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el folio UUID del CFDI.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:simpleContent>
+												<xs:extension base="t_CFDI"/>
+											</xs:simpleContent>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="TipoCFDI" type="c_TipoCFDI">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el tipo CFDI.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PrecioVentaOCompraOContrap">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el precio neto del producto vendido o comprado o la contraprestación por el servicio recibido.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+												<xs:maxInclusive value="1000000000000.00000"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="FechaYHoraTransaccion" type="t_FechaHusoHorario">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar la fecha y hora de la transacción que ampara el CFDI, deberá expresarse yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601, deberá expresarse la hora en UTC con la indicación del huso horario.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="VolumenDocumentado">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el volumen recibido o entregado según CFDI del cliente o proveedor del hidrocarburo o petrolífero (cantidad expresada en litros tratándose de petrolíferos y metro cúbico tratándose de gas natural).</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ValorNumerico">
+													<xs:annotation>
+														<xs:documentation>Valor adimensional del volumen.</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:decimal">
+															<xs:minInclusive value="0"/>
+															<xs:maxInclusive value="100000000000.00000"/>
+															<xs:whiteSpace value="collapse"/>
+															<xs:fractionDigits value="5"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="UM" type="ns:UM">
+													<xs:annotation>
+														<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EXTRANJERO" minOccurs="0" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando el cliente o proveedor sea extranjero.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="PermisoImportacionOExportacion" type="t_clavePermisoImportacionExportacionGeneral" minOccurs="0" maxOccurs="1">
+							<xs:annotation>
+								<xs:documentation>Requerido para expresar el permiso de importación o exportación. En caso de registrar el producto PR20, la presencia de este elemento será opcional.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+						<xs:element name="PEDIMENTOS" minOccurs="0" maxOccurs="unbounded">
+							<xs:complexType>
+								<xs:sequence>
+									<xs:element name="PuntoDeInternacionOExtraccion">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar la aduana y sección por la cual entra o sale el producto del territorio nacional. Se deberá señalar la clave de la ADUANA/SECCION, por la que entra o sale la mercancía a territorio nacional, conforme al Apéndice 1 del Anexo 22 de las Reglas Generales de Comercio Exterior. La clave ADUANA/SECCION se conforma por la clave de aduana, la cual deberá constar por dos dígitos que van desde el 01 al 84, y, en su caso, la sección aduanera la cual deberá constar por un dígito que va del 0 al 7.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="(0[1-2]|0[5-8]|1[1-2]|14|1[6-9]|20|2[2-8]|3[0-1]|3[3-4]|3[7-9]|40|4[2-4]|4[6-8]|5[0-3]|6[4-5]|67|73|75|8[0-4])([0-7])?"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="PaisOrigenODestino">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el país de donde proviene el producto o de su destino. Se deberá señalar la clave SAAI M3 del país, grupo de países o territorio de la Parte exportadora o importadora, que corresponda al origen de las mercancías, donde se produjeron o su destino, conforme al Apéndice 4 del Anexo 22 de las Reglas Generales de Comercio Exterior. Ejemplo: DEU ALEMANIA (REPUBLICA FEDERAL DE). Deberá estar conformado por tres letras.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:length value="3"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="MedioDeTransEntraOSaleAduana" type="c_MedioTransporte">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el medio del transporte mediante el cual el producto entra o sale de la aduana. Se deberá señalar la clave del medio de transporte en que se conduce la mercancía para su entrada o salida al territorio nacional, conforme al Apéndice 3 del Anexo 22 de las Reglas Generales de Comercio Exterior, conforme a los siguientes valores permitidos: 1 MARITIMO, 2 FERROVIARIO DE DOBLE ESTIBA, 3 CARRETERO-FERROVIARIO, 6 FERROVIARIO, 7 CARRETERO, 8 TUBERIA, 11 DUCTOS.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PedimentoAduanal">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el número del pedimento de importación o exportación conforme al Anexo 22 de las Reglas Generales de Comercio Exterior. Está integrado con quince dígitos, que corresponden a:
+2 dígitos, del año de validación.
+2 dígitos, de la aduana de despacho.
+4 dígitos, del número de la patente o autorización otorgada por la AGA al agente, importador, exportador, apoderado aduanal o de Almacén que promueve el despacho. Cuando este número sea menor a cuatro dígitos, se deberán anteponer los ceros que fueren necesarios para completar 4 dígitos.
+1 dígito, debe corresponder al último dígito del año en curso, salvo que se trate de un pedimento consolidado iniciado en el año inmediato anterior o del pedimento original de una rectificación.
+6 dígitos, los cuales serán numeración progresiva por aduana en la que se encuentren autorizados para el despacho, asignada por cada agente, importador, exportador, apoderado aduanal o de Almacén, referido a todos los tipos de pedimento.
+Dicha numeración deberá iniciar con 000001.
+Cada uno de estos grupos de dígitos deberá ser separado por dos espacios en blanco, excepto entre el dígito que corresponde al último dígito del año en curso y los seis dígitos de la numeración progresiva.
+Tratándose de pedimentos de rectificación o pedimentos complementarios, deberá de identificarse con un número nuevo.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:pattern value="[0-9]{2}  (0[1-2]|0[5-8]|1[1-2]|14|1[6-9]|20|2[2-8]|3[0-1]|3[3-4]|3[7-9]|40|4[2-4]|4[6-8]|5[0-3]|6[4-5]|67|73|75|8[0-4])  [0-9]{4}  [0-9]([0-9]{6})"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="Incoterms" type="t_Incoterms">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar los Incoterms (international commercial terms, “términos internacionales de comercio”). Deberá señalar los términos en tres letras cada uno. De acuerdo con los INCOTERMS internacionales vigentes, se deberá señalar conforme al Apéndice 14 del Anexo 22 de las Reglas Generales de Comercio Exterior. Ejemplo: DAP	(ENTREGADA EN LUGAR) a 3 caracteres.</xs:documentation>
+										</xs:annotation>
+									</xs:element>
+									<xs:element name="PrecioDeImportacionOExportacion">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el precio neto del producto (cantidad de pesos mexicanos mediante la cual el permisionario de expendio al público introduce o extrae del territorio nacional un producto. Incluye impuestos, pero no la tarifa de transporte ni almacenamiento).</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:decimal">
+												<xs:minInclusive value="0"/>
+												<xs:fractionDigits value="5"/>
+												<xs:whiteSpace value="collapse"/>
+												<xs:maxInclusive value="1000000000000.00000"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="VolumenDocumentado">
+										<xs:annotation>
+											<xs:documentation>Requerido para expresar el volumen expresado en el pedimento aduanal.</xs:documentation>
+										</xs:annotation>
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="ValorNumerico">
+													<xs:annotation>
+														<xs:documentation>Valor adimensional del volumen.</xs:documentation>
+													</xs:annotation>
+													<xs:simpleType>
+														<xs:restriction base="xs:decimal">
+															<xs:minInclusive value="0"/>
+															<xs:maxInclusive value="100000000000.00000"/>
+															<xs:whiteSpace value="collapse"/>
+															<xs:fractionDigits value="5"/>
+														</xs:restriction>
+													</xs:simpleType>
+												</xs:element>
+												<xs:element name="UM" type="ns:UM">
+													<xs:annotation>
+														<xs:documentation>Unidad de medida asociada al valor numérico.</xs:documentation>
+													</xs:annotation>
+												</xs:element>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:sequence>
+							</xs:complexType>
+						</xs:element>
+					</xs:sequence>
+					<xs:assert test="if (substring(ns:PEDIMENTOS/ns:PedimentoAduanal,16,6) = '000000') then false() else true()"/>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="ACLARACION" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Deberá manifestarse cuando se requiera realizar aclaraciones o justificaciones en caso de inconsistencias en los volúmenes reportados.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Aclaracion">
+							<xs:annotation>
+								<xs:documentation>Requerido para aclarar o justificar inconsistencias en los volúmenes reportados.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:maxLength value="600"/>
+									<xs:minLength value="10"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:assert test="count(TRASVASE)>0 or count(TERMINALALMYDIST)>0 or count(DICTAMEN)>0 or count(CERTIFICADO)>0 or count(NACIONAL)>0 or count(EXTRANJERO)>0 or count(ACLARACION)>0"/>
+	</xs:complexType>
+	<xs:complexType name="UM" abstract="false">
+		<xs:annotation>
+			<xs:documentation>Unidad de Medida</xs:documentation>
+		</xs:annotation>
+		<xs:simpleContent>
+			<xs:extension base="t_claveUnidadMedida"/>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

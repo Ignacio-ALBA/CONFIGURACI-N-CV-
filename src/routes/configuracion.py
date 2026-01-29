@@ -51,9 +51,7 @@ def configuracion():
                 print(datos)
 
                 return jsonify({'actividad': datos})
-        
-
-                
+                      
         payload = request.get_json(silent=True)
         if not payload:
                 return jsonify({"error": "JSON inválido"}), 400
@@ -64,9 +62,11 @@ def configuracion():
 
 
 
-            scaizen_cv_funtions.Cv_configuration.Add_cv(data)
+            cv_config = scaizen_cv_funtions.Cv_configuration()
+            cv_config.Add_cv(data)            
             print("CV recibido correctamente")
-            print(data)
+            print("ID O INFORMACION: "+str(data))
+            print("informacion:"+str(cv_config.cv_Configuration))
 
             # 👉 Aquí va:
             # - validación

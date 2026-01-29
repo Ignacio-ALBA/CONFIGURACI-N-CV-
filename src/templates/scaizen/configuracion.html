@@ -1,0 +1,3235 @@
+{% extends 'scaizen.html' %}
+{% block title %}Configuración{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <label class="titulo" style="text-transform: uppercase; display: block; text-align: left;">Configuración</label>
+    <p class="dir_vista">Configuración/Asignación</p>
+</div>
+
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+    
+    <div class="formulario_alta">
+        <div id="Control">
+            <h3 class="text-center">Controles Volumetricos</h3> <!-- Título añadido -->
+
+            <div style="display: flex; justify-content: center;">
+                <div class="campo">
+                    <label style="display: flex; justify-content: center;" for="productoSelect">Actividad:</label>
+                    <select  class="btn options_input select-small" name="transport2" id="productoSelect">
+                        <option value="" disabled selected>Seleccione Actividad</option>
+                        <option value="distribuidor">Distribuidor</option>
+                        <option value="comercializador">Comercializador</option>
+                    
+                    </select>
+                </div>
+                <div class="campo">
+                    <label style="display: flex; justify-content: center;" for="productoproductoSelect">Producto:</label>
+
+                    <select  class="btn options_input select-small" name="" id="productoproductoSelect" disabled>
+                        <option value="" disabled selected>Seleccione Producto</option>
+                    
+                    </select>
+                </div>
+            </div>
+            
+            <div style="display: flex; justify-content: center;">
+                <div class="campo">
+
+                    <label style="display: flex; justify-content: center;" for="terminalSelect">Terminal:</label>
+
+                    <select  class="btn options_input select-small" name="" id="terminalSelect" disabled>
+                        <option value="" disabled selected>Seleccione Terminal</option>
+                    
+                    </select>
+                </div>
+                <div class="campo">
+
+                    <label style="display: flex; justify-content: center;" for="medidoresSelect">Medidores:</label>
+
+                    <select  class="btn options_input select-small" name="" id="medidoresSelect" disabled>
+                        <option value="" disabled selected>Seleccione Medidor</option>
+                    </select>
+                </div>
+
+            </div>
+            <hr class="text-black d-none d-sm-block" />
+
+        </div>
+
+
+        <!-- Sección 1 -->
+        <div id="controles_volumetricos">
+
+
+            <div class="row mb-3">
+                
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="nombre_comercial">Rfc Contribuyente:</label>
+                        <input type="text" id="RfcContribuyente" name="Rfc_Contribuyente" class="form-control texto-negro CV" placeholder="Ej. CABL840215RF4" required disabled >
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="razon">Rfc Representante Legal:</label> 
+                        <input type="text" id="RfcRepresentantelegal" name="Rfc_Representante_Legal" class="form-control texto-negro rfc" placeholder="Ej. PEPC930514UN7"  required disabled >
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="rfc">RFC Proveedor:</label>
+                        <input type="text" id="RfcProveedor" name="Rfc_Proveedor" class="form-control rfc" placeholder="Ej. GEO2506184R6" required disabled>
+                    </div>
+                    <div id="rfc-error" class="text-danger" style="display: none;"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="No_rfc_proveedores">No. de Rfc Proveedores:</label>
+                
+                        <input type="number" id="No_rfc_proveedores" name="numero_de_rfc_proveedores" min="1" max="100" value="1">
+                
+                        <button type="button" class="button_color_alba button_color_alba--sm" id="add_save_rfc_provedores"  > + </button>
+                
+                    </div>
+                    <div class="switch">
+                        <label style="font-size: 10px;">
+                            <input type="checkbox" id="check_rfc_proveedores" disabled> 
+                            <span class="lever"  ></span>
+                            Habilitar RFC provedores.
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="tipoCaracter">Tipo de carácter:</label>
+                        <select class="btn options_input" name="tipoCaracter" id="tipoCaracter" disabled >
+                            <option value="" disabled selected>Seleccione el tipo de carácter</option>
+                            <option value="contratista">Contratista</option>
+                            <option value="asignatario">Asignatario</option>
+                            <option value="permisionario">Permisionario</option>
+                            <option value="usuario">Usuario</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="permisionario" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="modalidadPermiso">Modalidad de permiso:</label>
+                                <input type="text" id="modalidadPermiso" name="modalidad_Permiso" class="form-control texto-negro " placeholder="Ej. PER11" required disabled>
+                            </div>        
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="numeroPermiso">Número de permiso:</label>
+                                <input type="text" id="numeroPermiso" name="numero_Permiso" class="form-control texto-negro" placeholder="Ej. PL/99999/ALM/2025" required disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div id="contratoOasignacion" style="display: none;">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numeroContrato">Número de contrato o asignación:</label>
+                            <input type="text" id="numeroContrato" name="numero_Contrato" class="form-control texto-negro" placeholder="Ej. CNH-R10-L03-A23/2050"  minlength="14"  maxlength="24" required disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="usuario" style="display:none;">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="instalacionGas">Instalación de almacenamiento de gas natural:</label>
+                            <input type="text" id="instalacionGas" name="instalacion_Gas" class="form-control texto-negro" placeholder="Ej. terminal de almacenamiento de gas natural TRES CRUCES con 
+                            capacidad de 20000 m3." minlength="16"  maxlength="250" required disabled>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="informacion">Clave instalacíon:</label>
+                            <input type="text" id="ClaveInstalacion" name="Clave_Instalacion" class="form-control texto-negro" placeholder="Ej. REF-0001." required disabled>
+                        </div>
+                    </div>
+    
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="informacion">Descripción Instalación:</label>
+                            <input type="text" id="DescripcionInstalacion" name="Descripcion_Instalacion" class="form-control texto-negro" placeholder="Ej. Terminal de almacenamiento de gasolina con octanaje menor a 91 octanos, 
+                            con una capacidad de 200000 litros. " required disabled>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="GeolocalizacionLatitud">Geolocalización Latitud:</label>
+                            <input type="number" min="-90" max="90" id="GeolocalizacionLatitud" name="Geolocalizacion_Latitud" class="form-control texto-negro" placeholder="Ej. 21.8041458" required disabled>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="longitud">Geolocalización Longitud:</label>
+                            <input type="number" min="-90" max="90" id="GeolocalizacionLongitud" name="Geolocalizacion_Longitud" class="form-control texto-negro" placeholder="Ej. -104.8409271" required disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numero_pozos">Número de Pozos:</label>
+                            <input type="number" id= "numero_pozos" name="numero_pozos" min="0" max="100" value="0">
+                            <!--<button type="button" class="button_color_alba button_color_alba--sm"   id="add_pozos"> + </button>-->
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_Pozos" disabled>
+                                <span class="lever"></span>
+                                Habilitar Pozos.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numero_tanques">Número de Tanques:</label>
+                            <input type="number" id="numero_tanques" name="numerotanques" min="0" max="100" value="0">
+                            <!--<button type="button" class="button_color_alba button_color_alba--sm"   id="add_tanques"> + </button>-->
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_Tanques" disabled>
+                                <span class="lever"></span>
+                                Habilitar Tanques. 
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Numeroductosentradasalida">Número de ductos de entrada y salida:</label>
+                            <input type="number" id="Numeroductosentradasalida" name="Numero_ductos_entrada_salida" min="0" max="100" value="0">
+                            <!--<button type="button" class="button_color_alba button_color_alba--sm"   id="add_ductos_entrada_salida"> + </button>-->
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_ductos_entrada_salida" disabled>
+                                <span class="lever"></span>
+                                Habilitar ductos de entrada y salida. 
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Numeroductostransportedistribucion">Número de ductos de transporte y distribución:</label>
+                            <input type="number" id="Numeroductostransportedistribucion" name="Numero_ductos_transporte_distribucion" min="0" max="100" value="0">
+                            <!--<button type="button" class="button_color_alba button_color_alba--sm"   id="add_ductos_transporte_distribucion"> + </button>-->
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_ductos_transporte_distribucion" disabled>
+                                <span class="lever"></span>
+                                Habilitar ductos de transporte y distribución.
+                            </label>
+                        </div>
+                    </div>
+                    
+                </div>
+    
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numero_dispensarios">Número de dispensarios:</label>
+                            <input type="number" id="numero_dispensarios" name="numero_de_dispensarios" min="0" max="100" value="0">
+                            <!--<button type="button" class="button_color_alba button_color_alba--sm"   id="add_dispensarios"> + </button>-->
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_dispensarios" disabled>
+                                <span class="lever"></span>
+                                Habilitar dispensarios.
+
+                            </label>
+
+                        </div>
+                    </div> 
+                </div>
+
+
+
+
+                <hr class="text-black d-none d-sm-block" />
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_Productos">Productos:</label>
+                            <input type="number" id="No_Productos" name="productos" min="1" max="100" value="1" disabled>
+                            <button type="button" class="button_color_alba button_color_alba_producto--sm"   id="add_productos" disabled>+ / ✎ </button>
+
+                        </div>
+
+                    </div> 
+                </div>
+
+                <!--<div class="d-flex justify-content-center mt-4">
+                     <button type="button" class="button_color_alba me-2" id="añadir_controles"><i class="fa-solid fa-plus"></i>Añadir</button>
+                    <button type="reset" class="button_color_alba  me-2" id="limpiar_cv">LIMPIAR </button>
+                    <button type="button" class="button_color_alba me-2" id="siguienteBtn">SIGUIENTE</button>
+                </div>-->
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="submit" class="button_color_alba me-2" id="Añadir_CV" disabled>0 / 1</button>
+                    <button type="button" class="button_color_alba me-2" id="Eliminar_CV" disabled>ELIMINAR</button>
+                    <button type="reset" class="button_color_alba  me-2" id="limpiar_cv" disabled>LIMPIAR</button>
+                </div>
+        </div>
+        
+        <!--Sección 1.1-->
+        <div id="RFC_provedores" style="display: none;">
+            <h3 class="text-center">Rfc de provedores</h3> <!-- Título añadido -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="rfc">RFC  Proveedores:</label>
+                        <input type="text" id="RfcProveedores" name="Rfc_Proveedores" class="form-control" placeholder="Ej. TEC9704154R6" required>
+                    </div>
+                    <div id="rfc-error" class="text-danger" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="button_color_alba me-2" id="anteriorBtn_CreateProduct_RFC">ANTERIOR</button>
+                <button type="button" class="button_color_alba me-2" id="add_save_rfc">0 / 1</button>
+                <button type="button" class="button_color_alba me-2" id="Eliminar_CV_RFC">ELIMINAR</button>
+
+                <button type="reset" class="button_color_alba  me-2" id="limpiar_cv_rfc">LIMPIAR</button>
+            </div>
+        </div>
+
+
+
+
+        <!-- Sección 2 -->
+        <div id="CreateProduct" style="display: none;">
+            <h3 class="text-center">Productos</h3> 
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="claveproducto">Clave Producto:</label>
+                        <select class="btn options_input" name="clave_producto" id="claveproducto">
+                            <option value="" disabled selected>Seleccione la clave del producto</option>
+                            <option value="PR03"> PR03 (Diésel)</option>
+                            <option value="PR07"> PR07 (Gasolina)</option>
+                            <option value="PR08"> PR08 (Petróleo)</option>
+                            <option value="PR09"> PR09 (Gas Gatural)</option>
+                            <option value="PR10"> PR10 (Condensado)</option>
+                            <option value="PR11"> PR11 (Turbosina)</option>
+                            <option value="PR12"> PR12 (Gas L.P.)</option>
+                            <option value="PR13"> PR13 (Combustóleo)</option>
+                            <option value="PR14"> PR14 (Propano)</option>
+                            <option value="PR15"> PR15 (Bioenergético)</option>
+                            <option value="PR16"> PR16 (Gasóleo)</option>
+                            <option value="PR17"> PR17 (Naftas)</option>
+                            <option value="PR18"> PR18 (Gasavión)</option>
+                            <option value="PR19"> PR19 (Hidratos de metano)</option>
+                            <option value="PR20"> PR20 (Otros)</option>
+                        </select>                    
+                    </div>
+                </div>
+            </div>
+
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2"  >Clave Subproducto:</label>
+                        <select class="btn options_input" name="clave_subproducto" id="clavesubproducto">
+                            <option value="" disabled selected>Seleccione la clave del producto</option>
+
+                        </select>                       
+                    </div>
+                </div>
+
+                <div id="Gasolina" style="display: none;">
+                    <hr class="text-black d-none d-sm-block" />
+
+                    <label class="col-form-label texto-negro mb-0 me-2"  >Gasolina</label>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="ComposOctanajeGasolina">Compos de octanaje de gasolina:</label>
+                            <input type="number" id="ComposOctanajeGasolina" name="Compos_Octanaje_Gasolina" min="0" max="100" value="0">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Gasolina_combustible_no_fosil">Gasolina con combustible no fosil:</label>
+                            <select class="btn options_input" name="Gasolinacombustiblenofosil" id="Gasolina_combustible_no_fosil">
+                                <option value="" disabled selected>Seleccione Sí o No</option>
+                                <option value="Si"> Sí </option>
+                                <option value="No"> No </option>
+                            </select>                           
+                        </div>
+                    </div>
+                    <div id="Gasolinacombustiblenosifosil" style="display: none;" >
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="ComposCombustibleNoFosilGasolina">Compos de combustible no fosil en gasolina:</label>
+                                <input type="number" id="ComposCombustibleNoFosilGasolina" name="Compos_Combustible_No_Fosil_Gasolina" min="0" max="100" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div id="Disel" style="display: none;">
+                    <hr class="text-black d-none d-sm-block" />
+
+                    <label class="col-form-label texto-negro mb-0 me-2"  >Disel</label>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Diesel_combustible_no_fosil">Diesel con combustible no fosil:</label>
+                            <select class="btn options_input" name="Dieselcombustiblenofosil" id="Diesel_combustible_no_fosil">
+                                <option value="" disabled selected>Seleccione Sí o No</option>
+                                <option value="Si"> Sí </option>
+                                <option value="No"> No </option>
+                            </select>                                                   
+                        </div>
+                    </div>
+                    <div id="Dieselcombustiblenosifosil" style="display: none;" >
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="Compos_combustible_no_fosil_diesel">Compos de combustible no fosil en diesel:</label>
+                                <input type="number" id="Compos_combustible_no_fosil_diesel" name="Composcombustiblenofosildiesel" min="0" max="100" value="0">
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+                
+                
+                <div id="Turbosina" style="display: none;">
+                    <hr class="text-black d-none d-sm-block" />
+
+                    <label class="col-form-label texto-negro mb-0 me-2"  > Turbosina</label>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Turbosina_combustible_no_fosil"> Turbosina con combustible no fosil</label>
+                            <select class="btn options_input" name="Turbosinacombustiblenofisol" id="Turbosina_combustible_no_fosil">
+                                <option value="" disabled selected> Seleccione Sí o No</option>
+                                <option value="Si"> Sí </option>
+                                <option value="No"> No </option>
+                            </select>                            
+                        </div>
+                    </div>  
+                    <div id="Turbosinacombustiblenosifisol" style="display: none;" >
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="Compos_combustible_no_fosil_turbosina"> Compos de combustible no fosil en turbosina:</label>
+                                <input type="number" id="Compos_combustible_no_fosil_turbosina" name="Composcombustilenofosilturbosina" min="0" max="100" value="0">
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+
+                <div id="GasLP" style="display: none;">
+                    <hr class="text-black d-none d-sm-block" />
+
+                    <label class="col-form-label texto-negro mb-0 me-2"  > Gas L.P.</label>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2" > Compos de propano en Gas L.P. :</label>
+                        <input type="number" id="compospropanogaslp" name="Compos_propano_gas_lp" min="0" max="100" value="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2" > Compos de butano en Gas L.P. :</label>
+                        <input type="number" id="Compos_butano_gaslp" name="Composbutanogaslp" min="0" max="100" value="0">
+                    </div>
+                </div>
+                <div id="Petroleo" style="display: none;">
+                    <label class="col-form-label texto-negro mb-0 me-2"> Petroleo</label>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2"> Densidad de petroleo</label>
+                        <input type="number" id="densidad_petroleo" name="densidadpetroleo" min="0" max="100" value="0">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2"> Compos de azufre en petroleo</label>
+                        <input type="number" id="Compos_azufre_petroleo" name="Composazufrepetroleo" min="0" max="100" value="0">
+                    </div>
+                </div>
+                <div id="GasNatural" style="display: none;">
+                    <label class= "col-form-label texto-negro mb-0 me-2"> Gas Natural</label>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2"> Compos de gas natural o condensados</label>
+                        <input type="number" id="Compos_gas_natural_o_condensados" name="ComposgasnaturalOcondensados" min="0" max="100" value="0">
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2"> Fraccion molar:</label>
+                        <input type="number" id="fraccion_molar" name="fraccionmolar" min="0" max="100" value="0">
+
+                    
+                    </div>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2"> Poder Calorifico</label>
+                        <input type="number" id="Poder_Calorifico" name="PoderCalorifico" min="0" max="100" value="0">
+
+                    </div>
+                </div>
+                <div id="Otros" style="display: none;">
+                    <hr class="text-black d-none d-sm-block" />
+
+                    <label class="col-form-label texto-negro mb-0 me-2">Otros</label>
+                    <div class="col-md-6">
+                        <label class="col-form-label texto-negro mb-0 me-2">Otros:</label>
+                        <input type="text" id="OtrosInput" name="Otros" class="form-control texto-negro" placeholder="Ej. biometanol" required>
+                    </div>
+                </div>
+
+                <hr class="text-black d-none d-sm-block" />
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2">Marca Comercial:</label>
+                            <input type="text" id="MarcaComercial" name="Marca_Comercial" class="form-control texto-negro" placeholder="Ej. Blue-ultrapower 5000" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2">Marca:</label>
+                            <input type="text" id="Marca" name="Marca" class="form-control texto-negro" placeholder="Ej. Nitrógeno " required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2">Concentración Sustancia Marcaje:</label>
+                            <input type="number" min="0" max="100000000" id="ConcentracionSustanciaMarcaje" name="Concentracion_Sustancia_Marcaje" class="form-control texto-negro" placeholder="Ej. 100" required>
+                        </div>
+                    </div>
+                </div>
+  
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_producto_tanque">Tanques:</label>
+                            <input type="number" id="No_producto_tanque" name="tanques" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba--sm"   id="add_tanques"> + </button>
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_productos_Tanques">
+                                <span class="lever"></span>
+                                Habilitar tanques.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_producto_ductos">Ductos:</label>
+                            <input type="number" id="No_producto_ductos" name="ductos" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba--sm"   id="add_ductos_entrada_salida"> + </button>
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_productos_ductos_transporte_distribucion">
+                                <span class="lever"></span>
+                                Habilitar ductos.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_producto_pozo">Pozo:</label>
+                            <input type="number" id="No_producto_pozo" name="pozos" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba--sm"   id="add_pozos"> + </button>
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_productos_Pozos">
+                                <span class="lever"></span>
+                                Habilitar pozos.
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_producto_dispensario">Dispensario:</label>
+                            <input type="number" id="No_producto_dispensario" name="dispensario" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba--sm"   id="add_dispensarios"> + </button>
+
+                        </div>
+                        <div class="switch">
+                            <label style ="font-size: 10px;">
+                                <input type="checkbox" id="check_productos_dispensarios">
+                                <span class="lever"></span>
+                                Habilitar dispensario.
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="d-flex justify-content-center mt-4">
+                    <button type="button" class="button_color_alba me-2" id="anteriorBtn_CreateProduct">ANTERIOR</button>
+                    <button type="button" class="button_color_alba me-2" id="añadir_producto_producto">0 / 1</button>
+
+                    <!--<button type="button" class="button_color_alba me-2" id="añadir_producto_producto"> <i class="fa-solid fa-plus"></i>AÑADIR PRODUCTO  </button>
+                    -->
+                    <button type="button" class="button_color_alba me-2" id="Eliminar_producto">ELIMINAR</button>
+                    <button type="reset" class="button_color_alba  me-2" id="limpiar_producto">LIMPIAR </button>
+                    <!--<button type="button" class="button_color_alba me-2" id="siguienteBtn_2">SIGUIENTE</button>-->
+                </div>
+ 
+        </div>
+
+        <!--section 3-->
+        <div id="Measurement_system" style="display: none;">
+            <h3 class="text-center">Sistema de medición </h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_Sistemademedicion"  class="col-form-label texto-negro mb-0 me-2"></label>
+                        <input type="text" id="Sistemademedicion" name="Sistema_medicion_tanque" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_Localizacion_descripicion_sistema_medicion" class="col-form-label texto-negro mb-0 me-2" for="razon"></label>
+                        <input type="text" id="Localizacion_descripicion_sistema_medicion" name="localizaciondescripcionsistemamedicion" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_vigencia_calibracion" class="col-form-label texto-negro mb-0 me-2"></label>
+                        <input type="text" id="vigencia_calibracion" name="vigenciacalibracion" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_Incertidumbre_medicion_tanque" class="col-form-label texto-negro mb-0 me-2"></label>
+                        <input type="number" min="0" max="1" step="0.001" id="Incertidumbre_medicion_tanque" name="incertidumbremediciontanque" class="form-control texto-negro"  required>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="button_color_alba me-2" id="anteriorBtn_Measurement_system">ANTERIOR</button>
+                <button type="button" class="button_color_alba me-2" id="añadir_medicion">Añadir</button>
+                <button type="button" class="button_color_alba me-2" id="eliminar_medicion">ELIMINAR</button>
+
+                <button type="reset" class="button_color_alba  me-2" id="limpiar_medicion">LIMPIAR </button>
+
+                <!--<button type="button" class="button_color_alba me-2" id="siguienteBtn_4">SIGUIENTE</button>-->
+            </div>
+        </div>
+
+        <!--section 3.1-->
+        <div id="Hose_system_Measurement" style="display: none;">
+            <h3 class="text-center">Manguera</h3> <!-- Título añadido -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label class="col-form-label texto-negro mb-0 me-2" for="">Identificador de manguera:</label>
+                        <input type="text" id="identificador_manguera" name="" class="form-control" placeholder="DISP-0004-MGA-0002" required>
+                    </div>
+                    <div id="rfc-error" class="text-danger" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="button_color_alba me-2" id="before_measurement">Anterior</button>
+                <button type="button" class="button_color_alba me-2" id="add_save_hose_system">0 / 1</button>
+                <button type="button" class="button_color_alba me-2" id="Delete_hose_manguera">ELIMINAR</button>
+                <button type="reset" class="button_color_alba  me-2" id="Clear_hose_manguera">LIMPIAR</button>
+            </div>
+        </div>
+
+        <!--section_4-->
+        <div id="ProductController" style="display: none;">
+            <h3 class="text-center">Tanque</h3>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_clave_identificacion"  class="col-form-label texto-negro mb-0 me-2">Clave de identificacion del tanque:</label>
+                        <input type="text" id="Label_clave_identificacion" name="clavetanque" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_localizacion_yo_identificacion_" class="col-form-label texto-negro mb-0 me-2">Localizacion y/o descripción del  tanque</label>
+                        <input type="text" name="Label_localizacion_yo_identificacion_"  id="Label_localizacion_yo_identificacion_" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_vigencia_calibracion_tanque" class="col-form-label texto-negro mb-0 me-2">Vigencia de calibración del tanque</label>
+                        <input type="text" name="vigencia_calibracion_tanq"  id="Label_vigencia_calibracion_tanque" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>                
+ 
+            </div>
+            <div class="row mb-3">
+                             
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_diametro_ducto" class="col-form-label texto-negro mb-0 me-2">Diametro del ducto</label>
+                        <input type="text" name="vigencia_calibracion_tanq"  id="Label_diametro_ducto" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>  
+            </div>
+
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_capacidad_total_" class="col-form-label texto-negro mb-0 me-2">Capacidad total del tanque:</label>
+                        <input type="number" min="0" max="100000000" name="Capacidad_total_" id="Label_capacidad_total_" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_capacidad_operativa_" class="col-form-label texto-negro mb-0 me-2">Capacidad operativa del tanque:</label>
+                        <input type="number" min="0" max="100000000" name="Capacidad_operativa_" id="Label_capacidad_operativa_" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_capacidad_util_" class="col-form-label texto-negro mb-0 me-2">Capacidad util del tanque:</label>
+                        <input type="number" min="0" max="100000000" name="Capacidad_util_"  id="Label_capacidad_util_" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_capacidad_fondaje_" class="col-form-label texto-negro mb-0 me-2">Capacidad de fondaje del tanque</label>
+                        <input type="number" min="0" max="100000000" name="Capacidad_fondaje_" id="Label_capacidad_fondaje_" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_capacidad_gas_" class="col-form-label texto-negro mb-0 me-2">Capacidad del gas talon:</label>
+
+                        <input type="number" min="0" max="100000000" name="Capacidad_gas_" id="Label_capacidad_gas_" class="form-control texto-negro"  required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_vol_min_operacion" class="col-form-label texto-negro mb-0 me-2">Volumen minimo de operación:</label>
+                        <input type="number" min="0" max="100000000" name="Vol_min_operacion" id="Label_vol_min_operacion" class="form-control texto-negro" placeholder="" required>
+                    </div>
+                </div>
+            </div>  
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_estado_" class="col-form-label texto-negro mb-0 me-2">Estado del tanque:</label>
+                        <select class="btn options_input" name="Estado_" id="Label_estado_">
+                            <option value="" disabled selected>Seleccione el estado del tanque</option>
+                            <option value="O"> O (En Operación) </option>
+                            <option value="F"> F (Fuera de Operación ) </option>
+                        </select>  
+                    </div>
+                </div>
+            </div>
+            <!--<div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_prodcutoasignado" class="col-form-label texto-negro mb-0 me-2">Producto asignado:</label>
+                        <select class="btn options_input" name="prodcutoasignado" id="prodcuto_asignado">
+                            <option value="" disabled selected>Seleccione la clave del producto</option>
+
+                        </select>  
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="form-group d-flex align-items-center">
+                        <label for="Label_medicion_fk" class="col-form-label texto-negro mb-0 me-2">Sistema de medición:</label>
+                        <select class="btn options_input" name="sistema_medicion_fk" id="sistema_medicion_fk">
+                            <option value="" disabled selected>Seleccione la clave del producto</option>
+
+                        </select>  
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-md-6">
+                <div class="form-group d-flex align-items-center">
+                    <label class="col-form-label texto-negro mb-0 me-2" for="Label_medicion">Sistema de medición:</label>
+                    <input type="number" id="Label_medicion" name="numero_de_medicion" min="1" max="100" value="1">
+                    <button type="button" class="button_color_alba button_color_alba--sm" id="add_medicion"> + </button>
+            
+                </div>
+                <!--<div class="switch">
+                    <label style="font-size: 10px;" for="check_medicion">
+                        <input type="checkbox" id="check_medicion">
+                        <span class="lever"></span>
+                        Habilitar Sistema de medición.
+                    </label>
+                </div>-->
+            </div>
+           
+            <!--<div class="col-md-6" id="hose_system" style="display: none;">-->
+            <div class="col-md-6">
+
+                <div class="form-group d-flex align-items-center">
+                    <label class="col-form-label texto-negro mb-0 me-2" for="No_Mangueras">No. de mangueras:</label>
+            
+                    <input type="number" id="No_Mangueras" name="numero_de_Mangueras" min="1" max="100" value="1">
+            
+                    <button type="button" class="button_color_alba button_color_alba--sm" id="add_mangueras"> + </button>
+            
+                </div>
+            </div>
+
+
+
+            <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="button_color_alba me-2" id="anteriorBtn_ProductController">ANTERIOR</button>
+                <button type="button" class="button_color_alba me-2" id="añadir_save_producto">Añadir</button>
+                <button type="button" class="button_color_alba me-2" id="eliminar_tanque">ELIMINAR</button>
+                <button type="reset" class="button_color_alba  me-2" id="limpiar_tanque">LIMPIAR </button>
+                <!--<button type="button" class="button_color_alba me-2" id="añadir_save_producto"> <i class="fa-solid fa-plus"></i>AÑADIR</button>
+                0 / 1-->
+
+                <!--<button type="reset" class="button_color_alba  me-2" id="cancelar">CANCELAR</button>
+
+                <button type="button" class="button_color_alba me-2" id="enviar">ENVIAR</button>
+                -->
+            </div>
+        </div>
+
+
+
+
+    </div>
+</form>
+<script>
+
+    function controlSwitch(id,valor,html){
+        let sw=document.getElementById(id);
+        if(!sw) return;
+
+        sw.disabled=false;
+        sw.checked=valor>0;
+        sw.dispatchEvent(new Event("change",{bubbles:true}));
+    
+        $('#' + html).val(valor);
+    }
+
+    function clearForm(formulario){
+        const div =document.getElementById(formulario)
+        //selecciono todos los inputs,slects y textareas
+        const campos=div.querySelectorAll("input, select, textarea");
+
+        campos.forEach(campo =>{
+            switch(campo.type){
+                case "checkbox":
+                    break;
+
+                case "radio":
+                    campo.checked=false;//desmarca los checkbox/radio
+                    break;
+
+                case "number":
+                    if (campo.id === "No_Productos" ){
+                        campo.value=1;
+                    }else if (campo.id ==="GeolocalizacionLatitud"||
+                     campo.id==="GeolocalizacionLongitud"){
+                        
+                        campo.value="";
+
+                    }else{
+                        campo.value=0;//reinicia inputs numericos
+                    }
+                    break;
+                default:
+                    campo.value="";//limpia texto y selects
+                    campo.selectedIndex= 0;//para los selects,vuelve al originl
+                    document.getElementById('permisionario').style.display='none';// OCULTAMOS todas las secciones posibles
+                    document.getElementById('contratoOasignacion').style.display='none';
+                    document.getElementById('usuario').style.display='none';
+                    
+                    break;
+                }
+        })
+
+    }
+
+
+    const select_cv = document.getElementById("productoSelect");
+    select_cv.addEventListener("change",function(){
+        var csrfToken = $('input[name="csrf_token"]').val();
+        
+        var formData= {
+            'csrf_token':csrfToken,
+            'actividad':this.value
+       
+        }
+        $.ajax({
+            url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
+            data:formData,
+            type:'POST',
+            success:function(response){
+                if(response.actividad && response.actividad.length ){
+                        contador_cv=1;
+
+                        const cv = response.actividad[0];
+                            $("#RfcContribuyente").val(cv.RfcContribuyente);
+                            $("#RfcRepresentantelegal").val(cv.RfcContribuyente);
+                            $("#RfcProveedor").val(cv.RfcContribuyente);
+                            const selectTipo = document.getElementById("tipoCaracter");
+                            selectTipo.value = cv.TipoCaracter;
+                            // simula selección manual
+                            selectTipo.dispatchEvent(new Event("change"));
+
+                            $("#modalidadPermiso").val(cv.ModalidadPermiso);
+                            $("#numeroPermiso").val(cv.NumPermiso);
+                            $("#numeroContrato").val(cv.NumContratoOAsignacion);
+                            $("#instalacionGas").val(cv.InstalacionAlmacenGasNatural);
+                            $("#ClaveInstalacion").val(cv.ClaveInstalacion);
+                            $("#DescripcionInstalacion").val(cv.DescripcionInstalacion);
+                            $("#GeolocalizacionLatitud").val(cv.GeolocalizacionLatitud);
+                            $("#GeolocalizacionLongitud").val(cv.GeolocalizacionLongitud);
+                            //chec el error de 2/1
+                            controlSwitch("check_Pozos", cv.NumeroPozos,"numero_pozos");
+
+                            controlSwitch("check_Tanques", cv.NumeroTanques,"numero_tanques");
+
+                            controlSwitch("check_ductos_entrada_salida", cv.NumeroDuctosEntradaSalida,"Numeroductosentradasalida");
+
+                            controlSwitch("check_ductos_transporte_distribucion", cv.NumeroDuctosTransporteDistribucion,"Numeroductostransportedistribucion");
+
+                            controlSwitch("check_dispensarios", cv.NumeroDispensarios,"numero_dispensarios");
+
+                        }else{
+                            console.error("No se encontraron datos para rellenar el formulario CV");
+ 
+
+                            contador_cv=0;
+                            clearForm("controles_volumetricos");
+                            inicializarProductoSelect();
+                            
+                }
+                actualizarEstado();
+
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:",error);
+            }
+
+        });
+
+    });
+
+</script>
+
+<script>
+
+        // Lista de IDs de los checkbox y sus campos
+    const pairs = [
+            { checkboxId: "check_Pozos", inputId: "numero_pozos",button:""},
+            { checkboxId: "check_Tanques", inputId: "numero_tanques",button:""},
+            { checkboxId: "check_ductos_entrada_salida", inputId: "Numeroductosentradasalida",button:""},
+            { checkboxId: "check_ductos_transporte_distribucion", inputId: "Numeroductostransportedistribucion",button:""},
+            { checkboxId: "check_dispensarios", inputId: "numero_dispensarios",button:""},
+            {checkboxId: "check_rfc_proveedores", inputId:"No_rfc_proveedores", button:"add_save_rfc_provedores"},
+    
+            { checkboxId: "check_productos_Pozos", inputId: "No_producto_pozo",button:"add_pozos"},
+            { checkboxId: "check_productos_Tanques", inputId: "No_producto_tanque",button:"add_tanques"},
+            { checkboxId: "check_productos_ductos_transporte_distribucion", inputId: "No_producto_ductos",button:"add_ductos_entrada_salida"},
+            { checkboxId: "check_productos_dispensarios", inputId: "No_producto_dispensario",button:"add_dispensarios"}
+     
+    
+        ];
+
+    document.addEventListener("DOMContentLoaded", function () {
+        pairs.forEach(function (pair) {
+            const checkbox = document.getElementById(pair.checkboxId);
+            const input = document.getElementById(pair.inputId);
+            const button = document.getElementById(pair.button);
+
+            if (checkbox && input ) {
+
+                // Desactivar por defecto
+                input.disabled = true;
+                input.value = 0;
+
+                if (button) button.disabled = true;
+
+                checkbox.addEventListener("change", function () {
+                    if (this.checked) {
+                        input.disabled = false;
+                        if (button) button.disabled = false;
+                    } else {
+                        input.disabled = true;
+                        input.value = 0;
+                        if (button) button.disabled = true;
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
+    document.addEventListener("DOMContentLoaded", inicializarProductoSelect);
+    function inicializarProductoSelect() {
+        const campos = document.querySelectorAll(
+            "#controles_volumetricos input, #controles_volumetricos select, #controles_volumetricos button"
+        );
+
+        const excluirIds = [
+            "productoproductoSelect",
+            "terminalSelect",
+            "medidoresSelect",
+            "No_rfc_proveedores",
+            "numero_pozos",
+            "numero_tanques",
+            "Numeroductosentradasalida",
+            "Numeroductostransportedistribucion",
+            "numero_dispensarios"
+        ];
+
+        const productoSelect = document.getElementById("productoSelect");
+
+        if (!productoSelect) return;
+
+        productoSelect.addEventListener("change", function () {
+            campos.forEach(campo => {
+                if (!excluirIds.includes(campo.id)) {
+                    campo.disabled = false;
+                }
+            });
+        });
+    }
+
+
+
+
+
+
+
+    
+
+
+    
+
+
+
+
+
+    function obtenerValor(elemento) {
+        return elemento.value.trim() === '' ? null : elemento.value;
+    }
+    /*let cv = [];
+    document.getElementById('siguienteBtn').addEventListener('click', function() {
+
+        const actividad = document.getElementById('productoSelect');
+        const rfccontribuyente = document.getElementById('RfcContribuyente');
+        const rfcrepresentantelegal = document.getElementById('RfcRepresentantelegal');
+        const rfcproveedor = document.getElementById('RfcProveedor');
+        const tipoCaracter = document.getElementById('tipoCaracter');
+        const modalidadPermiso = document.getElementById('modalidadPermiso');
+        const numeroPermiso = document.getElementById('numeroPermiso');
+        const numeroContrato = document.getElementById('numeroContrato');
+        const instalacionGas = document.getElementById('instalacionGas');
+        const ClaveInstalacion = document.getElementById('ClaveInstalacion');
+        const DescripcionInstalacion = document.getElementById('DescripcionInstalacion');
+        const GeolocalizacionLatitud = document.getElementById('GeolocalizacionLatitud');
+        const GeolocalizacionLongitud = document.getElementById('GeolocalizacionLongitud');
+        const numeropozos = document.getElementById('numeropozos');
+        const numero_tanques = document.getElementById('numero_tanques');
+        const Numeroductosentradasalida = document.getElementById('Numeroductosentradasalida');
+        const Numeroductostransportedistribucion = document.getElementById('Numeroductostransportedistribucion');
+        const numerodedispensarios = document.getElementById('numerodedispensarios');
+
+
+        controles_volumetricos = {    
+            actividad: obtenerValor(actividad),
+            rfccontribuyente: obtenerValor(rfccontribuyente),
+            rfcrepresentantelegal: obtenerValor(rfcrepresentantelegal),
+            rfcproveedor: obtenerValor(rfcproveedor),
+            tipoCaracter: obtenerValor(tipoCaracter),
+            modalidadPermiso: obtenerValor(modalidadPermiso),
+            numeroPermiso: obtenerValor(numeroPermiso),
+            numeroContrato: obtenerValor(numeroContrato),
+            instalacionGas: obtenerValor(instalacionGas),
+            ClaveInstalacion: obtenerValor(ClaveInstalacion),
+            DescripcionInstalacion: obtenerValor(DescripcionInstalacion),
+            GeolocalizacionLatitud: obtenerValor(GeolocalizacionLatitud),
+            GeolocalizacionLongitud: obtenerValor(GeolocalizacionLongitud),
+            Numeroductostransportedistribucion: obtenerValor(Numeroductostransportedistribucion),
+            numerodedispensarios: obtenerValor(numerodedispensarios)
+        };
+        cv.push(controles_volumetricos)
+
+        console.log(cv);
+    });
+    */
+
+
+
+
+
+
+
+    /*let productos = [];
+
+    document.getElementById('añadir_producto').addEventListener('click', function() {
+
+        const claveproducto = document.getElementById('claveproducto');
+        const clavesubproducto = document.getElementById('clavesubproducto');
+        const ComposOctanajeGasolina = document.getElementById('ComposOctanajeGasolina');
+        const Gasolina_combustible_no_fosil = document.getElementById('Gasolina_combustible_no_fosil');
+        const ComposCombustibleNoFosilGasolina = document.getElementById('ComposCombustibleNoFosilGasolina');
+        const Diesel_combustible_no_fosil = document.getElementById('Diesel_combustible_no_fosil');
+        const Compos_combustible_no_fosil_diesel = document.getElementById('Compos_combustible_no_fosil_diesel');
+        const Turbosina_combustible_no_fosil = document.getElementById('Turbosina_combustible_no_fosil');
+        const Compos_combustible_no_fosil_turbosina = document.getElementById('Compos_combustible_no_fosil_turbosina');
+        const compospropanogaslp = document.getElementById('compospropanogaslp');
+        const Compos_butano_gaslp = document.getElementById('Compos_butano_gaslp');
+        const densidad_petroleo = document.getElementById('densidad_petroleo');
+        const Compos_azufre_petroleo = document.getElementById('Compos_azufre_petroleo');
+        const Compos_gas_natural_o_condensados = document.getElementById('Compos_gas_natural_o_condensados');
+        const fraccion_molar = document.getElementById('fraccion_molar');
+        const Poder_Calorifico = document.getElementById('Poder_Calorifico');
+        const OtrosInput = document.getElementById('OtrosInput');
+        const MarcaComercial = document.getElementById('MarcaComercial');
+        const Marca = document.getElementById('Marca');
+        const ConcentracionSustanciaMarcaje = document.getElementById('ConcentracionSustanciaMarcaje');
+
+        producto = {
+            claveproducto: obtenerValor(claveproducto),
+            clavesubproducto: obtenerValor(clavesubproducto),
+            ComposOctanajeGasolina: obtenerValor(ComposOctanajeGasolina),
+            Gasolina_combustible_no_fosil: obtenerValor(Gasolina_combustible_no_fosil),
+            ComposCombustibleNoFosilGasolina: obtenerValor(ComposCombustibleNoFosilGasolina),
+            Diesel_combustible_no_fosil: obtenerValor(Diesel_combustible_no_fosil),
+            Compos_combustible_no_fosil_diesel: obtenerValor(Compos_combustible_no_fosil_diesel),
+            Turbosina_combustible_no_fosil: obtenerValor(Turbosina_combustible_no_fosil),
+            Compos_combustible_no_fosil_turbosina: obtenerValor(Compos_combustible_no_fosil_turbosina),
+            compospropanogaslp: obtenerValor(compospropanogaslp),
+            Compos_butano_gaslp: obtenerValor(Compos_butano_gaslp),
+            densidad_petroleo: obtenerValor(densidad_petroleo),
+            Compos_azufre_petroleo: obtenerValor(Compos_azufre_petroleo),
+            Compos_gas_natural_o_condensados: obtenerValor(Compos_gas_natural_o_condensados),
+            fraccion_molar: obtenerValor(fraccion_molar),
+            Poder_Calorifico: obtenerValor(Poder_Calorifico),
+            OtrosInput: obtenerValor(OtrosInput),
+            MarcaComercial: obtenerValor(MarcaComercial),
+            Marca: obtenerValor(Marca),
+            ConcentracionSustanciaMarcaje: obtenerValor(ConcentracionSustanciaMarcaje)
+
+        };
+        productos.push(producto);
+
+        console.log(productos);
+
+    });
+    */
+
+    let medicion = [];
+    document.getElementById('añadir_medicion').addEventListener('click', function() {
+
+        const Sistemademedicion = document.getElementById('Sistemademedicion');
+        const Localizacion_descripicion_sistema_medicion = document.getElementById('Localizacion_descripicion_sistema_medicion');
+        const vigencia_calibracion = document.getElementById('vigencia_calibracion');
+        const Incertidumbre_medicion_tanque = document.getElementById('Incertidumbre_medicion_tanque');
+
+        systemmedicion = {
+            Sistemademedicion: obtenerValor(Sistemademedicion),
+            Localizacion_descripicion_sistema_medicion: obtenerValor(Localizacion_descripicion_sistema_medicion),
+            vigencia_calibracion:obtenerValor(vigencia_calibracion),
+            Incertidumbre_medicion_tanque:obtenerValor(Incertidumbre_medicion_tanque)
+        };
+        medicion.push(systemmedicion)
+        console.log(medicion);
+
+
+    });
+    
+    /*let tanques = [];
+    document.getElementById('añadir_tanque').addEventListener('click', function() {
+
+        const clave_tanque = document.getElementById('clave_tanque');
+        const localizacion_tanque = document.getElementById('localizacion_tanque');
+        const capacidad_total_tanque = document.getElementById('capacidad_total_tanque');
+        const capacidad_operativa_tanque = document.getElementById('capacidad_operativa_tanque');
+        const capacidad_util_tanque = document.getElementById('capacidad_util_tanque');
+        const capacidad_fondaje_tanque = document.getElementById('capacidad_fondaje_tanque');
+        const capacidad_gas = document.getElementById('capacidad_gas');
+        const vol_min_tanque = document.getElementById('vol_min_tanque');
+        const Estado_tanque = document.getElementById('Estado_tanque');
+        const sistema_medicion_fk = document.getElementById('sistema_medicion_fk');
+        const producto_asignado = document.getElementById('producto_asignado');
+    
+        tanque = {
+            clave_tanque: obtenerValor(clave_tanque),
+            localizacion_tanque:obtenerValor(localizacion_tanque),
+            capacidad_total_tanque: obtenerValor(capacidad_total_tanque),
+            capacidad_operativa_tanque: obtenerValor(capacidad_operativa_tanque),
+            capacidad_util_tanque:obtenerValor(capacidad_util_tanque),
+            capacidad_fondaje_tanque: obtenerValor(capacidad_fondaje_tanque),
+            capacidad_gas: obtenerValor(capacidad_gas),
+            vol_min_tanque: obtenerValor(vol_min_tanque),
+            Estado_tanque: obtenerValor(Estado_tanque),
+            producto_asignado: obtenerValor(producto_asignado),
+            sistema_medicion_fk: obtenerValor(sistema_medicion_fk)
+        };
+        tanques.push(tanque)
+
+        console.log(tanques);
+
+    });
+
+    document.getElementById('enviar').addEventListener('click', function() {
+        
+
+    })*/;
+
+
+
+
+
+
+
+/****************************************************/
+    function enviarDatos() {
+        const file = event.target.files[0];
+ 
+        const formData = new FormData();
+        formData.append('cv', cv); // Agrega el archivo al FormData
+        formData.append('produtos', productos); // Agrega orden_id al FormData
+        formData.append('medicion', medicion); // Agrega orden_id al FormData
+        formData.append('tanques', tanques); // Agrega orden_id al FormData
+        formData.append('csrf_token',csrfToken);
+
+          // Enviar el archivo al servidor
+          fetch("{{ url_for('app_scaizen.app_configuracion.configuracion')}}", {  // Cambia 'URL_DEL_SERVIDOR' a la URL de tu API o script PHP
+              method: 'POST',
+              body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+              console.log('Éxito:', data);
+              document.getElementById(ordenId).style.display = 'none';
+              // Manejar la respuesta del servidor aquí
+          })
+          .catch((error) => {
+              console.error('Error:', error);
+ 
+            });
+    };
+
+
+    
+    document.getElementById('limpiar_cv').addEventListener('click',function(){
+        cv = [];
+        productos = [];
+        medicion = [];
+        tanques = [];
+        console.log("Cancelado con exito");
+    });
+
+
+
+
+
+    document.getElementById('add_productos').addEventListener('click', function() {
+        showSection('CreateProduct');
+        //mostrar_contadores('tanques');
+    });
+
+
+    document.getElementById('add_save_rfc_provedores').addEventListener('click', function() {
+        showSection('CV_RFCs');
+    });
+    document.getElementById('add_mangueras').addEventListener('click',function(){
+        showSection('Hose_system_Measurement');
+    }); 
+
+    document.getElementById('before_measurement').addEventListener('click',function(){
+        showSection('ProductController', { tipo: 'dispensario'});
+        LabelsProducto('dispensario');
+    });
+
+
+    document.getElementById('anteriorBtn_CreateProduct').addEventListener('click', function() {
+        showSection('controles_volumetricos');
+    });
+    document.getElementById('anteriorBtn_CreateProduct_RFC').addEventListener('click', function() {
+        showSection('controles_volumetricos');
+    });
+  
+    document.getElementById('anteriorBtn_ProductController').addEventListener('click', function() {
+        showSection('CreateProduct');
+    });
+  
+    document.getElementById('anteriorBtn_Measurement_system').addEventListener('click', function() {
+        showSection('ProductController');
+    });
+
+  
+    /*
+    document.getElementById('siguienteBtn').addEventListener('click', function() {
+        showSection('section2');
+    });
+
+    document.getElementById('anteriorBtn').addEventListener('click', function() {
+        showSection('controles_volumetricos');
+    });
+    document.getElementById('siguienteBtn_2').addEventListener('click', function() {
+        showSection('ProductController');
+    });
+
+   */
+ 
+
+
+   function LabelsProducto(contexto = 'tanque') {
+        const labels_Producto = {
+            tanque: {
+                ClaveIdentificacionTanque: 'Clave de identificacion del tanque:',
+                LocalizacionYODescripcionTanque: 'Localización y/o descripcion del tanque:',
+                VigenciaCalibracionTanque: 'Vigencia de calibracion del tanque:',
+                CapacidadTotalTanque: 'Capacidad total del tanque:',
+                CapacidadOperativaTanque: 'Capacidad operativa del tanque:',
+                CapacidadUtilTanque: 'Capacidad util del tanque:',
+                CapacidadFondajeTanque: 'Capacidad de fondaje del tanque: ',
+                CapacidadGasTalon: 'Capacidad de gas talon:',
+                VolumenMinimoOperacion: 'Volumen minimo de operación:',
+                EstadoTanque: 'Estado del tanque:',
+                MedicionTanque: 'Sistema de medición del tanque:',
+                ID_medicion_tanques: 'Save_product_tanque',
+                Delete_tanque:'Delete_product_tanque',
+                Clear_tanque:'Clear_product_tanque'
+            },
+            ducto: {
+                ClaveIdentificacionDucto: 'Clave de identificacion del ducto:',
+                DescripcionDucto: 'Descripcion del ducto:',
+                DiametroDucto: 'Diametro del ducto:',
+                MedicionDucto: 'Sistema de medicion del ducto:',
+                CapacidadGasTalon: 'Capacidad de gas talon:',
+                ID_medicion_ducto: 'Save_product_ducto',
+                Delete_ducto:'Delete_product_ducto',
+                Clear_ducto:'Clear_product_ducto'
+            },
+            pozo: {
+                ClavePozo: 'Clave del pozo:',
+                DescripcionPozo: 'Descripcion del pozo:',
+                MedicionPozo: 'Sistema de medicion del pozo:',
+                ID_medicion_pozo: 'Save_product_pozo',
+                Delete_pozo:'Delete_product_pozo',
+                Clear_pozo:'Clear_product_pozo'
+            },
+            dispensario: {
+                ClaveDispensario: 'Clave del dispensario:',
+                MedicionDispensario: 'Sistema de medicion del dispensario:',
+                ID_medicion_dispensarios: 'Save_product_dispensario',
+                Manguera: 'Manguera:',
+                Delete_dispensario:'Delete_product_dispensario',
+                Clear_dispensario:'Clear_product_dispensario'
+            },
+
+        };
+
+        // Función para intercambiar el ID del botón de manera dinámica
+        function intercambio_ID(button_actual_ID, button_nuevo_ID, input_actual_id, input_nuevo_id, save_button_actual_ID,save_button_nuevo_id , add_button_producto, no_product_contador , producto , delete_button_actual_ID, delete_button_nuevo_id, clear_button_actual_ID ,clear_button_nuevo_id  ) {
+            
+            const button = document.getElementById(button_actual_ID);
+            if (button) {
+                button.id = button_nuevo_ID;  // Cambiar el ID del botón
+                actual_id_medicion = button_nuevo_ID;
+                asignarEventosMedicion();
+            } else {
+                console.log(`El botón con ID ${button_actual_ID} no fue encontrado.`);
+            }
+
+            const input = document.getElementById(input_actual_id);
+            if (input){
+                input.id = input_nuevo_id;
+                actual_id_medicion_input = input_nuevo_id;
+                asignarEventosInput(input_nuevo_id);
+            }else{
+                console.log(`El input con ID ${input_actual_id} no fue encontrado.`)
+            }
+
+            //Para el boton para guardar el producto
+            const save_button = document.getElementById(save_button_actual_ID);
+            if (save_button){
+                save_button.id = save_button_nuevo_id;
+                actual_id_save_producto_button = save_button_nuevo_id;
+                asignarEventosInput(save_button_nuevo_id);
+
+                añadir_producto = save_button_nuevo_id;
+
+            }else{
+                console.log(`El button save con ID ${save_button_actual_id} no fue encontrado.`)
+            }
+
+
+            //Para el boton delete
+            const delete_button = document.getElementById(delete_button_actual_ID);
+            if(delete_button){
+                delete_button.id = delete_button_nuevo_id;
+                actual_id_delete_producto_button = delete_button_nuevo_id;
+                asignarEventosInput(delete_button_nuevo_id);
+                
+                delete_producto = delete_button_nuevo_id;
+            }else{                
+                console.log(`El button con ID ${delete_button} no fue encontrado.`)
+            }
+
+            //Para el boton clear
+            const clear_button = document.getElementById(clear_button_actual_ID);
+            if (clear_button){
+                clear_button.id = clear_button_nuevo_id;
+                actual_id_clear_producto_button = clear_button_nuevo_id;
+                asignarEventosInput(clear_button_nuevo_id);
+                
+                clear_producto = clear_button_nuevo_id;
+            }else{
+                console.log(`El button con ID ${clear_button} no fue encontrado.`)
+            }
+
+            contadores(producto,no_product_contador)
+
+        }
+
+
+
+
+        const lab = labels_Producto[contexto];
+
+        function toggleLabelVisibility(label, input, textContent, status, button, button_status = false) {
+            if (label) {
+                label.textContent = textContent;
+                label.style.display = status ? 'block' : 'none';
+            }
+            if (input) {
+                input.style.display = status ? 'block' : 'none';
+            }
+            if (button){
+                button.style.display = button_status ? 'block' : 'none';
+            }else{
+                console.log(
+                        "display botón no encontrado:",
+                        labelElements.Label_manguera.button.style.display
+                    );
+            }
+        }
+        
+        const labelElements = {
+            Label_clave_identificacion: {
+                label: document.querySelector("label[for='Label_clave_identificacion']"),
+                input: document.querySelector("input[id='Label_clave_identificacion']")
+ 
+            },
+            Label_localizacion_yo_identificacion_: {
+                label: document.querySelector("label[for='Label_localizacion_yo_identificacion_']"),
+                input: document.querySelector("input[id='Label_localizacion_yo_identificacion_']")
+            },
+            Label_vigencia_calibracion_tanque: {
+                label: document.querySelector("label[for='Label_vigencia_calibracion_tanque']"),
+                input: document.querySelector("input[id='Label_vigencia_calibracion_tanque']")
+            },
+            Label_diametro_ducto:{//Compartira el mismo label e input que label vigewncia calibracion tanque
+                label: document.querySelector("label[for='Label_diametro_ducto']"),
+                input: document.querySelector("input[id='Label_diametro_ducto']")
+            },
+
+
+            Label_capacidad_total_: {
+                label: document.querySelector("label[for='Label_capacidad_total_']"),
+                input: document.querySelector("input[id='Label_capacidad_total_']")
+            },
+            Label_capacidad_operativa_: {
+                label: document.querySelector("label[for='Label_capacidad_operativa_']"),
+                input: document.querySelector("input[id='Label_capacidad_operativa_']")
+            },
+            Label_capacidad_util_: {
+                label: document.querySelector("label[for='Label_capacidad_util_']"),
+                input: document.querySelector("input[id='Label_capacidad_util_']")
+            },
+            Label_capacidad_fondaje_: {
+                label: document.querySelector("label[for='Label_capacidad_fondaje_']"),
+                input: document.querySelector("input[id='Label_capacidad_fondaje_']")
+            },
+            Label_capacidad_gas_: {
+                label: document.querySelector("label[for='Label_capacidad_gas_']"),
+                input: document.querySelector("input[id='Label_capacidad_gas_']")
+            },
+            Label_vol_min_operacion: {
+                label: document.querySelector("label[for='Label_vol_min_operacion']"),
+                input: document.querySelector("input[id='Label_vol_min_operacion']")
+            },
+            Label_estado_: {
+                label: document.querySelector("label[for='Label_estado_']"),
+                select: document.querySelector("select[id='Label_estado_']")
+            },
+            Label_medicion: {
+                label: document.querySelector("label[for='Label_medicion']"),
+                input: document.querySelector("input[id='Label_medicion']")
+            },
+            Label_manguera:{
+                label: document.querySelector("label[for='No_Mangueras']"),
+                input: document.querySelector("input[id='No_Mangueras']"),
+                button:document.querySelector("button[id='add_mangueras']")
+
+            }
+        };
+
+        function placeholder_text(contexto){
+            if (contexto == 'tanque'){
+                labelElements.Label_clave_identificacion.input.placeholder = "Ej. TQS-TDA-0001";
+                labelElements.Label_localizacion_yo_identificacion_.input.placeholder = "Ej. Tanque de almacenamiento ubicado en la terminal 2 de reparto Gas LP XXXXX.";
+                labelElements.Label_vigencia_calibracion_tanque.input.placeholder = "Ej. 2020-06-29";
+                //labelElements.Label_diametro_ducto.input.placeholder= "Ej. 3.000";
+                labelElements.Label_capacidad_total_.input.placeholder= "Ej. 1000000.00000";
+                labelElements.Label_capacidad_operativa_.input.placeholder= "Ej. 900000.55500"
+                labelElements.Label_capacidad_util_.input.placeholder= "Ej. 1000000.00000 ";
+                labelElements.Label_capacidad_fondaje_.input.placeholder= "Ej. 700.00000";
+                labelElements.Label_capacidad_gas_.input.placeholder= "Ej. 15000.00000";
+                labelElements.Label_vol_min_operacion.input.placeholder= "Ej. 200.00000"
+
+            }else if (contexto == 'ducto'){
+                labelElements.Label_clave_identificacion.input.placeholder = "Ej. DUC-DES-004";
+                labelElements.Label_localizacion_yo_identificacion_.input.placeholder = "Ej. ducto de descarga del autotanque de clave TQS-ATQ-1234 de distribución de petrolíferos.";
+                labelElements.Label_diametro_ducto.input.placeholder= "Ej. 3.000";
+                labelElements.Label_capacidad_gas_.input.placeholder= "Ej. 1500.00000";
+
+              
+            }else if (contexto == 'pozo'){
+                labelElements.Label_clave_identificacion.input.placeholder = "Ej. POZ-NOBLES-0001DEL";
+                labelElements.Label_localizacion_yo_identificacion_.input.placeholder = "Ej. Pozo delimitador ubicado en el área contractual México 45, profundidad 4534 m.";                    
+                
+            }else if (contexto == 'dispensario'){
+                labelElements.Label_clave_identificacion.input.placeholder = "Ej. DISP-0004";
+
+            } 
+        }
+
+
+        // Ocultar todos
+        Object.values(labelElements).forEach(el => {
+            if (el.label) el.label.style.display = 'none';
+            if (el.input) el.input.style.display = 'none';
+            if (el.select) el.select.style.display = 'none';
+            if (el.button) el.button.style.display = 'none';
+
+        });
+
+        if (lab) {
+            switch (contexto) {
+                case 'tanque':
+
+                    toggleLabelVisibility(labelElements.Label_clave_identificacion.label, labelElements.Label_clave_identificacion.input, lab.ClaveIdentificacionTanque, true);
+                    toggleLabelVisibility(labelElements.Label_localizacion_yo_identificacion_.label, labelElements.Label_localizacion_yo_identificacion_.input, lab.LocalizacionYODescripcionTanque, true);
+                    toggleLabelVisibility(labelElements.Label_vigencia_calibracion_tanque.label, labelElements.Label_vigencia_calibracion_tanque.input, lab.VigenciaCalibracionTanque, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_total_.label, labelElements.Label_capacidad_total_.input, lab.CapacidadTotalTanque, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_operativa_.label, labelElements.Label_capacidad_operativa_.input, lab.CapacidadOperativaTanque, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_util_.label, labelElements.Label_capacidad_util_.input, lab.CapacidadUtilTanque, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_fondaje_.label, labelElements.Label_capacidad_fondaje_.input, lab.CapacidadFondajeTanque, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_gas_.label, labelElements.Label_capacidad_gas_.input, lab.CapacidadGasTalon, true);
+                    toggleLabelVisibility(labelElements.Label_vol_min_operacion.label, labelElements.Label_vol_min_operacion.input, lab.VolumenMinimoOperacion, true);
+                    toggleLabelVisibility(labelElements.Label_estado_.label, labelElements.Label_estado_.select, lab.EstadoTanque, true);
+                    toggleLabelVisibility(labelElements.Label_medicion.label, labelElements.Label_medicion.input, lab.MedicionTanque, true);
+
+                    intercambio_ID(actual_id_medicion,"add_medicion_tanques", actual_id_medicion_input, "No_medicion_tanques", actual_id_save_producto_button, lab.ID_medicion_tanques,  añadir_producto,"No_producto_tanque", "tanques",actual_id_delete_producto_button  ,lab.Delete_tanque , actual_id_clear_producto_button, lab.Clear_tanque);   
+                    mostrar_contadores('tanques');
+                    console.log(
+                        "display botón:",
+                        labelElements.Label_manguera.button.style.display
+                    );
+                    placeholder_text('tanque');
+                    break;
+
+                case 'ducto':
+                    toggleLabelVisibility(labelElements.Label_clave_identificacion.label, labelElements.Label_clave_identificacion.input, lab.ClaveIdentificacionDucto, true);
+                    toggleLabelVisibility(labelElements.Label_localizacion_yo_identificacion_.label, labelElements.Label_localizacion_yo_identificacion_.input, lab.DescripcionDucto, true);
+                    toggleLabelVisibility(labelElements.Label_diametro_ducto.label, labelElements.Label_diametro_ducto.input, lab.DiametroDucto, true);
+
+                    toggleLabelVisibility(labelElements.Label_medicion.label, labelElements.Label_medicion.input, lab.MedicionDucto, true);
+                    toggleLabelVisibility(labelElements.Label_capacidad_gas_.label, labelElements.Label_capacidad_gas_.input, lab.CapacidadGasTalon, true);
+
+                    intercambio_ID(actual_id_medicion,"add_medicion_ductos_entrada_salida", actual_id_medicion_input, "No_medicion_ducto", actual_id_save_producto_button, lab.ID_medicion_ducto, añadir_producto ,"No_producto_ductos" ,"ductos" , actual_id_delete_producto_button, lab.Delete_ducto, actual_id_clear_producto_button, lab.Clear_ducto );   
+                    mostrar_contadores('ductos');
+
+                    placeholder_text('ducto');
+
+                    break;
+
+                case 'pozo':
+                    toggleLabelVisibility(labelElements.Label_clave_identificacion.label, labelElements.Label_clave_identificacion.input, lab.ClavePozo, true);
+                    toggleLabelVisibility(labelElements.Label_localizacion_yo_identificacion_.label, labelElements.Label_localizacion_yo_identificacion_.input, lab.DescripcionPozo, true);
+                    toggleLabelVisibility(labelElements.Label_medicion.label, labelElements.Label_medicion.input, lab.MedicionPozo, true);
+
+                    intercambio_ID(actual_id_medicion,"add_medicion_pozos", actual_id_medicion_input, "No_medicion_pozo", actual_id_save_producto_button,lab.ID_medicion_pozo,  añadir_producto ,"No_producto_pozo" ,"pozos", actual_id_delete_producto_button, lab.Delete_pozo, actual_id_clear_producto_button, lab.Clear_pozo);   
+                    mostrar_contadores('pozos');
+
+                    placeholder_text('pozo');
+                    break;
+
+                case 'dispensario':
+                    toggleLabelVisibility(labelElements.Label_clave_identificacion.label, labelElements.Label_clave_identificacion.input, lab.ClaveDispensario, true);
+                    toggleLabelVisibility(labelElements.Label_medicion.label, labelElements.Label_medicion.input, lab.MedicionDispensario, true);
+                    toggleLabelVisibility(labelElements.Label_manguera.label, labelElements.Label_manguera.input, lab.Manguera, true, labelElements.Label_manguera.button, true);
+
+                    intercambio_ID(actual_id_medicion,"add_medicion_dispensarios", actual_id_medicion_input, "No_medicion_dispensario", actual_id_save_producto_button, lab.ID_medicion_dispensarios,  añadir_producto ,"No_producto_dispensario" ,"dispensarios", actual_id_delete_producto_button,lab.Delete_dispensario, actual_id_clear_producto_button, lab.Clear_dispensario);   
+                    mostrar_contadores('dispensarios');
+                    console.log(
+                        "display botón:",
+                        labelElements.Label_manguera.button.style.display
+                    );
+                    placeholder_text('dispensario');
+                    break;
+                case 'rfcs':
+                    break;
+
+
+
+                default:
+                    // fallback a 'tanque'
+                   Object.entries({
+                        Label_clave_identificacion: lab.ClaveIdentificacionTanque,
+                        Label_localizacion_yo_identificacion_: lab.LocalizacionYODescripcionTanque,
+                        Label_vigencia_calibracion_tanque: lab.VigenciaCalibracionTanque,
+                        Label_diametro_ducto: lab.DiametroDucto,
+                        Label_capacidad_total_: lab.CapacidadTotalTanque,
+                        Label_capacidad_operativa_: lab.CapacidadOperativaTanque,
+                        Label_capacidad_util_: lab.CapacidadUtilTanque,
+                        Label_capacidad_fondaje_: lab.CapacidadFondajeTanque,
+                        Label_capacidad_gas_: lab.CapacidadGasTalon,
+                        Label_vol_min_operacion: lab.VolumenMinimoOperacion,
+                        Label_estado_: lab.EstadoTanque,
+                        Label_medicion: lab.MedicionTanque,
+                    }).forEach(([key, value]) => {
+                        toggleLabelVisibility(labelElements[key].label, labelElements[key].input, value, true);
+                    });
+                    break;
+            }
+        }
+    }
+
+  
+    const configuraciones_tanque_pozo_ducto_dispensario = {
+        add_pozos:{ section:'ProductController', tipo: 'pozo', titulo: 'Producto: Pozo'},
+        add_tanques: { section:'ProductController', tipo: 'tanque',      titulo: 'Producto: Tanque' },
+        add_ductos_entrada_salida: {section:'ProductController'  ,tipo: 'ducto', titulo: 'Producto: Ducto' },
+        add_ductos_transporte_distribucion: {section: 'ProductController', tipo: 'ducto', titulo: 'Producto: Ducto' },
+        add_dispensarios: {section:'ProductController',tipo: 'dispensario', titulo: 'Producto: Dispensario' },    
+        add_save_rfc_provedores:{section: 'RFC_provedores', tipo:'rfcs',titulo:'Rfc de provedores'}
+    
+    }
+
+
+    Object.entries(configuraciones_tanque_pozo_ducto_dispensario).forEach(([id,{section ,tipo,titulo}]) =>{
+        const elemento = document.getElementById(id);
+        if (elemento){
+            elemento.addEventListener('click', () => {
+                showSection(section,{titulo});
+                LabelsProducto(tipo);
+            });    
+        }
+
+    });
+
+
+
+
+
+    function LabelsMedicion(contexto = 'tanque'){
+        const Labels_Medicion = {
+            tanque:{
+                sistema:' Sistema de medicion del tanque: ',
+                localizacion: 'Localizacion/Descipcion del sistema de medición  del tanque: ',
+                vigencia: 'Vigencia de calibracion del sistema de medicion del tanque: ',
+                incertidumbre: 'Incertidumbre de medicion del sistema de medicion del tanque: ',    
+                delete_measurement_tanque:'Delete_measurement_tanque',
+                clear_measurement_tanque:'Clear_measurement_tanque'
+            },
+            ducto: {
+                sistema:' Sistema de medicion del ducto: ',
+                localizacion: 'Localizacion/Descipcion del sistema de medición  del ducto: ',
+                vigencia: 'Vigencia de calibracion del sistema de medicion del ducto: ',
+                incertidumbre: 'Incertidumbre de medicion del sistema de medicion del ducto: ',    
+                delete_measurement_ducto:'Delete_measurement_ducto',
+                clear_measurement_ducto:'Clear_measurement_ducto'    
+            },
+            pozo: {
+                sistema:' Sistema de medicion del pozo: ',
+                localizacion: 'Localizacion/Descipcion del sistema de medición  del pozo: ',
+                vigencia: 'Vigencia de calibracion del sistema de medicion del pozo: ',
+                incertidumbre: 'Incertidumbre de medicion del sistema de medicion del pozo: ',    
+                delete_measurement_pozo:'Delete_measurement_pozo',
+                clear_measurement_pozo:'Clear_measurement_pozo'   
+            },
+            dispensario: {
+                sistema:' Sistema de medicion del  dispensario: ',
+                localizacion: 'Localizacion/Descipcion del sistema de medición del dispensario: ',
+                vigencia: 'Vigencia de calibracion del sistema de medicion del dispensario: ',
+                incertidumbre: 'Incertidumbre de medicion del sistema de medicion del dispensario: ',           
+                delete_measurement_dispensario:'Delete_measurement_dispensario',
+                clear_measurement_dispensario:'Clear_measurement_dispensario'   
+            
+            },
+            manguera: {
+
+            }
+        };
+
+        const Placeholder_Medicion = {
+            tanque:{
+                placeholder_sistema:"SME-TQS-TDA-0001",
+                placeholder_localizacion:"medidor de nivel MEDIMEX30000",
+                placeholder_vigencia:"2020-06-29",
+                placeholder_incertidumbre:"0.010",
+            },
+            ducto:{
+                placeholder_sistema:"SMD-DUC-DES-004",
+                placeholder_localizacion:"Medidor dinámico Marca DuctMex",
+                placeholder_vigencia:"2018-06-30",
+                placeholder_incertidumbre:"0.009",
+            },
+            pozo:{
+                placeholder_sistema:"SMD-POZ-NOBLES-0001DEL",
+                placeholder_localizacion:"medidor multifásico instalado en el cabezal del pozo POZ-NOBLES-0001DEL.",
+                placeholder_vigencia:"2020-07-07",
+                placeholder_incertidumbre:"0.010",
+            },
+            dispensario:{
+                placeholder_sistema:" SMD-DISP-0004",
+                placeholder_localizacion:"Totalizador acumulado electrónico Marca LIQUID MEX3000",
+                placeholder_vigencia:"2020-09-09",
+                placeholder_incertidumbre:"0.010",
+            },
+            manguera:{
+                placeholder_sistema:"DISP-0004-MGA-0002"
+            }
+        };
+        
+        function intercambio_ID_medicion(button_actual_id,button_new_id,  no_meassure_contador, measurement,  delete_button_actual_ID, delete_button_nuevo_id, clear_button_actual_ID ,clear_button_nuevo_id ){
+
+            const button_save = document.getElementById(button_actual_id);
+            if (button_save){
+                button_save.id = button_new_id;
+                actual_id_save_producto_button = button_new_id;
+                asignarEventosInput(button_new_id);
+                añadir_measurement = button_new_id;
+
+             }else {
+                console.log(`El botón con ID ${button_save} no fue encontrado.`);
+            }
+            //Para el boton delete
+            const delete_button = document.getElementById(delete_button_actual_ID);
+            if(delete_button){
+                delete_button.id = delete_button_nuevo_id;
+                actual_id_delete_measurement_button = delete_button_nuevo_id;
+                asignarEventosInput(delete_button_nuevo_id);
+                
+                delete_measurement = delete_button_nuevo_id;
+            }else{                
+                console.log(`El button con ID ${delete_button} no fue encontrado.`)
+            }
+            
+            //Para el boton clear
+            const clear_button = document.getElementById(clear_button_actual_ID);
+            if (clear_button){
+                clear_button.id = clear_button_nuevo_id;
+                actual_id_clear_measurement_button = clear_button_nuevo_id;
+                asignarEventosInput(clear_button_nuevo_id);
+                
+                clear_measurement = clear_button_nuevo_id;
+            }else{
+                console.log(`El button con ID ${clear_button} no fue encontrado.`)
+            }
+            
+            contadores_medidores( measurement,no_meassure_contador)
+
+
+
+
+            
+        
+        }
+
+
+
+        const lab = Labels_Medicion[contexto];
+        const placehold = Placeholder_Medicion[contexto];
+        if (lab){
+            document.querySelector("label[for='Label_Sistemademedicion']").textContent = lab.sistema;
+            document.querySelector("label[for='Label_Localizacion_descripicion_sistema_medicion']").textContent =  lab.localizacion;
+            document.querySelector("label[for='Label_vigencia_calibracion']").textContent =  lab.vigencia;
+            document.querySelector("label[for='Label_Incertidumbre_medicion_tanque']").textContent =  lab.incertidumbre;
+
+            /*if(contexto == 'dispensario'){
+                document.getElementById('hose_system').style.display = 'block';
+            }else{
+                document.getElementById('hose_system').style.display = 'none';
+
+            }*/
+
+            if (placehold !== 'manguera'){
+                document.getElementById("Sistemademedicion").placeholder = placehold.placeholder_sistema;
+                document.getElementById("Localizacion_descripicion_sistema_medicion").placeholder= placehold.placeholder_localizacion;
+                document.getElementById("vigencia_calibracion").placeholder= placehold.placeholder_vigencia;
+                document.getElementById("Incertidumbre_medicion_tanque").placeholder =  placehold.placeholder_incertidumbre;
+            }
+
+            console.log(`actual ${contexto}`);
+            switch (contexto){
+                case 'tanque':
+                   intercambio_ID_medicion(actualy_button_medicion, "save_measurement_tanque", "No_medicion_tanques", "tanques",actual_id_delete_measurement_button , lab.delete_measurement_tanque, actual_id_clear_measurement_button , lab.clear_measurement_tanque );
+                   //intercambio_ID(actual_id_medicion,"add_medicion_tanques", actual_id_medicion_input, "input_medicion_tanques", actual_id_save_producto_button, "Save_product_tanque",  añadir_producto,"No_producto_tanque", "tanques");   
+
+                   mostrar_contadores_medidores('tanques')
+
+                   break;
+                case 'ducto':
+                    intercambio_ID_medicion(actualy_button_medicion,"save_measurement_ducto","No_medicion_ducto" ,"ductos",actual_id_delete_measurement_button , lab.delete_measurement_ducto, actual_id_clear_measurement_button , lab.clear_measurement_ducto);
+                    mostrar_contadores_medidores('ductos')
+
+                    break;
+                case 'pozo':
+                    intercambio_ID_medicion(actualy_button_medicion,"save_measurement_pozo", "No_medicion_pozo" ,"pozos",actual_id_delete_measurement_button , lab.delete_measurement_pozo, actual_id_clear_measurement_button , lab.clear_measurement_pozo);
+                    mostrar_contadores_medidores('pozos')
+                    break;
+                case 'dispensario':
+
+                    intercambio_ID_medicion(actualy_button_medicion,"save_measurement_dispensario", "No_medicion_dispensario" ,"dispensarios",actual_id_delete_measurement_button , lab.delete_measurement_dispensario, actual_id_clear_measurement_button , lab.clear_measurement_dispensario);
+                    mostrar_contadores_medidores('dispensarios')
+
+                    break;
+                case 'manguera':
+                    //add_mangueras
+                    mostrar_contadores_medidores('manguera')
+                    contadores_medidores('manguera','No_Mangueras')
+
+
+                
+            }
+
+        }
+    }
+
+    let actual_id_medicion = "add_medicion";
+    let actual_id_medicion_input = "Label_medicion";
+    let actual_id_save_producto_button ="añadir_save_producto";
+    let actual_id_delete_producto_button = "eliminar_tanque";
+    let actual_id_clear_producto_button = "limpiar_tanque";
+
+
+    const configuraciones_medicion = {
+        add_medicion_pozos:{ section:'Measurement_system', tipo: 'pozo', titulo: 'Sistema de medición para pozos'},
+        add_medicion_tanques: { section:'Measurement_system', tipo: 'tanque',      titulo: 'Sistema de medición para tanques' },
+        add_medicion_ductos_entrada_salida: {section:'Measurement_system'  ,tipo: 'ducto', titulo: 'Sistema de medición para ducto de entrada/salida' },
+        add_medicion_ductos_transporte_distribucion: {section: 'Measurement_system', tipo: 'ducto', titulo: 'Sistema de medición para ducto de transporte/distribución' },
+        add_medicion_dispensarios: {section:'Measurement_system',tipo: 'dispensario', titulo: 'Sistema de medición para dispensario' },    
+        add_mangueras: {section:'Hose_system_Measurement', tipo:'manguera', titulo:'Manguera'}
+    }
+
+    function asignarEventosMedicion() {
+        Object.entries(configuraciones_medicion).forEach(([id, { section, tipo, titulo }]) => {
+            const elemento = document.getElementById(id);
+            if (elemento) {
+                console.log("Asignando evento a:", id);
+                elemento.addEventListener('click', () => {
+                    showSection(section, { titulo });
+                    LabelsMedicion(tipo);
+                });
+            }
+        });
+    }
+
+        
+
+    // Función que reasigna eventos al nuevo ID
+    function asignarEventosInput(input_nuevo_ID) {
+        const input = document.getElementById(input_nuevo_ID);
+        if (input) {
+            input.addEventListener('change', function() {
+                console.log(`Valor cambiado en el input con ID ${input.id}: ${input.value}`);
+            });
+        } else {
+            console.log(`El input con ID ${input_nuevo_ID} no fue encontrado.`);
+        }
+    }
+
+
+
+    
+
+    function showSection(sectionToShow, options = {}) {
+        const sections = ['controles_volumetricos','RFC_provedores', 'CreateProduct' ,'ProductController', 'Measurement_system','Hose_system_Measurement'];
+
+        sections.forEach(sectionId => {
+            const sectionElement = document.getElementById(sectionId);
+            if (sectionElement) {
+                sectionElement.style.display = (sectionId === sectionToShow) ? 'block' : 'none';
+
+            }
+        });
+ 
+        // Cambiar título si se pasa como opción
+        if (options.titulo) {
+            const sectionElement = document.getElementById(sectionToShow);
+            if (sectionElement) {
+                const h3 = sectionElement.querySelector('h3.text-center');
+                if (h3) {
+                    h3.textContent = options.titulo;
+                }
+            }
+        }
+        
+ 
+    }
+    let contador_cv=0;
+    let add_cv = document.getElementById('Añadir_CV');
+    let delete_cv = document.getElementById('Eliminar_CV');
+    delete_cv.disabled = true;
+
+    let limite_cv = 1;
+    add_cv.textContent = `${contador_cv} / ${limite_cv}`;
+    function actualizarEstado(){
+        add_cv.textContent = `${contador_cv} / ${limite_cv}`;
+        add_cv.disabled = contador_cv >= limite_cv;
+        delete_cv.disabled = contador_cv <= 0;
+    }
+
+
+
+
+    const FormIndex = {};
+
+    function Form_index(index, id = null) {
+        // Validar que no exista otro con el mismo id (si se usa)
+        if (
+            id !== null &&
+            Object.values(FormIndex).some(n => n.id === id)
+        ) {
+            return; // ya existe ese id
+        }
+        
+
+        // Evitar sobrescribir por index
+        if (!FormIndex[index]) {
+            FormIndex[index] = {
+                id: id ,///id recuperado de la bd
+                name: index,//nombre
+                form: "",//nombre del formulario 
+            };
+        }
+    }
+
+
+
+
+    var formData  = {
+        csrf_token: $("input[name='csrf_token']").val().trim()
+
+    };
+
+  // Contenedor global CORRECTO
+  let Controles_volumetricos = {
+        //CV: [],
+        CV:{
+            Actividad:null,
+            Id_CV:null,
+            Version:null,
+            RfcContribuyente:null,
+            RfcRepresentanteLegal:null,
+            RfcProveedor:null,
+            RfcProveedores:[ ],
+            Caracter:{
+                TipoCaracter:null,
+                ModalidadPermiso:null,
+                NumPermiso:null,
+                NumContratoOAsignacion:null,
+                InstalacionAlmacenGasNatural:null,
+            },
+            ClaveInstalacion:null,
+            DescripcionInstalacion:null,
+            Geolocalizacion:{
+                GeolocalizacionLatitud:null,
+                GeolocalizacionLongitud:null,
+            },
+            NumeroPozos:0,
+            NumeroTanques:0,
+            NumeroDuctosEntradaSalida:0,
+            NumeroDuctosTransporte:0,
+            NumeroDispensario:0,
+            FechaYHoraCorte:0,
+
+        Producto: [
+            {
+            ClaveProducto:null,
+            ClaveSubProducto:null,
+            Gasolina:{
+                    ComposOctanajeGasolina:null,
+                    GasolinaConCombustibleNoFosil:null,
+                    ComposDeCombustibleNoFosilEnGasolina:null
+             },
+            Diesel:{
+                    DieselConCombustibleNoFosil:null,
+                    ComposDeCombustibleNoFosilEnDiesel:null
+                },
+            Turbosina:{
+                    TurbosinaConCombustibleNoFosil:null,
+                    ComposDeCombustibleNoFosilEnTurbosina:null
+                },
+            GasLP:{
+                    ComposDePropanoEnGasLP:null,
+                    ComposDeButanoEnGasLP:null
+                },
+            Petroleo:{
+                    DensidadDePetroleo:null,
+                    ComposDeAzufreEnPetroleo:null
+                },
+            GasNatural:{
+                    GasNaturalOCondensados:[{
+                           ComposGasNaturalOCondensados:null,
+                           FraccionMolar:null,
+                           PoderCalorifico:null 
+                    }]
+                },
+            Otros:null,
+            MarcaComercial:null,
+            Marcaje:null,
+            ConcentracionSustanciaMarcaje:null,
+            
+            Tanque:[{
+                ClaveIdentificacionTanque:null,
+                LocalizacionYODescripcionTanque:null,
+                VigenciaCalibracionTanque:null,
+                CapacidadTotalTanque:{VN:null, UM:null},
+                CapacidadOperativaTanque:{VN:null, UM:null},
+                CapacidadUtilTanque:{VN:null, UM:null},
+                CapacidadFondajeTanque:{VN:null, UM:null},
+                VolumenMinimoOperacion:{VN:null, UM:null},
+                EstadoTanque:null,
+                MedicionTanque: [{
+                    SistemaMedicionTanque:null,
+                    LocalizODescripSistMedicionTanque:null,
+                    VigenciaCalibracionSistMedicionTanque:null,
+                    IncertidumbreMedicionSistMedicionTanque:null
+                }]
+            }],
+            Ducto:[{
+                ClaveIdentificacionDucto:null,
+                DescripcionDucto:null,
+                DiametroDucto:null,
+                MedicionDucto: [{
+                  SistemaMedicionDucto:null,
+                  LocalizODescripSistMedicionDucto:null,
+                  VigenciaCalibracionSistMedicionDucto:null,
+                  IncertidumbreMedicionSistMedicionDucto:null  
+                }],
+                CapacidadGasTalon:{VN:null, UM:null}
+
+            }],
+            Pozo:[ {
+                ClavePozo:null,
+                DescripcionPozo:null,
+                MedicionPozo: [{
+                   SistemaMedicionPozo:null,
+                   LocalizODescripSistMedicionPozo:null,
+                   VigenciaCalibracionSistMedicionPozo:null,
+                   IncertidumbreMedicionSistMedicionPozo:null
+                }]
+            }],
+            Dispensario: [{
+                ClaveDispensario:null,
+                MedicionDispensario: [{
+                    SistemaMedicionDispensario:null,
+                    LocalizODescripSistMedicionDispensario:null,
+                    VigenciaCalibracionSistMedicionDispensario:null,
+                    IncertidumbreMedicionSistMedicionDispensario:null     
+                }],
+                MANGUERA: [{
+                    IdentificadorManguera:null
+                }]
+            }],
+           }],
+        },
+    };
+
+
+    add_cv.addEventListener('click',function(e){
+        e.preventDefault();
+
+        if (contador_cv < limite_cv) {
+            console.log("Lógica para guardar");
+
+            actualizarEstado();
+    
+            //añade una funcion para validar los datos
+            //var urlParams = new URLSearchParams(window.location.search);
+            //var actualizar_id = urlParams.get('id');
+            console.log("Logica para guardar");
+
+            let cont_vol  =Controles_volumetricos.CV;       
+            
+            cont_vol.Actividad = $("#productoSelect").val().trim();
+            cont_vol.RfcContribuyente = $("#RfcContribuyente").val().trim();
+            cont_vol.RfcRepresentanteLegal =$("#RfcRepresentantelegal").val().trim();
+            cont_vol.RfcProveedor = $("#RfcProveedor").val().trim();
+            
+            let caracter = cont_vol.Caracter
+            caracter.TipoCaracter =  $("#tipoCaracter").val().trim();
+            caracter.ModalidadPermiso = $("#modalidadPermiso").val().trim();
+            caracter.NumPermiso = $("#numeroPermiso").val().trim();
+            caracter.NumContratoOAsignacion= $("#numeroContrato").val().trim();
+            caracter.InstalacionAlmacenGasNatural = $("#instalacionGas").val().trim();
+ 
+            cont_vol.ClaveInstalacion= $("#ClaveInstalacion").val().trim();
+            cont_vol.DescripcionInstalacion= $("#DescripcionInstalacion").val().trim();
+            
+            let geo = Controles_volumetricos.CV.Geolocalizacion;
+            geo.GeolocalizacionLatitud = $("#GeolocalizacionLatitud").val().trim();
+            geo.GeolocalizacionLongitud = $("#GeolocalizacionLongitud").val().trim();
+
+            cont_vol.NumeroPozos= $("#numero_pozos").val().trim();
+            cont_vol.NumeroTanques= $("#numero_tanques").val().trim();
+            cont_vol.NumeroDuctosEntradaSalida= $("#Numeroductosentradasalida").val().trim();
+            cont_vol.NumeroDuctosTransporte= $("#Numeroductostransportedistribucion").val().trim();
+            cont_vol.NumeroDispensario = $("#numero_dispensarios").val().trim();
+
+
+            console.log(Controles_volumetricos.CV);
+
+
+
+            let payloadCV = {
+                Version: "4.0",
+                Actividad: cont_vol.Actividad,
+                RfcContribuyente: cont_vol.RfcContribuyente,
+                RfcRepresentanteLegal: cont_vol.RfcRepresentanteLegal,
+                RfcProveedor: cont_vol.RfcProveedor,
+
+                Caracter: {
+                    TipoCaracter: caracter.TipoCaracter,
+                    ModalidadPermiso: caracter.ModalidadPermiso,
+                    NumPermiso: caracter.NumPermiso,
+                    NumContratoOAsignacion: caracter.NumContratoOAsignacion,
+                    InstalacionAlmacenGasNatural: caracter.InstalacionAlmacenGasNatural
+                },
+
+                ClaveInstalacion: cont_vol.ClaveInstalacion,
+                DescripcionInstalacion: cont_vol.DescripcionInstalacion,
+
+                Geolocalizacion: {
+                    GeolocalizacionLatitud: geo.GeolocalizacionLatitud,
+                    GeolocalizacionLongitud: geo.GeolocalizacionLongitud
+                },
+
+                NumeroPozos: cont_vol.NumeroPozos,
+                NumeroTanques: cont_vol.NumeroTanques,
+                NumeroDuctosEntradaSalida: cont_vol.NumeroDuctosEntradaSalida,
+                NumeroDuctosTransporte: cont_vol.NumeroDuctosTransporte,
+                NumeroDispensario: cont_vol.NumeroDispensario
+
+            };
+
+
+            $.ajax({
+                url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
+                type:"POST",
+                headers:{
+                    'X-CSRFToken':csrfToken
+                },
+                data: JSON.stringify({
+                    formulario: "CV",
+                    data: payloadCV
+                }),
+                contentType: "application/json",    
+                 beforeSend:function(){
+                    $("#loader-row").show();
+                },
+                success:function(response){
+
+                    $("#loader-row").hide();
+                    if(response){
+                        contador_cv++;
+                        actualizarEstado();
+
+                        alert("CV creado con éxito");
+                    }else{
+                        alert("Error al registrar datos de cv");
+                    }
+                    
+                },
+                 
+            })
+        }
+    });
+
+    delete_cv.addEventListener('click',function(e){
+        e.preventDefault();
+
+        if (contador_cv > 0) {
+            contador_cv--;
+            console.log("Lógica para eliminar");
+        }
+
+        actualizarEstado();
+        
+    });
+
+
+
+
+
+
+    let contador_productos = 0;
+    let total_productos = 0;
+
+    let new_add_producto = document.getElementById('añadir_producto_producto');
+    let new_delete_producto = document.getElementById('Eliminar_producto');
+    new_delete_producto.disabled = true;
+
+    let add_producto = document.getElementById('add_productos');
+ 
+    add_producto.addEventListener('click',function(){
+        let No_producto = parseInt(document.getElementById('No_Productos').value); // leer el valor en cada click
+        new_add_producto.textContent = `${contador_productos} / ${No_producto}`;
+        total_productos = No_producto;
+    });
+    /// ∞
+    new_add_producto.addEventListener('click', function () {
+        let No_producto = parseInt(total_productos); // leer el valor en cada click
+
+        new_add_producto.textContent = `${contador_productos} / ${No_producto}`;
+
+        // Aquí va el código para guardar los datos del producto
+
+
+        //antes de continua analiza como resolver este problema
+        let Cv_producto  =Controles_volumetricos.CV[contador_cv].Producto[contador_productos];       
+
+        Cv_producto.ClaveProducto =$("#claveproducto").val().trim();
+        Cv_producto.ClaveSubProducto =$("#clavesubproducto").val().trim();
+    
+        console.log($("#claveproducto").val().trim());
+
+        let Cv_producto_gasolina = Cv_producto.Gasolina;
+        if (Cv_producto.ClaveProducto === "PR07"){
+            
+            Cv_producto_gasolina.ComposOctanajeGasolina=$("#ComposOctanajeGasolina").val().trim();
+            Cv_producto_gasolina.GasolinaConCombustibleNoFosil=$("#Gasolina_combustible_no_fosil").val().trim();
+            Cv_producto_gasolina.ComposDeCombustibleNoFosilEnGasolina=$("#ComposCombustibleNoFosilGasolina").val().trim();
+        }
+
+        let Cv_producto_diesel = Cv_producto.Diesel;
+        if (Cv_producto.ClaveProducto === "PR03"){
+
+            Cv_producto_diesel.DieselConCombustibleNoFosil=$("#Diesel_combustible_no_fosil").val().trim();
+            Cv_producto_diesel.ComposDeCombustibleNoFosilEnDiesel=$("#Compos_combustible_no_fosil_diesel").val().trim();
+        }
+
+
+        let Cv_producto_turnosina = Cv_producto.Turbosina;
+        if (Cv_producto.ClaveProducto === "PR11"){
+            Cv_producto_turnosina.TurbosinaConCombustibleNoFosil=$("#Turbosina_combustible_no_fosil").val().trim();
+            Cv_producto_turnosina.ComposDeCombustibleNoFosilEnTurbosina=$("#Composcombustilenofosilturbosina").val().trim();
+        }
+        
+        let Cv_producto_gaslp = Cv_producto.GasLP;
+        if (Cv_producto.ClaveProducto === "PR12"){
+            Cv_producto_gaslp.ComposDePropanoEnGasLP=$("#compospropanogaslp").val().trim();
+            Cv_producto_gaslp.ComposDeButanoEnGasLP=$("#Compos_butano_gaslp").val().trim();
+        }
+        let Cv_producto_petroleo = Cv_producto.Petroleo;
+        if (Cv_producto.ClaveProducto === "PR08"){
+
+            Cv_producto_petroleo.DensidadDePetroleo=$("#densidad_petroleo").val().trim();
+            Cv_producto_petroleo.ComposDeAzufreEnPetroleo=$("#Compos_azufre_petroleo").val().trim();
+        }
+
+        //Analisar como hacer que sean varios
+        let Cv_producto_gasnatural = Cv_producto.GasNatural.GasNaturalOCondensados[contador_productos];
+        if (Cv_producto.ClaveProducto === "PR09" || Cv_producto.ClaveProducto === "PR10") {
+            Cv_producto_gasnatural.ComposGasNaturalOCondensados=$("#Compos_gas_natural_o_condensados").val().trim();
+            Cv_producto_gasnatural.FraccionMolar=$("#fraccion_molar").val().trim();
+            Cv_producto_gasnatural.PoderCalorifico=$("#Poder_Calorifico").val().trim();
+        }
+        if (Cv_producto.ClaveProducto === "PR15" || Cv_producto.ClaveProducto === "PR20") {
+
+            Cv_producto.Otros =$("#OtrosInput").val().trim();
+        }
+        Cv_producto.MarcaComercial=$("#MarcaComercial").val().trim();
+        Cv_producto.Marcaje=$("#Marca").val().trim();
+        Cv_producto.ConcentracionSustanciaMarcaje=$("#ConcentracionSustanciaMarcaje").val().trim();
+        
+        
+        console.log(Controles_volumetricos.Producto[contador_productos]);
+
+        $.ajax({
+                url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
+                type:"POST",
+                headers:{
+                    'X-CSRFToken':csrfToken
+                },
+                data: JSON.stringify({
+                    formulario: "Producto",
+                    data: Cv_producto
+                }),
+                contentType: "application/json",    
+                 beforeSend:function(){
+                    $("#loader-row").show();
+                },
+                success:function(response){
+                    contador_productos++;       
+                    if (contador_productos >= No_producto) {
+                        new_add_producto.disabled = true;
+                        new_delete_producto.disabled = false;
+                        //console.log("Límite de productos alcanzado");
+                    }
+
+                    $("#loader-row").hide();
+                    if(response){
+                        alert("CV creado con éxito");
+                    }else{
+                        alert("Error al registrar datos de cv");
+                    }
+                    
+                },
+                 
+            })        
+
+
+
+
+
+
+
+    });
+    new_delete_producto.addEventListener('click',function(){
+        let No_producto = parseInt(total_productos); // leer el valor en cada click
+
+        contador_productos--;
+        new_add_producto.textContent = `${contador_productos} / ${No_producto}`;
+        if (contador_productos < No_producto) {
+        new_add_producto.disabled = false;
+        }
+
+        if (contador_productos == 0) {
+            new_delete_producto.disabled = true;
+        }
+    });
+
+
+
+
+
+
+    let contador_rfc_proveedores = 0;
+    let new_add_rfc_proveedores = document.getElementById('add_save_rfc');
+    let new_delete_rfc = document.getElementById('Eliminar_CV_RFC');
+    new_delete_rfc.disabled = true;
+
+    let save_rfc_provedore = document.getElementById('add_save_rfc_provedores');
+    
+    
+    save_rfc_provedore.addEventListener('click',function(){
+        let No_producto_rfc = parseInt(document.getElementById('No_rfc_proveedores').value); // leer el valor en cada click
+        new_add_rfc_proveedores.textContent = `${contador_rfc_proveedores} / ${No_producto_rfc}`;
+ 
+    });
+    new_add_rfc_proveedores.addEventListener('click', function() {
+
+        let No_rfc_provedores = parseInt(document.getElementById('No_rfc_proveedores').value);
+
+        contador_rfc_proveedores++;
+
+        console.log(`RFC Proveedores ${contador_rfc_proveedores} registrados`);
+
+        new_add_rfc_proveedores.textContent = `${contador_rfc_proveedores} / ${No_rfc_provedores}`;
+
+        Controles_volumetricos.CV.RfcProveedores.push(
+        $("#RfcProveedores").val().trim()
+        );
+
+        // Deshabilitar si se llega al límite
+        if (contador_rfc_proveedores >= No_rfc_provedores) {
+            new_add_rfc_proveedores.disabled = true;
+            new_delete_rfc.disabled = false;
+            
+            Controles_volumetricos.CV.RfcProveedores.forEach(rfc => {
+            console.log(`RFC ${rfc}`);
+            });            
+
+            console.log("Límite de RFC de proveedores alcanzado");
+        }
+    });
+
+    new_delete_rfc.addEventListener('click', function(){
+        let No_rfc_provedores = parseInt(document.getElementById('No_rfc_proveedores').value);
+
+        contador_rfc_proveedores--;
+        new_add_rfc_proveedores.textContent = `${contador_rfc_proveedores} / ${No_rfc_provedores}`;
+        if (contador_rfc_proveedores == 0){
+            new_add_rfc_proveedores.disabled = false;
+            new_delete_rfc.disabled = true;
+
+            //logica para eliminar provedores
+        } 
+    })
+
+    let añadir_producto ="añadir_save_producto" ;
+    let delete_producto = "Eliminar_tanque";
+    let clear_producto = "limpiar_tanque";
+
+    let contador_local_productos = {
+        tanques:{contador:0},
+        ductos:{contador:0},
+        pozos:{contador:0},
+        dispensarios:{contador:0}
+    };
+    let contador_local_producto_limite_previo={
+        tanques:{previo:0},
+        ductos:{previo:0},
+        pozos:{previo:0},
+        dispensarios:{previo:0}
+    };
+
+    let contador_local_productos_limite_actual = {
+        tanques:{limite:0},
+        ductos:{limite:0},
+        pozos:{limite:0},
+        dispensarios:{limite:0}
+    };
+    let No_input_producto ={
+        tanques:{input:`No_producto_tanque`},
+        ductos:{input:`No_producto_ductos`},
+        pozos:{input:`No_producto_pozo`},
+        dispensarios:{input:`No_producto_dispensario`}
+    };
+    let add_button_producto ={
+        tanques:{boton:`add_tanques`},
+        ductos:{boton:`add_ductos_entrada_salida`},
+        pozos:{boton:`add_pozos`},
+        dispensarios:{boton:`add_dispensarios`}
+    };
+    //contador_local_productos["tanques"].contador++;
+    let save_button_producto = {
+        //true ->deshabilitado
+        //false -> habilitado
+        tanques:{boton:`Save_product_tanque`,status:false},
+        ductos:{boton:`Save_product_ducto`,status:false},
+        pozos:{boton:`Save_product_pozo`,status:false},
+        dispensarios:{boton:`Save_product_dispensario`,status:false}
+    }
+    let delete_button_producto = {
+        //true ->deshabilitado
+        //false -> habilitado
+        tanques:{boton:`Delete_product_tanque`,status:false},
+        ductos:{boton:`Delete_product_ducto`,status:false},
+        pozos:{boton:`Delete_product_pozo`,status:false},
+        dispensarios:{boton:`Delete_product_dispensario`,status:false}
+    }
+
+    let clear_button_producto = {
+        //true ->deshabilitado
+        //false -> habilitado
+        tanques:{boton:`Clear_product_tanque`,status:false},
+        ductos:{boton:`Clear_product_ducto`,status:false},
+        pozos:{boton:`Clear_product_pozo`,status:false},
+        dispensarios:{boton:`Clear_product_dispensario`,status:false}
+    }
+    function almacen_datos_productos(counter_product,indice_cv,indice_producto,indice_tdpd){
+        switch(counter_product){
+            //Checa bien esta parte
+            case 'tanques':
+                let Producto_tanque=Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd];       
+
+                Producto_tanque.ClaveIdentificacionTanque=$("#Label_clave_identificacion").val().strim();
+                Producto_tanque.LocalizacionYODescripcionTanque=$("#Label_localizacion_yo_identificacion_").val().strim();
+                Producto_tanque.VigenciaCalibracionTanque=$("#Label_vigencia_calibracion_tanque").val().strim();
+                Producto_tanque.CapacidadTotalTanque=$("#Label_capacidad_total_").val().strim();
+                Producto_tanque.CapacidadOperativaTanque=$("#Label_capacidad_operativa_").val().strim();
+                Producto_tanque.CapacidadUtilTanque=$("#Label_capacidad_util_").val().strim();
+                Producto_tanque.CapacidadFondajeTanque=$("#Label_capacidad_fondaje_").val().strim();
+                Producto_tanque.VolumenMinimoOperacion =$("#Label_vol_min_operacion").val().strim();
+                Producto_tanque.EstadoTanque =$("#Label_estado_").val().strim();
+
+                break;
+
+            let Producto_ducto  =Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Ducto[indice_tdpd];       
+            case 'ductos':
+                Producto_ducto.ClaveIdentificacionDucto=$("#Label_clave_identificacion").val().strim();
+                Producto_ducto.DescripcionDucto =$("#Label_localizacion_yo_identificacion_").val().strim();
+                Producto_ducto.DiametroDucto = $("#Label_diametro_ducto").val().strim();
+                Producto_ducto.CapacidadGasTalon =$("#Label_capacidad_total_").val().strim();
+                break;
+
+            let Producto_pozo  =Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Pozo[indice_tdpd];       
+            case 'pozos':
+                Producto_pozo.ClavePozo=$("#Label_clave_identificacion").val().strim();
+                Producto_pozo.DescripcionPozo=$("#Label_localizacion_yo_identificacion_").val().strim();
+                
+                break;
+
+            let Producto_dispensario  =Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Dispensario[indice_tdpd];       
+            case 'dispensarios':
+                Producto_dispensario.ClaveDispensario=$("#Label_clave_identificacion").val().strim();
+
+                break;
+        }
+    }
+
+
+
+
+    //let save_button_producto_previo= null;
+
+    function mostrar_contadores(counter_product){
+        let actual_but = contador_local_productos[counter_product].contador;
+        let limite_previo = contador_local_producto_limite_previo[counter_product].previo;
+        let  limite_actual = parseInt(document.getElementById(No_input_producto[counter_product].input).value); // obtener límite
+
+        //let button_producto = document.getElementById(add_button_producto[counter_product].boton);
+        let save_button = document.getElementById(save_button_producto[counter_product].boton);
+                     
+        
+        //console.log(`${save_button}`);
+        //console.log(`${save_button_producto[counter_product].boton}`);
+
+        let text_producto = parseInt(document.getElementById(No_input_producto[counter_product].input).value);
+        
+        save_button.disabled = save_button_producto[counter_product].status;
+
+        save_button.textContent = `${actual_but} / ${text_producto}`;
+        
+        let deshabilitar;
+
+        if(actual_but >= limite_actual){
+            deshabilitar = true;
+        }
+        else {
+            if(limite_actual > limite_previo){
+                deshabilitar=false;
+            }
+            else if(limite_actual < limite_previo){
+                deshabilitar = actual_but >= limite_actual;
+            }
+            else{
+                deshabilitrar = save_button_producto[counter_product].status;
+
+            }
+        }
+        
+        save_button.disabled = deshabilitar;
+        save_button_producto[counter_product].status = deshabilitar;
+        
+        
+        contador_local_productos_limite_actual[counter_product].limite = text_producto;
+        contador_local_producto_limite_previo[counter_product].previo = text_producto;
+        //console.log(`${text_producto}`); 
+
+
+    }
+
+    function contadores( counter_product,counter) {
+
+        //let contador_local = 0; // contador individual para este botón
+        console.log(`${counter_product,counter}`);
+
+        let add_button = document.getElementById(save_button_producto[counter_product].boton);
+        let delete_button = document.getElementById(delete_button_producto[counter_product].boton);
+
+
+
+        /*let limite = parseInt(document.getElementById(counter).value); // obtener límite
+        let limite_previo = contador_local_producto_limite_previo[counter_product].previo;
+        if(limite !== limite_previo){
+
+                add_button.disabled = false;
+                save_button_producto[counter_product].status = false;
+                
+                delete_button.disabled = false;
+                delete_button_producto[counter_product].status = false;
+                
+                contador_local_producto_limite_previo[counter_product].previo = limite;
+        };*/
+            
+        if(!add_button){
+            console.warn(
+                `Add  button no existe para ${counter_product}`,
+                save_button_producto[counter_product].boton
+            );
+            return; 
+        }
+
+            // IMPORTANTE: evitar duplicación de listeners
+        add_button.replaceWith(add_button.cloneNode(true));
+        add_button = document.getElementById(save_button_producto[counter_product].boton);
+        add_button.disabled = save_button_producto[counter_product].status;
+        
+
+
+        if(!delete_button){
+            console.warn(
+                `Delete button no existe para ${counter_product}`,
+                delete_button_producto[counter_product].boton
+            );
+            return; 
+        }
+
+
+        delete_button.replaceWith(delete_button.cloneNode(true));
+        delete_button = document.getElementById(delete_button_producto[counter_product].boton);
+        delete_button.disabled = delete_button_producto[counter_product].status;
+        
+
+
+        add_button.addEventListener('click', function () {
+                contador_local_productos[counter_product].contador++;
+                let actual_producto = contador_local_productos[counter_product].contador;
+                //contador_local_productos_limite_actual[counter_product].limite = limite;
+                let actual_limite = contador_local_productos_limite_actual[counter_product].limite;
+                
+                add_button.textContent = `${actual_producto} / ${actual_limite}`;
+                console.log(`${actual_producto} / ${actual_limite}`);
+                // Aquí iría la lógica para guardar el producto
+                
+                almacen_datos_productos(counter_product);
+
+
+                if (actual_producto >= actual_limite) {//checar
+                    
+                    add_button.disabled = true;
+                    save_button_producto[counter_product].status = true;
+                    
+                    delete_button.disabled = false;
+                    delete_button_producto[counter_product].status = false;
+
+                    //contador_local_productos_limite_actual[counter_product].limite = limite;
+
+
+                    console.log(`Límite de productos alcanzado para ${save_button_producto[counter_product].boton}`);
+                }else{
+                    add_button.disabled = false;
+                    save_button_producto[counter_product].status = false;
+                    
+                    delete_button.disabled = false;
+                    delete_button_producto[counter_product].status = false;
+
+                }
+        });
+
+
+
+        delete_button.addEventListener('click',function (){
+                contador_local_productos[counter_product].contador--;
+
+                let actual = contador_local_productos[counter_product].contador;
+                //contador_local_productos_limite_actual[counter_product].limite = limite;
+                let actual_limite = contador_local_productos_limite_actual[counter_product].limite;
+                
+                
+                add_button.textContent = `${actual} / ${actual_limite}`;
+
+                if(actual == 0){
+                    add_button.disabled= false;
+                    save_button_producto[counter_product].status = false;
+
+                    delete_button.disabled=true;
+                    delete_button_producto[counter_product].status=true;
+
+                    //contador_local_productos_limite_actual[counter_product].limite = limite;
+
+                }else{
+                    delete_button.disabled = false;
+                    delete_button_producto[counter_product].status=false;
+                    
+                }
+        });
+
+    }
+
+
+    
+    //Para los medidores
+    let añadir_measurement ="añadir_save_producto";
+    let delete_measurement ="eliminar_medicion";
+    let clear_measurement="limpiar_medicion";
+
+    let actualy_button_medicion = "añadir_medicion";
+    let actual_id_save_measurement_button ="añadir_medicion";
+    let actual_id_delete_measurement_button = "eliminar_medicion";
+    let actual_id_clear_measurement_button = "limpiar_medicion";
+
+    let contador_local_medicion = {//valor actual
+        tanques:{contador:0},
+        ductos:{contador:0},
+        pozos:{contador:0},
+        dispensarios:{contador:0},
+        manguera:{contador:0}
+    };
+    let contador_local_medicion_limite_previo={//limite previo
+        tanques:{previo:1},
+        ductos:{previo:1},
+        pozos:{previo:1},
+        dispensarios:{previo:1},
+        manguera:{previo:1}
+    };
+    let contador_local_medicion_limite= {//limite actual
+        tanques:{limite:1},
+        ductos:{limite:1},
+        pozos:{limite:1},
+        dispensarios:{limite:1},
+        manguera:{limite:1}
+    };
+    let No_input_medicion ={
+        tanques:{input:`No_medicion_tanques`},
+        ductos:{input:`No_medicion_ducto`},
+        pozos:{input:`No_medicion_pozo`},
+        dispensarios:{input:`No_medicion_dispensario`},
+        manguera:{input:`No_Mangueras`}
+    };
+    let save_button_medicion = {
+        tanques:{boton:`save_measurement_tanque`,status:false},
+        ductos:{boton:`save_measurement_ducto`,status:false},
+        pozos:{boton:`save_measurement_pozo`,status:false},
+        dispensarios:{boton:`save_measurement_dispensario`,status:false},
+        manguera:{boton:`add_save_hose_system`,status:false}
+    };
+    let delete_button_medicion = {
+        tanques:{boton:`Delete_measurement_tanque`,status:false},
+        ductos:{boton:`Delete_measurement_ducto`,status:false},
+        pozos:{boton:`Delete_measurement_pozo`,status:false},
+        dispensarios:{boton:`Delete_measurement_dispensario`,status:false},
+        manguera:{boton:`Delete_hose_manguera`,status:false}
+    }
+    let clear_button_medicion = {
+        //true ->deshabilitado
+        //false -> habilitado
+        tanques:{boton:`Clear_measurement_tanque`,status:false},
+        ductos:{boton:`Clear_measurement_ducto`,status:false},
+        pozos:{boton:`Clear_measurement_pozo`,status:false},
+        dispensarios:{boton:`Clear_measurement_dispensario`,status:false},
+        manguera:{boton:`Clear_hose_manguera`,status:false}
+
+    }
+    function almacen_datos_productos_medidores(counter_measurement,indice_cv,indice_producto,indice_tdpd){
+        switch(counter_measurement){
+            case 'tanque':
+                let measurement_tanques= Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd].m;       
+                
+                measurement_tanques.SistemaMedicionTanque=$("#Sistemademedicion").val().strim();
+                measurement_tanques.LocalizODescripSistMedicionTanque=$("#Localizacion_descripicion_sistema_medicion").val().strim();
+                measurement_tanques.VigenciaCalibracionSistMedicionTanque=$("#vigencia_calibracion").val().strim();
+                measurement_tanques.IncertidumbreMedicionSistMedicionTanque=$("#Incertidumbre_medicion_tanque").val().strim();
+
+                break;
+            case 'ductos':
+                let measurement_ductos= Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd].m;       
+
+                measurement_ductos.SistemaMedicionDucto=$("#Sistemademedicion").val().strim();
+                measurement_ductos.LocalizODescripSistMedicionDucto=$("#Localizacion_descripicion_sistema_medicion").val().strim();
+                measurement_ductos.VigenciaCalibracionSistMedicionDucto=$("#vigencia_calibracion").val().strim();
+                measurement_ductos.IncertidumbreMedicionSistMedicionDucto=$("#Incertidumbre_medicion_tanque").val().strim();
+
+                break;
+            case 'pozos':
+                let measurement_pozos= Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd].Pozo;       
+
+                measurement_pozos.SistemaMedicionPozo=$("#Sistemademedicion").val().strim();
+                measurement_pozos.LocalizODescripSistMedicionPozo=$("#Localizacion_descripicion_sistema_medicion").val().strim();
+                measurement_pozos.VigenciaCalibracionSistMedicionPozo=$("#vigencia_calibracion").val().strim();             
+                measurement_pozos.IncertidumbreMedicionSistMedicionPozo=$("#Incertidumbre_medicion_tanque").val().strim();
+
+                break;
+            case 'dispensarios':
+                let measurement_dispensarios= Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd].Dispensario;       
+
+                measurement_dispensarios.SistemaMedicionDispensario=$("#Sistemademedicion").val().strim();
+                measurement_dispensarios.LocalizODescripSistMedicionDispensario=$("#Localizacion_descripicion_sistema_medicion").val().strim();
+                measurement_dispensarios.VigenciaCalibracionSistMedicionDispensario=$("#vigencia_calibracion").val().strim();
+                measurement_dispensarios.IncertidumbreMedicionSistMedicionDispensario=$("#Incertidumbre_medicion_tanque").val().strim();
+                
+                break;
+            case 'manguera':
+                let measurement_manguera= Controles_volumetricos.CV[indice_cv].Producto[indice_producto].Tanque[indice_tdpd].Dispensario;       
+
+
+                measurement_manguera.IdentificadorManguera=$("#identificador_manguera").val().strim();
+                break;
+        }
+    }
+
+
+
+    function mostrar_contadores_medidores(counter_measurement){
+        let actual_but = contador_local_medicion[counter_measurement].contador;
+             
+        let limite_previo = contador_local_medicion_limite_previo[counter_measurement].previo;
+        let limite_actual = parseInt(document.getElementById(No_input_medicion[counter_measurement].input).value);
+        console.log(` ${counter_measurement}`);
+
+        let save_button = document.getElementById(save_button_medicion[counter_measurement].boton);
+
+
+        //let button_producto = document.getElementById(add_button_producto[counter_measurement].boton);
+        
+        console.log(`${save_button}`);
+        console.log(`valores actuales ${actual_but},${limite_actual}`);
+        
+        save_button.disabled = save_button_medicion[counter_measurement].status;
+
+
+        save_button.textContent = `${actual_but} / ${limite_actual}`;
+
+        let deshabilitar;
+
+        //  Regla principal: si alcanza o supera el límite → deshabilitar SIEMPRE
+        if (actual_but >= limite_actual) {
+            deshabilitar = true;
+        } 
+        else {
+            //  Límite aumentó → habilitar
+            if (limite_actual > limite_previo) {
+                deshabilitar = false;
+            }
+
+            //  Límite disminuyó → deshabilitar hasta que contador < nuevo límite
+            else if (limite_actual < limite_previo) {
+                deshabilitar = actual_but >= limite_actual;
+            }
+
+            // Sin cambios → mantener estado previo
+            else {
+                deshabilitar = save_button_medicion[counter_measurement].status;
+            }
+        }
+
+        // Aplicar estado al botón
+        save_button.disabled = deshabilitar;
+        save_button_medicion[counter_measurement].status = deshabilitar;
+
+        // Actualizar límites
+        contador_local_medicion_limite[counter_measurement].limite = limite_actual;
+        contador_local_medicion_limite_previo[counter_measurement].previo = limite_actual;
+    }
+ 
+    function contadores_medidores( counter_measurement,counter) {
+        //let contador_local = 0; // contador individual para este botón
+        console.log("ID buscado:", delete_button_medicion[counter_measurement].boton);
+        console.log("Existe en el DOM?", document.getElementById(delete_button_medicion[counter_measurement].boton));
+        console.log(counter_measurement);
+
+        let add_button_measurement = document.getElementById(save_button_medicion[counter_measurement].boton);
+        let delete_button_measurement = document.getElementById(delete_button_medicion[counter_measurement].boton);
+        console.log("Elemento encontrado:", delete_button_measurement);
+
+        //let limite_measurement = parseInt(document.getElementById(counter).value); // obtener límite
+        //let limite_measurement =parseInt(document.getElementById(No_input_medicion[counter_measurement].input).value); // obtener límite
+        
+        /*let limite_measurement = contador_local_medicion_limite[counter_measurement].limite; 
+        let limite_previo = contador_local_medicion_limite_previo[counter_measurement].previo;
+
+        if(limite_measurement !== limite_previo){
+
+            add_button_measurement.disabled = false;
+            save_button_medicion[counter_measurement].status = false;
+                        
+            // Actualizar límite y límite previo
+            contador_local_medicion_limite[counter_measurement].limite = limite_measurement;
+            contador_local_medicion_limite_previo[counter_measurement].previo = limite_measurement;
+        };*/
+
+        //let actual_measurement = contador_local_medicion[counter_measurement].contador;
+            // IMPORTANTE: evitar duplicación de listeners
+        
+        if(!add_button_measurement){
+            console.warn(
+                `Add measurement button no existe para ${counter_measurement}`,
+                save_button_medicion[counter_measurement].boton
+            );
+            return; // ⛔ sales antes de romper todo
+        }
+
+        add_button_measurement.replaceWith(add_button_measurement.cloneNode(true));
+        add_button_measurement = document.getElementById(save_button_medicion[counter_measurement].boton);
+        add_button_measurement.disabled = save_button_medicion[counter_measurement].status;
+        //console.log(`${counter_measurement,counter}`);
+
+        if(!delete_button_measurement){
+            console.warn(
+                `Delete measurement button no existe para ${counter_measurement}`,
+                delete_button_medicion[counter_measurement].boton
+            );
+            return; // ⛔ sales antes de romper todo
+        }
+
+
+
+        delete_button_measurement.replaceWith(delete_button_measurement.cloneNode(true));
+        delete_button_measurement = document.getElementById(delete_button_medicion[counter_measurement].boton);
+        delete_button_measurement.disabled = delete_button_medicion[counter_measurement].status;
+        
+
+
+        add_button_measurement.addEventListener('click', function () {
+                contador_local_medicion[counter_measurement].contador++; // incrementar el contador local
+                let actual_measurement = contador_local_medicion[counter_measurement].contador;
+                ///contador_local_medicion_limite[counter_measurement].limite = limite_measurement;
+                let actual_limite = contador_local_medicion_limite[counter_measurement].limite;    
+            
+                add_button_measurement.textContent = `${actual_measurement} / ${actual_limite}`;
+                // Aquí iría la lógica para guardar el producto
+                console.log(`valores actuales  boton ${actual_measurement},${actual_limite}`);
+
+                almacen_datos_productos_medidores(counter_measurement);
+
+                if (actual_measurement >= actual_limite) {//checar
+                    add_button_measurement.disabled = true;
+                    save_button_medicion[counter_measurement].status = true;
+
+                    
+                    delete_button_measurement.disabled = false;
+                    delete_button_medicion[counter_measurement].status = false;
+
+
+
+                    console.log(`Límite de productos alcanzado para ${save_button_medicion[counter_measurement].boton}`);
+                }else{
+                    add_button_measurement.disabled = false;
+                    save_button_medicion[counter_measurement].status = false;
+                    
+                    delete_button_measurement.disabled = false;
+                    delete_button_medicion[counter_measurement].status = false;
+
+                }
+            });
+
+            delete_button_measurement.addEventListener('click',function (){
+                contador_local_medicion[counter_measurement].contador--;
+
+                let actual = contador_local_medicion[counter_measurement].contador;
+                let actual_limite = contador_local_medicion_limite[counter_measurement].limite;
+                
+                
+                add_button_measurement.textContent = `${actual} / ${actual_limite}`;
+
+                if(actual == 0){
+                    add_button_measurement.disabled= false;
+                    save_button_medicion[counter_measurement].status = false;
+
+                    delete_button_measurement.disabled=true;
+                    delete_button_medicion[counter_measurement].status=true;
+
+                }else{
+                    delete_button_measurement.disabled = false;
+                    delete_button_medicion[counter_measurement].status=false;
+                    
+                }
+             });
+            
+
+    }
+
+
+
+
+
+    //Save_global
+    //$("#Añadir_CV").submit(function(event){
+    //add_cv.addEventListener('click',function(){
+
+       //event.preventDefault();
+
+
+
+
+    
+
+
+    const patrones = {
+        //pattern="^([A-ZÑ]|&){3}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$" 
+        //CV
+        rfc: "^([A-ZÑ]|&){3}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$",
+        version: "^[0-9]+\\.[0-9]+$",
+
+        NumPermiso: "^H[/]{1}[0-9]{1,5}[/]{1}COM[/]{1}[0-9]{4}$')",
+        NumContratoOAsignacion:"^SENER-CPG-[0-9]{1,3}-[0-9]{4}$",
+        ClaveInstalacion:"^(ACL|ASN)-(TRE|MNA)-[a-zA-Z0-9]{4}$"
+    };
+
+
+    document.querySelectorAll('.rfc').forEach(i => {
+        i.setAttribute('pattern', patrones.rfc);
+        i.setAttribute('title', 'RFC válido (12 o 13 caracteres)');
+    });
+
+    document.querySelectorAll('.permiso').forEach(i => {
+        i.setAttribute('pattern', patrones.permiso);
+        i.setAttribute('title', 'Versión con formato X.Y (Ej. 1.0)');
+    });
+
+
+    
+
+
+
+
+
+
+
+
+
+
+    /*document.getElementById('anteriorBtn_3').addEventListener('click', function() {
+        showSection('section2');
+    });*/
+
+    
+    /*document.getElementById('siguienteBtn_4').addEventListener('click', function() {
+        showSection('section4');
+        const productoSelect = document.getElementById('prodcuto_asignado');
+
+        // Limpiar opciones anteriores
+        productoSelect.innerHTML = '<option value="" disabled selected>Seleccione el producto</option>';
+        console.log(productos); // Muestra el contenido de productos en la consola
+
+        // Verificar que 'productos' esté definido y no esté vacío
+        if (Array.isArray(productos) && productos.length > 0) {
+            for (let i = 0; i < productos.length; i++) {
+                // Aquí puedes acceder a las propiedades de cada producto
+                const producto = productos[i]; // Obtén el producto actual
+                
+                if (producto && producto.claveproducto) { // Verificar que 'claveproducto' exista
+                    const nuevaOpcion = document.createElement('option'); // Crear una nueva opción
+                    nuevaOpcion.value = producto.claveproducto; // Asumiendo que 'claveproducto' es la propiedad que deseas usar
+                    nuevaOpcion.textContent = producto.claveproducto; // Agregar texto para la opción
+                    productoSelect.appendChild(nuevaOpcion); // Agregar la nueva opción al select
+                }
+            }
+        } else {
+            console.warn('No hay productos disponibles para agregar al select.');
+        }
+        const sistema_medicion_fk = document.getElementById('sistema_medicion_fk');
+        sistema_medicion_fk.innerHTML = '<option value="" disabled selected>Seleccione el sistema de medición</option>';
+        console.log(medicion);
+
+        if (Array.isArray(medicion) && medicion.length > 0) {
+            for (let x = 0; x < medicion.length; x++) {
+                const itemMedicion = medicion[x]; // Cambiado 'medicion' a 'itemMedicion'
+                if (itemMedicion && itemMedicion.Sistemademedicion) {
+                    const nuevaopcion_ = document.createElement('option');
+                    nuevaopcion_.value = itemMedicion.Sistemademedicion;
+                    nuevaopcion_.textContent = itemMedicion.Sistemademedicion;
+                    sistema_medicion_fk.appendChild(nuevaopcion_);
+                }
+            }
+        } else {
+            console.warn('No hay ningun sistema de medicion disponible para agregar al select.');
+        }
+
+
+
+
+    }); 
+
+    document.getElementById('anteriorBtn_4').addEventListener('click', function() {
+        showSection('section3');
+    });*/
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = {
+            'Gasolina_combustible_no_fosil': 'Gasolinacombustiblenosifosil',
+            'Diesel_combustible_no_fosil': 'Dieselcombustiblenosifosil',
+            'Turbosina_combustible_no_fosil': 'Turbosinacombustiblenosifisol'
+        };
+
+        Object.keys(sections).forEach(function(selectId) {
+            const selectElement = document.getElementById(selectId);
+            const sectionToToggle = document.getElementById(sections[selectId]);
+
+            selectElement.addEventListener('change', function() {
+                if (this.value === 'Si') {
+                    sectionToToggle.style.display = 'block';
+                } else {
+                    sectionToToggle.style.display = 'none';
+                }
+            });
+        });
+    });
+
+    document.getElementById('tipoCaracter').addEventListener('change',function(){
+        document.getElementById('permisionario').style.display='none';// OCULTAMOS todas las secciones posibles
+        document.getElementById('contratoOasignacion').style.display='none';
+        document.getElementById('usuario').style.display='none';
+        switch(this.value){
+            case 'permisionario':
+                // mostramos las secciones
+                document.getElementById('permisionario').style.display='block';
+                break;
+            case 'contratista':
+                document.getElementById('contratoOasignacion').style.display='block';
+                break;
+            case 'asignatario':
+                document.getElementById('contratoOasignacion').style.display='block';
+                break;
+            case 'usuario':
+                document.getElementById('usuario').style.display='block';
+                break;
+        }
+    });
+    document.getElementById('claveproducto').addEventListener('change',function(){
+        const claveSubproducto = document.getElementById('clavesubproducto');
+        claveSubproducto.innerHTML = '<option value="" disabled selected>Seleccione la clave del producto</option>'; // Limpiar opciones anteriores
+        document.getElementById('Disel').style.display = 'none';
+        document.getElementById('Gasolina').style.display = 'none';
+        document.getElementById('Petroleo').style.display = 'none';
+        document.getElementById('GasNatural').style.display = 'none';
+        document.getElementById('Turbosina').style.display = 'none';
+        document.getElementById('GasLP').style.display = 'none';
+        document.getElementById('Otros').style.display = 'none';
+        switch(this.value){
+            case 'PR03':
+                claveSubproducto.innerHTML += '<option value="SP18">SP18(Diésel automotriz)</option>';
+                claveSubproducto.innerHTML += '<option value="SP19">SP19(Diésel marino)</option>';
+                claveSubproducto.innerHTML += '<option value="SP22">SP22 (IFO380)</option>';
+                claveSubproducto.innerHTML += '<option value="SP23">SP23 (Diésel industrial)</option>';
+                claveSubproducto.innerHTML += '<option value="SP24">SP24 (Diésel de Ultra Bajo Azufre(DUBA))</option>';
+                claveSubproducto.innerHTML += '<option value="SP25">SP25 (Diésel agrícola)</option>';
+                document.getElementById('Disel').style.display='block';
+
+                break;
+
+            case 'PR07':
+                claveSubproducto.innerHTML += '<option value="SP16">SP16 (Gasolina regular menor a 91 octanos)</option>';
+                claveSubproducto.innerHTML += '<option value="SP17">SP17 (Gasolina premium mayor o igual a 91 octanos)</option>';
+                document.getElementById('Gasolina').style.display='block';
+
+                break;
+
+            case 'PR08':
+                claveSubproducto.innerHTML += '<option value="SP1">SP1 (Súper-ligero/Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP2">SP2 (Súper-ligero/Semi-amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP3">SP3 (Súper-ligero/Amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP4">SP4 (Ligero/Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP5">SP5 (Ligero/Semi-amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP6">SP6 (Ligero/Amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP7">SP7 (Mediano/Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP8">SP8 (Mediano/Semi-Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP9">SP9 (Mediano/Semi-amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP10">SP10 (Pesado/Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP11">SP11 (Pesado/Semi-amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP12">SP12 (Pesado/Amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP13">SP13 (Extra-pesado/Dulce)</option>';
+                claveSubproducto.innerHTML += '<option value="SP14">SP14 (Extra-pesado/Semi-amargo)</option>';
+                claveSubproducto.innerHTML += '<option value="SP15">SP15 (Extra-pesado/Amargo)</option>';
+                document.getElementById('Petroleo').style.display='block';
+
+                break;
+
+            case 'PR09':
+                claveSubproducto.innerHTML += '<option value="SP27">SP27 (Gas natural vehicular comprimido)</option>';
+                claveSubproducto.innerHTML += '<option value="SP28">SP28 (Gas natural comprimido)</option>';
+                claveSubproducto.innerHTML += '<option value="SP29">SP29 (Gas natural licuado)</option>';
+                claveSubproducto.innerHTML += '<option value="SP37">SP37 (Líquido del gas natural)</option>';
+                claveSubproducto.innerHTML += '<option value="SP38">SP38 (Gas natural sin procesar)</option>';
+                claveSubproducto.innerHTML += '<option value="SP41">SP41 (Gas natural procesado)</option>';
+                claveSubproducto.innerHTML += '<option value="SP42">SP42 (Metano)</option>';
+                claveSubproducto.innerHTML += '<option value="SP43">SP43 (Butano)</option>';
+                claveSubproducto.innerHTML += '<option value="SP44">SP44 (Étano)</option>';
+                claveSubproducto.innerHTML += '<option value="SP47">SP47 (Gasolina natural)</option>';
+                document.getElementById('GasNatural').style.display='block';
+
+                break;
+            case 'PR10':
+                document.getElementById('GasNatural').style.display='block';
+                break;
+            case 'PR11':
+                claveSubproducto.innerHTML += '<option value="SP34">SP34 (JET-A) </option>';  
+                claveSubproducto.innerHTML += '<option value="SP35">SP35 (JET-A1) </option>';  
+                document.getElementById('Turbosina').style.display='block';
+               
+                break;
+            case 'PR12':
+                document.getElementById('GasLP').style.display='block';
+                break;
+            case 'PR13':
+                claveSubproducto.innerHTML += '<option value="SP30">SP30 (Combustóleo menor o igual a 1% de azufre)</option>';
+                claveSubproducto.innerHTML += '<option value="SP31">SP31 (Combustóleo mayor a 1% y menor a 3% de azufre)</option>';
+                claveSubproducto.innerHTML += '<option value="SP32">SP32 (Combustóleo mayor o igual a 3% y menor a 4.4% de azufre)</option>';
+                claveSubproducto.innerHTML += '<option value="SP33">SP33 (IFO 180)</option>';
+                break;
+
+ 
+            case 'PR15':
+                claveSubproducto.innerHTML += '<option value="SP20">SP20 (Otros)</option>';
+                claveSubproducto.innerHTML += '<option value="SP21">SP21 (Biodiesel)</option>';
+                claveSubproducto.innerHTML += '<option value="SP36">SP36 (Bioturbosina)</option>';
+                claveSubproducto.innerHTML += '<option value="SP39">SP39 (Etanol anhidro contenido máximo de 10% como oxigenante en gasolinas Regular)</option>';
+                claveSubproducto.innerHTML += '<option value="SP40">SP40 (Etanol anhidro contenido máximo de 10% como oxigenante en gasolinas Premium)</option>';
+                document.getElementById('Otros').style.display='block';
+                break;
+            case 'PR16':
+                claveSubproducto.innerHTML += '<option value="SP48">SP48 (Gasóleo doméstico)</option>';
+                break;
+
+            case 'PR17':  
+                claveSubproducto.innerHTML += '<option value="SP45">SP45 (Naftas pesadas)</option>';
+                claveSubproducto.innerHTML += '<option value="SP46">SP46 (Naftas ligeras)</option>';
+                break;
+
+            case 'PR18':
+                claveSubproducto.innerHTML += '<option value="SP26">SP26 (Gasavión)</option>';
+                break;
+
+            case 'PR19':
+                claveSubproducto.innerHTML += '<option value="SP42">SP42 (Metano)</option>';
+                break;
+
+             
+            case 'PR20':
+                claveSubproducto.innerHTML += '<option value="SP20">SP20 (Otros)</option>';
+                claveSubproducto.innerHTML += '<option value="SP49">SP49 (MTBE)</option>';
+                document.getElementById('Otros').style.display='block';
+                break;
+
+        }
+    })
+
+
+</script>
+
+ 
+{% endblock %}

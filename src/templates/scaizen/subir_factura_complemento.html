@@ -1,0 +1,809 @@
+{% extends 'scaizen.html' %}
+{% block title %}{{prefijo}} Subir XML{% endblock %}
+
+{% block styles %}
+    <style>
+        .show {
+            display: initial; /* Cambia a visible */
+            opacity: 1; /* Se hace completamente visible */
+        }
+
+        tbody th {
+            width: 100px; 
+        }
+        tbody td {
+            width: 400px;
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+    </style>
+{% endblock %} 
+
+{% block tables %}
+<div id="subir_factura" style="display:none;">
+    <div class="formulario" style="width: 700px;">
+        <label class="titulo">Subir Factura XML</label><br />
+        <p class="dir_vista">{{'Distribuidor' if blueprint =='app_distribuidor' else 'Comercializador'}}/{{prefijo}} Subir XML</p>
+    </div>
+
+    <form method="POST" style="display: grid;">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <input 
+            type="file" 
+            id="fileInput" 
+            accept=".xml" 
+            style="display: none;" 
+            data-orden-id=""/>
+
+        <hr class="text-black d-none d-sm-block" />
+        <div style="min-width: 100%; display: grid; grid-template-columns: repeat(2,700px); gap: 20px;">
+            <div class="formulario_alta" style="min-width: 700px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div>
+                    <label style="margin-bottom: 15px; font-weight: bold; font-size: 16px; color: black;">Sube tu factura en XML para actualizar los datos de operación</label>
+                    <div style="width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                        <button type="button"  style="margin-bottom: 10px; width: 200px;" class="button_color_alba openFileDialog">Selecciona la Factura (XML)</button>
+                        <label id="error_label" style="display: none; color: red; margin: 10px 0;  opacity: 0; transition: opacity 0.5s ease;">El archivo seleccionado no tiene la extension correcta.</label>
+                        <label id="file_name_label">Nombre del Archivo: Ningún Archivo Seleccionado</label>
+                    </div>
+                    <br>
+                    <div id="data_inputs" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    </div>
+                    <br>
+                </div>
+                <div style="width: 80%; display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px;">
+                    <button class="button_color_alba" onclick="window.history.back()">Cancelar</button>
+                    <button class="button_color_alba Anterior">Anterior</button>
+                    <button class="button_color_alba Siguiente2" disabled>Siguiente</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="div_carga">
+    <div class="formulario formularioxml" style="width: 1000px;">
+        <label class="titulo">Información de Operación</label><br />
+        <p class="dir_vista">{{'Distribuidor' if blueprint =='app_distribuidor' else 'Comercializador'}}/{{prefijo}} Subir XML</p>
+    </div>
+
+    <hr class="text-black d-none d-sm-block" />
+    <div style="min-width: 100%; display: grid; grid-template-columns: repeat(2,700px); gap: 20px;">
+        <div class="formulario_alta formulario_altaxml" style="min-width: 1000px; display: flex; flex-direction: column; justify-content: center; align-items: center;" id="orden_informacion">
+            <div>
+                <label style="margin-bottom: 15px; font-weight: bold; font-size: 16px; color: black;">Datos de orden</label>
+                <label style="margin-bottom: 15px; font-size: 14px; color: black;">Los datos mostrados de bajo son datos originales de la orden registrada, al momento de subir la factura solo se actualizaran los datos de Costo y el Costo del Traslado.</label>
+                <label style="margin-bottom: 15px; font-size: 12px; color: black;" id="label_data_msg"></label>
+                <table style="width: 900px;" id="tabla_orden_operacion"> 
+                    <thead>
+                        <tr>
+                            <th style="background-color: rgba(0, 0, 0, 0);"></th>
+                            <th>Datos de Orden</th>
+                            <th>Datos de Complemento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Emisor</th>
+                            <td>{{operacion.Emisor}}</td>
+                            <td rowspan="12" style="text-align: center; justify-content: center; align-items: center;" id="celdacomplemento">
+                                Ingresa el Numero de orden que <br> complementara esta orden.
+                                <label style="margin-bottom: 15px; font-size: 12px; color: black; " id="label_data_msg2"></label>
+                                <input value="" type="number" id="IdComplemento" name="IdComplemento" class="form-control" style="width: 100%; resize: none; text-align: center;"/>
+                                <br>
+                                <button class="button_color_alba ComplementoBuscar">Buscar complemento</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Emisor RFC</th>
+                            <td>{{operacion.EmisorRFC}}</td>
+                        </tr>
+                        <tr>
+                            <th>Receptor</th>
+                            <td>{{operacion.Receptor}}</td>
+                        </tr>
+                        <tr>
+                            <th>Receptor RFC</th>
+                            <td>{{operacion.ReceptorRFC}}</td>
+                        </tr>
+                        <tr>
+                            <th>Producto</th>
+                            <td>{{operacion.Producto}}</td>
+                        </tr>
+                        <tr>
+                            <th>Volumen Natural</th>
+                            <td>{{ "{:,.3f}".format(operacion.VolumenNatural) + " lts" if operacion.VolumenNatural is not none else "Desconocido" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Volumen Neto</th>
+                            <td>{{ "{:,.3f}".format(operacion.VolumenNeto) + " lts" if operacion.VolumenNeto is not none else "Desconocido" }}</td>
+                        </tr>
+                        <tr>
+                            <th>Temperatura</th>
+                            <td>{{operacion.TemperaturaPromedio + " °C" if operacion.TemperaturaPromedio is not none else "Desconocida"}}</td>
+                        </tr>
+                        <tr>
+                            <th>Autotanque</th>
+                            <td>{{operacion.Autotanque}}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha y Hora de Inicio</th>
+                            <td>{{operacion.FechaInicio}}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha y Hora de Fin</th>
+                            <td>{{operacion.FechaFin}}</td>
+                        </tr>
+                        <tr>
+                            <th>Tanque</th>
+                            <td>{{operacion.Tanque}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br>
+            <div style="width: 80%; display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px;">
+                <button class="button_color_alba" onclick="window.history.back()">Cancelar</button>
+                <button class="button_color_alba LimpiarComplemento" disabled>Limpiar Complemento</button>
+                <button class="button_color_alba Siguiente1">Siguiente</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div id="div_carga_factura" style="display: none;">
+    <div class="formulario" style="width: 1000px;">
+        <label class="titulo">Información de Operación contra Factura</label><br />
+        <p class="dir_vista">{{'Distribuidor' if blueprint =='app_distribuidor' else 'Comercializador'}}/{{prefijo}} Subir XML</p>
+    </div>
+
+    <hr class="text-black d-none d-sm-block" />
+    <div style="min-width: 100%; display: grid; grid-template-columns: repeat(2,700px); gap: 20px;">
+        <div class="formulario_alta formulario_alta" style="min-width: 1000px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div>
+                <label style="margin-bottom: 15px; font-weight: bold; font-size: 16px; color: black;">Comparación entre datos Orden de Operación y Factura</label>
+                <label style="margin-bottom: 15px; font-size: 14px; color: black;">Los datos mostrados abajo son datos originales de la orden registrada comparados contra los datos de la factura, al momento de subir la factura solo se actualizaran los datos de Costo.</label>
+                <label style="margin-bottom: 15px; font-size: 12px; color: black;" id="label_data_msgconfirm"></label>
+                <div id="data_factura_orden">
+                </div>
+            </div>
+            <br>
+            <div style="width: 80%; display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 10px;">
+                <button class="button_color_alba" onclick="window.history.back()">Cancelar</button>
+                <button class="button_color_alba Anterior2">Anterior</button>
+                <button class="button_color_alba Confirmar">Confirmar</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div style="
+    width: 500px; 
+    height: auto; 
+    background-color: #F8F9FA; 
+    border-radius: 10px; 
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.5); 
+    border: black solid 3px;
+    flex-direction: column;
+    display: None;  
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px; 
+    position: fixed; 
+    top: 40%; 
+    left: 50%; 
+    transform: translate(-50%, -80%);" id="div_change_confirm">
+    <div style="position: absolute; top: 2px; right: 5px; cursor: pointer;" onclick="this.parentNode.style.display = 'none'"><h4>X</h4></div>
+    <h3 id="label_ventana" style="margin-bottom: 10px;">Los datos no coinciden</h3>
+    <lab id="label_ventana_msg" style="margin-bottom: 10px;">Los datos no coinciden</lab>
+    <button style="display: flex; background-color: #122B49; height: 40px; width: 60%; border-radius: 10px; border-style: none; margin-bottom:5px; 
+    color: white; align-items: center; justify-content: center;" onclick="confirm_data2()">Confirmar</button>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+            const currentUrl = window.location.href;
+            var claves_productos = {{ CLAVES_PRODUCTOS | tojson }};
+            var claves_servicios = {{ CLAVES_SERVICIOS | tojson }};
+            let selectedFile = null; // Variable para almacenar el archivo seleccionado
+            let InformacionIgual = false;
+            let diferencias_str = '';
+            let IdComplemento = 0;
+            var NoCoinciden = [];
+            var NoCoinciden2 = [];
+            var MismoTanque = true;
+            var orden_data = {{ operacion | tojson }};
+            var complemento_data = {};
+            var factura_data = {};
+            var fin_formulario = true;
+            var complemento_id = null;
+
+            function limpiar_formulario() {
+                $('#data_inputs').empty();
+                selectedFile = null;
+                $('#fileInput').val(''); // Restablecer el input de archivo
+                $('#file_name_label').text('Nombre del Archivo: Ningún Archivo Seleccionado');
+                $('.Siguiente2').attr('disabled', 'disabled');
+            }
+            
+            $(document).on('click', '.limpiar_formulario', function(event) {limpiar_formulario()})
+
+            $('.openFileDialog').on('click', function(event) {
+                event.preventDefault(); // Previene la acción por defecto del evento
+                $('#fileInput').click(); // Abre el explorador de archivos
+            });
+
+            $('#fileInput').on('change', function(event) {
+                selectedFile = event.target.files[0]; // Guarda el archivo seleccionado
+
+                if (selectedFile) {
+                    // Validar el tipo MIME
+                    const validMimeTypes = ['application/xml', 'text/xml'];
+                    const mimeType = selectedFile.type;
+
+                    if (!validMimeTypes.includes(mimeType)) {
+                        $('#error_label').text('El archivo seleccionado no tiene la extensión correcta.')
+                            .css({ color: 'red', display: 'initial', opacity: '1' });
+                        setTimeout(function() {
+                            $('#error_label').css({ opacity: '0' });
+                            setTimeout(function() {
+                                $('#error_label').hide();
+                                limpiar_formulario();
+                            }, 1000);
+                        }, 3000);
+                        return;
+                    }
+
+                    // Mostrar el nombre del archivo seleccionado en el label
+                    $('#file_name_label').text(`Nombre del Archivo: ${selectedFile.name}`);
+
+                    // Leer el archivo XML
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const xmlContent = e.target.result; // Contenido del archivo XML como texto
+
+                        // Parsear el contenido como XML
+                        const parser = new DOMParser();
+                        const xmlDoc = parser.parseFromString(xmlContent, "application/xml");
+                        let data_inputs = $('#data_inputs');
+
+                        // Definir el espacio de nombres (namespace) del prefijo cfdi
+                        const namespace = "http://www.sat.gob.mx/cfd/4";
+                        let Comprobante = xmlDoc.getElementsByTagNameNS(namespace, "Comprobante")[0];
+
+                        if (!Comprobante) {
+                            $('#error_label').text('El archivo seleccionado no tiene el formato correcto.')
+                                .css({ color: 'red', display: 'initial', opacity: '1' });
+                            setTimeout(function() {
+                                $('#error_label').css({ opacity: '0' });
+                                setTimeout(function() {
+                                    $('#error_label').hide();
+                                    limpiar_formulario();
+                                }, 1000);
+                            }, 3000);
+                            return;
+                        }
+
+                        // Obtener los elementos con las etiquetas necesarias
+                        let Emisor = xmlDoc.getElementsByTagNameNS(namespace, "Emisor")[0];
+                        let Receptor = xmlDoc.getElementsByTagNameNS(namespace, "Receptor")[0];
+                        let Concepto = xmlDoc.getElementsByTagNameNS(namespace, "Concepto")[0];
+                        let Impuestos = xmlDoc.getElementsByTagNameNS(namespace, "Impuestos")[2];
+                        let Complemento = xmlDoc.getElementsByTagNameNS(namespace, "Complemento")[0];
+                        console.log(Complemento);
+                        
+                        let ConceptoTraslado = xmlDoc.getElementsByTagNameNS(namespace, "Concepto")[1];
+                        let Addenda = xmlDoc.getElementsByTagNameNS(namespace, "Addenda")[0];
+
+                        let AddendaMGCLO = Addenda ? Addenda.getElementsByTagNameNS(null, "AddendaMGCLO")[0] : null;
+
+                        let TimbreFiscalDigital = Complemento? Complemento.getElementsByTagNameNS('http://www.sat.gob.mx/TimbreFiscalDigital', "TimbreFiscalDigital")[0]: null;
+                        let FechaFactura = TimbreFiscalDigital ? TimbreFiscalDigital.getAttribute("FechaTimbrado") : null;
+
+                        if (FechaFactura) {
+                            // Dividir la fecha y hora
+                            let [fecha, hora] = FechaFactura.split("T");
+                            let [anio, mes, dia] = fecha.split("-");
+
+                            // Formatear la fecha en el formato deseado
+                            FechaFactura = `${dia}/${mes}/${anio} ${hora}`;
+                        } else {
+                            FechaFactura = 'Desconocido';
+                        }
+                        console.log(FechaFactura);
+                        
+
+                        let CantidadAlNatural = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'CantidadAlNatural')[0] : null;
+                        let Cantidad20gC = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'Cantidad20gC')[0] : null;
+                        let TemperaturaGcentigrados = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'TemperaturaGcentigrados')[0] : null;
+                        let Vehiculo = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'Vehiculo')[0] : null;
+                        let DatosOperativos = AddendaMGCLO ? AddendaMGCLO.getElementsByTagNameNS(null, 'DatosOperativos')[0] : null;
+                        let fechas = DatosOperativos ? DatosOperativos.getAttribute("Valor").split(" PC:")[0] : null;
+
+                        // Asignación de valores con condicionales
+                        let emisor = Emisor ? Emisor.getAttribute("Nombre") : 'Desconocido';
+                        let receptor = Receptor ? Receptor.getAttribute("Nombre") : 'Desconocido';
+                        let emisorrfc = Emisor ? Emisor.getAttribute("Rfc") : 'Desconocido';
+                        let receptorrfc = Receptor ? Receptor.getAttribute("Rfc") : 'Desconocido';
+                        let ClaveProdServ = Concepto ? Concepto.getAttribute("ClaveProdServ") : 'Desconocido';
+                        let producto_name = claves_productos[ClaveProdServ];
+                        let producto = productos_names[producto_name] ? productos_names[producto_name] : 'Desconocido';
+                        let Costo = Concepto ? Concepto.getAttribute("Importe") : 'Desconocido';
+                        let totalimpuestos = Impuestos ? Impuestos.getAttribute("TotalImpuestosTrasladados") : 'Desconocido';
+                        let cantidad_nat_recibida = Concepto ? Concepto.getAttribute("Cantidad") : 'Desconocido';
+                        factura_data = {
+                            "Emisor": emisor,
+                            "EmisorRFC":emisorrfc,
+                            "Receptor":receptor,
+                            "ReceptorRFC":receptorrfc,
+                            "Producto":producto,
+                            "VolumenNatural":cantidad_nat_recibida,
+                            "Fecha": FechaFactura
+                        }
+
+                        data_inputs.html(`
+                            <table style="width: 500px;" id="tabla_orden_operacion2"> 
+                            <thead>
+                                <tr>
+                                    <th style="background-color: rgba(0, 0, 0, 0);"></th>
+                                    <th>Datos de Orden</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>Emisor</th>
+                                    <td>${emisor}</td>
+                                </tr>
+                                <tr>
+                                    <th>Emisor RFC</th>
+                                    <td>${emisorrfc}</td>
+                                </tr>
+                                <tr>
+                                    <th>Receptor</th>
+                                    <td>${receptor}</td>
+                                </tr>
+                                <tr>
+                                    <th>Receptor RFC</th>
+                                    <td>${receptorrfc}</td>
+                                </tr>
+                                <tr>
+                                    <th>Producto</th>
+                                    <td>${producto}</td>
+                                </tr>
+                                <tr>
+                                    <th>Fecha de Factura</th>
+                                    <td>${FechaFactura}</td>
+                                </tr>
+                                <tr>
+                                    <th>Volumen Neto</th>
+                                    <td>${cantidad_nat_recibida !== null ? parseFloat(cantidad_nat_recibida).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts" : "Desconocido"}</td>
+                                </tr>
+                                <tr>
+                                    <th>Costo</th>
+                                    <td>${Costo !== null ? `$ ${parseFloat(Costo).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Desconocido"}</td>
+                                </tr>
+                                <tr>
+                                    <th>Total de Impuestos</th>
+                                    <td>${totalimpuestos !== null ? `$ ${parseFloat(totalimpuestos).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "Desconocido"}</td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            <br>
+                            
+                            <button style="width:92%; margin-bottom:10px; margin-top:10px; border-color:#122B49;" 
+                                    type="button" class="button_color_alba2 limpiar_formulario">Limpiar</button>
+                        `);
+                    };
+
+                    // Leer el archivo como texto
+                    reader.readAsText(selectedFile);
+                    $('.Siguiente2').removeAttr('disabled');
+                }
+            });
+
+            function confirm_data() {
+                InformacionIgual = true;
+                $('#div_change_confirm').hide();
+                uploadFile();
+            }
+
+            function goBack() {
+                window.history.back();
+            }
+
+            function uploadFile() {
+                if (!selectedFile) {
+                    alert('Por favor, selecciona un archivo antes de enviar.');
+                    return;
+                }
+                let csrfToken = $("input[name='csrf_token']").val().trim();
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('csrf_token', csrfToken);
+                formData.append('complemento_id', complemento_id);
+                const currentUrl = window.location.href;
+
+                // Enviar el archivo al servidor usando AJAX
+                $.ajax({
+                    url: currentUrl,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // No procesar los datos
+                    contentType: false, // No establecer el tipo de contenido
+                    dataType: 'json' // Esperar respuesta en formato JSON
+                })
+                .done(function(data) {
+                    if (data['success'] == true) {
+                        $('#label_data_msgconfirm').text(data['message'])
+                            .css({ color: 'green', display: 'initial', opacity: '1' });
+                        setTimeout(function() {
+                            $('#label_data_msgconfirm').css({ opacity: '0' });
+                            setTimeout(function() {
+                                $('#label_data_msgconfirm').hide();
+                                limpiar_formulario();
+                            }, 1000);
+                            goBack();
+                        }, 5000);
+                        return;
+                    }else{
+                        $('#label_data_msgconfirm').text(data['message'])
+                            .css({ color: 'red', display: 'initial', opacity: '1' });
+                        setTimeout(function() {
+                            $('#label_data_msgconfirm').css({ opacity: '0' });
+                            setTimeout(function() {
+                                $('#label_data_msgconfirm').hide();
+                                limpiar_formulario();
+                            }, 1000);
+                            //goBack();
+                        }, 5000);
+                        return;
+                    }
+                    console.log('Éxito:', data);
+                    // Manejar la respuesta del servidor aquí
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                });
+            }
+
+            $(document).on('click', '.ComplementoBuscar', function(event) {
+                event.preventDefault(); // Evitar el comportamiento por defecto del botón
+
+                console.log('Botón ComplementoBuscar fue clicado');
+                
+                const inputComplemento = $('#IdComplemento');
+                const valorInput = inputComplemento.val().trim(); // Asegúrate de eliminar espacios en blanco
+
+                // Validar que el input no esté vacío y sea un número
+                if (!valorInput || isNaN(valorInput)) {
+                    console.error('El valor del complemento no es válido');
+                    return;
+                }
+
+                let csrfToken = $("input[name='csrf_token']").val().trim();
+
+                const formData = new FormData();
+                console.log(parseInt(valorInput));
+                
+                formData.append('IdComplemento', parseInt(valorInput));
+                formData.append('csrf_token', csrfToken);
+                complemento_id = valorInput;
+                const currentUrl = window.location.href;
+
+                $.ajax({
+                    url: currentUrl,
+                    type: 'POST',
+                    data: formData,
+                    processData: false, // No procesar los datos
+                    contentType: false, // No establecer el tipo de contenido
+                    success: function(data) {
+
+                        if (data.data) {
+                            $('.LimpiarComplemento').removeAttr('disabled');
+                            // Eliminar el rowspan
+                            $('#celdacomplemento').removeAttr('rowspan');
+                            $('#celdacomplemento').empty(); 
+
+                            complemento_data = data.data;
+                            filas_tablas = $('#tabla_orden_operacion tr');
+                            $('#celdacomplemento').text(complemento_data.Emisor).removeAttr('style');;
+                            $(filas_tablas[2]).append(`<td>${complemento_data.EmisorRFC}</td>`);
+                            $(filas_tablas[3]).append(`<td>${complemento_data.Receptor}</td>`);
+                            $(filas_tablas[4]).append(`<td>${complemento_data.ReceptorRFC}</td>`);
+                            $(filas_tablas[5]).append(`<td>${complemento_data.Producto}</td>`);
+                            $(filas_tablas[6]).append(`<td>${complemento_data.VolumenNatural !== null ? parseFloat(complemento_data.VolumenNatural).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts" : "Desconocido"}</td>`);
+                            $(filas_tablas[7]).append(`<td>${complemento_data.VolumenNeto !== null ? parseFloat(complemento_data.VolumenNeto).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts" : "Desconocido"}</td>`);
+                            $(filas_tablas[8]).append(`<td>${complemento_data.TemperaturaPromedio !== null ? complemento_data.TemperaturaPromedio + " °C" : "Desconocida"}</td>`);
+                            $(filas_tablas[9]).append(`<td>${complemento_data.Autotanque}</td>`);
+                            $(filas_tablas[10]).append(`<td>${complemento_data.FechaInicio}</td>`);
+                            $(filas_tablas[11]).append(`<td>${complemento_data.FechaFin}</td>`);
+                            $(filas_tablas[12]).append(`<td>${complemento_data.Tanque}</td>`);
+                            console.log($('#tabla_orden_operacion tr'));
+                            NoCoinciden = [];
+                            if(complemento_data.Emisor !== orden_data.Emisor ){
+                                NoCoinciden.push(1);
+                                $(filas_tablas[1]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.EmisorRFC !== orden_data.EmisorRFC ){
+                                NoCoinciden.push(2);
+                                $(filas_tablas[2]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.Receptor !== orden_data.Receptor ){
+                                NoCoinciden.push(3);
+                                $(filas_tablas[3]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.ReceptorRFC !== orden_data.ReceptorRFC ){
+                                NoCoinciden.push(4);
+                                $(filas_tablas[4]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.Producto !== orden_data.Producto ){
+                                NoCoinciden.push(5);
+                                $(filas_tablas[5]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.Autotanque !== orden_data.Autotanque ){
+                                NoCoinciden.push(9);
+                                $(filas_tablas[9]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);}
+                            if(complemento_data.Tanque !== orden_data.Tanque ){
+                                NoCoinciden.push(12);
+                                MismoTanque = false;
+                                $(filas_tablas[12]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                            }else{ MismoTanque= true;}
+                            if(NoCoinciden.length >0){
+                                $('.formulario_altaxml').css(
+                                    {
+                                        'min-width': '1400px'
+                                    }
+                                );
+                                $('.formularioxml').css(
+                                    {
+                                        'min-width': '1400px'
+                                    }
+                                );
+                                $('#tabla_orden_operacion').css(
+                                    {
+                                        'min-width': '1300px'
+                                    }
+                                );
+                            }
+
+
+                        }
+                        console.log('Datos recibidos:', data);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                    }
+                });
+            });
+
+            $('.LimpiarComplemento').on('click', function(event) {
+                event.preventDefault(); // Evitar el comportamiento por defecto del botón
+                if ($('#celdacomplemento').attr('rowspan') !== '12') {
+                    complemento_data = {};
+                    complemento_id = null;
+                    filas_tablas = $('#tabla_orden_operacion tr');
+                    if (NoCoinciden.length > 0) {
+                            $('.formulario_altaxml').css(
+                                    {
+                                        'min-width': '1000px'
+                                    }
+                                );
+                                $('.formularioxml').css(
+                                    {
+                                        'min-width': '1000px'
+                                    }
+                                );
+                                $('#tabla_orden_operacion').css(
+                                    {
+                                        'min-width': '900px'
+                                    }
+                                );
+
+                        NoCoinciden.forEach((item, index) => {
+                            // Asegúrate de que el índice no exceda el número de filas
+                            console.log(item);
+                            
+                            if (item < filas_tablas.length) {
+                                const fila = filas_tablas[item]; // Ajustamos el índice para empezar desde 2
+                                const ultimaColumna = fila.cells.length - 1; // Obtener el índice de la última columna
+                                console.log(ultimaColumna);
+                                
+                                if (ultimaColumna >= 0) {
+                                    fila.deleteCell(ultimaColumna); // Eliminar la última celda
+                                }
+                            }
+                        });
+                    }
+                    
+
+                    for (let i = 2; i <= 12; i++) {
+                        const fila = filas_tablas[i];
+                        const ultimaColumna = fila.cells.length - 1; // Obtener el índice de la última columna
+                        console.log(ultimaColumna);
+                        
+                        if (ultimaColumna >= 0) {
+                            fila.deleteCell(ultimaColumna); // Eliminar la última celda
+                        }
+                    }
+
+                    $('#celdacomplemento').attr('rowspan', '12').css({
+                        'text-align': 'center',
+                        'content': 'center',
+                        'align-items': 'center' // Agrega otro estilo, por ejemplo, tamaño de fuente
+                    });
+
+                    $('#celdacomplemento').html(`
+                        Ingresa el Numero de orden que <br> complementara esta orden.
+                        <label style="margin-bottom: 15px; font-size: 12px; color: black; " id="label_data_msg2"></label>
+                        <input value="" type="number" id="IdComplemento" name="IdComplemento" class="form-control" style="width: 100%; resize: none; text-align: center;"/>
+                        <br>
+                        <button class="button_color_alba ComplementoBuscar">Buscar complemento</button>
+                    `);
+                    $('.LimpiarComplemento').attr('disabled', 'disabled');
+                    NoCoinciden = [];
+                }
+            });
+
+            $(document).on('click', '.Siguiente1', function(event) {
+                if (NoCoinciden.length > 0 ){
+                    if(!MismoTanque){
+                        alert('No se puede continuar la operación, ya que el tanque no es el mismo')
+                        return
+                    }
+                    const result = confirm("Hay datos que no coinciden. ¿Quieres continuar?");
+                    if (!result) {
+                        return;
+                    }
+                }
+                $('#div_carga').fadeOut();
+                setTimeout(function() {
+                    $('#subir_factura').fadeIn();
+                }, 300);
+                
+            });
+            
+            $(document).on('click', '.Anterior', function(event) {
+                event.preventDefault(); // Evitar el comportamiento por defecto del botón
+                $('#subir_factura').fadeOut(); // Ocultar el elemento con id 'subir_factura'
+                setTimeout(function() {
+                    console.log('$(#div_carga).fadeIn()');
+                    $('#div_carga').fadeIn();
+                }, 300);
+            });
+
+            $(document).on('click', '.Anterior2', function(event) {
+                event.preventDefault(); // Evitar el comportamiento por defecto del botón
+                $('#div_carga_factura').fadeOut(); // Ocultar el elemento con id 'subir_factura'
+                setTimeout(function() {
+                    $('#tabla_orden_operacion3').empty();
+                    $('#subir_factura').fadeIn();
+                }, 300);
+            });
+
+            $(document).on('click', '.Siguiente2', function(event) {
+                event.preventDefault();
+                if(selectedFile === null && Object.keys(factura_data).length === 0){
+                    alert('No se ha seleccionado ningún archivo XML')
+                    return;
+                }
+                //var volumen_orden =  parseFloat(orden_data.VolumenNeto);
+                var volumen_orden =  parseFloat(orden_data.VolumenNatural);
+                console.log(complemento_data);
+                
+                if(Object.keys(complemento_data).length !== 0){
+                    //volumen_orden = parseFloat(orden_data.VolumenNeto) + parseFloat(complemento_data.VolumenNeto);
+                    volumen_orden = parseFloat(orden_data.VolumenNatural) + parseFloat(complemento_data.VolumenNatural);
+                }
+                console.log(volumen_orden);
+                
+                $('#subir_factura').fadeOut();
+                $('#data_factura_orden').html(`
+                    <table style="width: 900px;" id="tabla_orden_operacion3"> 
+                        <thead>
+                            <tr>
+                                <th style="background-color: rgba(0, 0, 0, 0);"></th>
+                                <th>Datos de Factura</th>
+                                <th>${Object.keys(complemento_data).length !== 0 ? "Datos de Orden y Complemento":"Datos de Orden"}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Emisor</th>
+                                <td>${factura_data.Emisor}</td>
+                                <td>${orden_data.Emisor}</td>
+                            </tr>
+                            <tr>
+                                <th>Emisor RFC</th>
+                                <td>${factura_data.EmisorRFC}</td>
+                                <td>${orden_data.EmisorRFC}</td>
+                            </tr>
+                            <tr>
+                                <th>Receptor</th>
+                                <td>${factura_data.Receptor}</td>
+                                <td>${orden_data.Receptor}</td>
+                            </tr>
+                            <tr>
+                                <th>Receptor RFC</th>
+                                <td>${factura_data.ReceptorRFC}</td>
+                                <td>${orden_data.ReceptorRFC}</td>
+                            </tr>
+                            <tr>
+                                <th>Producto</th>
+                                <td>${factura_data.Producto}</td>
+                                <td>${orden_data.Producto}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha</th>
+                                <td>${factura_data.Fecha}</td>
+                                <td>${orden_data.FechaFin}</td>
+                            </tr>
+                            <tr>
+                                <th>Volumen Natural</th>
+                                <td>${factura_data.VolumenNatural !== null ? parseFloat(factura_data.VolumenNatural).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts" : "Desconocido"}</td>
+                                <td>${volumen_orden !== null ? parseFloat(volumen_orden).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts" : "Desconocido"}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `);
+                fin_formulario = true;
+                filas_tablas = $('#tabla_orden_operacion3 tr');
+                if(factura_data.Emisor !== orden_data.Emisor){
+                    NoCoinciden2.push(1);
+                    $(filas_tablas[1]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+                if(factura_data.EmisorRFC !== orden_data.EmisorRFC){
+                    NoCoinciden2.push(2);
+                    $(filas_tablas[2]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+                if(factura_data.EmisorRFC !== orden_data.Receptor){
+                    NoCoinciden2.push(3);
+                    $(filas_tablas[3]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+                if(factura_data.EmisorRFC !== orden_data.ReceptorRFC){
+                    NoCoinciden2.push(4);
+                    $(filas_tablas[4]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+                if(factura_data.Producto !== orden_data.Producto){
+                    NoCoinciden2.push(5);
+                    $(filas_tablas[5]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+                if(factura_data.Fecha !== orden_data.FechaFin){
+                    NoCoinciden2.push(6);
+                    $(filas_tablas[6]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                }
+
+                if(parseFloat(factura_data.VolumenNatural) !== volumen_orden){
+                    NoCoinciden2.push(7);
+                    console.log(factura_data.VolumenNatural - volumen_orden);
+                    if (parseFloat(factura_data.VolumenNatural - volumen_orden)<10) {
+                        fin_formulario = false;
+                        $(filas_tablas[7]).append(`<td style="background-color: rgba(0,0,0,0); color:red; non">${"Tiene una diferencia de " + (parseFloat(factura_data.VolumenNatural) - parseFloat(volumen_orden)).toLocaleString('es-MX', { minimumFractionDigits: 3, maximumFractionDigits: 3 }) + " lts en Volumen."}</td>`);
+                    }else{
+                        
+                        $(filas_tablas[7]).append(`<td style="background-color: rgba(0,0,0,0); color:red;">${"Los datos no coinciden"}</td>`);
+                    }
+                }
+                setTimeout(function() {
+                    $('#div_carga_factura').fadeIn();
+                }, 300);
+                
+            });
+
+            $(document).on('click', '.Confirmar', function(event) {
+                if (fin_formulario == true) {
+                    alert("Hay mucha diferencia en los Volúmenes, el registro no puede llevarse acabo.");
+                    return;
+                }
+                console.log("confirmar");
+                uploadFile();
+                
+            });
+                    
+        });
+
+        
+
+    
+    </script>
+{% endblock %}

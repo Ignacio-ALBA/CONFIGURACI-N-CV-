@@ -1,0 +1,243 @@
+{% extends 'scaizen.html' %}
+{% block title %}EDITÁR PERMISOS{% endblock %}
+{% block tables %}
+  <div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn" style="margin-right: 10px;">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+        </button>
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">EDITÁR PERMISOS</label>
+            <p class="dir_vista">Catálogo/Permisos Editar</p>
+        </div>
+    </div>  
+  </div>
+
+<hr class="text-black d-none d-sm-block" />
+
+<form id="userForm" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  
+  <div class="formulario_alta">
+    <div class="form-group row align-items-center mb-3">
+      <h5 class="col-10  texto-negro" for="user_name">Nombre del Rol: {{rol.NombreRol}}</h5>
+    </div>
+    <!--Distribuidor-->
+    {% for permiso_id, permiso_padre in permisos.items() %}
+    <!--Ini - Cambio jul-25-->
+    {% if permiso_padre.label != "Distribuidor" %}
+    <!--Fin - Cambio jul-25-->
+    <div class="div_perm_item">
+        <h6 class="col-12 texto-negro" for="{{ permiso_id | lower }}">{{ permiso_padre.label }}</h6>
+        <div class="col-7">
+            <div class="switch">
+                <label>
+                    Off
+                    <input hierarchyperm="{{ permiso_id }}" type="checkbox" id="{{ permiso_id }}" 
+                      {% if permiso_id in rol.Permisos %} checked {% endif %}>
+                    <span class="lever"></span>
+                    On
+                </label>
+            </div>
+        </div>
+    </div>
+    
+    {% set display_element = "display: none;" if permiso_id not in rol.Permisos else "" %}
+    {% set permlevel1 = rol.Permisos[permiso_id].sub_permisos if permiso_id in rol.Permisos else False %}
+    <div style="width: 100%; {{ display_element }} height: auto;" id="{{ permiso_id | lower }}">
+      {% for sub_permiso_id, permiso_padre2 in permiso_padre.sub_permisos.items() %}
+      <div class="div_perm_item">
+          <label style="padding-left: 10px;" class="col-12 texto-negro" for="{{ sub_permiso_id | lower }}">{{ permiso_padre2.label }}</label>
+          <div class="col-7">
+              <div class="switch">
+                  <label>
+                    Off
+                    <input hierarchyperm="{{ permiso_id + '/' + sub_permiso_id }}" class="{{ 'c_' + permiso_id | lower }}" type="checkbox" id="{{ sub_permiso_id }}" 
+                      {% if permlevel1 != False and sub_permiso_id in permlevel1 %} checked {% endif %}>
+                    <span class="lever"></span>
+                    On
+                  </label>
+              </div>
+          </div>
+      </div>
+      {% set display_element2 = "" if permlevel1 != False and sub_permiso_id in permlevel1 else "display: none;" %}
+      
+      {% set permlevel2 = permlevel1[sub_permiso_id].sub_permisos if permlevel1 != False and sub_permiso_id in permlevel1 else False %}
+
+      <div style="width: 100%; {{ display_element2 }} height: auto;" id="{{ sub_permiso_id | lower }}">
+          {% for sub_sub_permiso_id, permiso_padre3 in permiso_padre2.sub_permisos.items() %}
+          <div class="div_perm_item">
+              <label style="padding-left: 20px;" class="col-12" for="{{ sub_sub_permiso_id | lower }}">{{ permiso_padre3.label }}</label>
+              <div class="col-7">
+                  <div class="switch">
+                      <label>
+                          Off
+                          <input hierarchyperm="{{ permiso_id + '/' + sub_permiso_id + '/' + sub_sub_permiso_id }}" class="{{ 'c_' + permiso_id | lower }} {{ 'c_' + sub_permiso_id | lower }}" type="checkbox" id="{{ sub_sub_permiso_id }}" 
+                            {% if permlevel2 != False and sub_sub_permiso_id in permlevel2 %} checked {% endif %}>
+                          <span class="lever"></span>
+                          On
+                      </label>
+                  </div>
+              </div>
+          </div>
+          {% set display_hijo = "" if permlevel2 != False and  sub_sub_permiso_id not in permlevel2 else "display: none;" %}
+          {% set permlevel3 = permlevel2[sub_sub_permiso_id].sub_permisos if permlevel2 != False and  sub_sub_permiso_id in permlevel2 else False %}
+          <div style="width: 100%; {{ display_hijo }} height: auto;" id="{{ sub_sub_permiso_id | lower }}">
+              {% for permiso_hijo_id, permiso_hijo in permiso_padre3.sub_permisos.items() %}
+              <div class="div_perm_item">
+                  <label style="padding-left: 30px; font-size: 11px;" class="col-12" for="{{ permiso_hijo_id | lower }}">{{ permiso_hijo.label }}</label>
+                  <div class="col-7">
+                      <div class="switch">
+                          <label>
+                              Off
+                              <input hierarchyperm="{{ permiso_id + '/' + sub_permiso_id + '/' + sub_sub_permiso_id + '/' + permiso_hijo_id }}" class="{{ 'c_' + permiso_id | lower }} {{ 'c_' + sub_permiso_id | lower }} {{ 'c_' + sub_sub_permiso_id | lower }}" type="checkbox" id="{{ permiso_hijo_id }}" 
+                              {% if permlevel3 != False and permiso_hijo_id in permlevel3 %} checked {% endif %}>
+                              <span class="lever"></span>
+                              On
+                          </label>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+          {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+    <hr class="text-black d-none d-sm-block">
+    <!--Ini - Cambio jul-25-->
+    {% endif %}
+    <!--Fin - Cambio jul-25-->
+    {% endfor %}
+
+
+
+    <div class="text-center mt-4">
+      <button type="submit" id="crearorden" class="button_color_alba">
+        Editar registro   
+      </button>
+      <button type="reset" class="button_color_alba">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</form>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+
+  function verificarCambioCheckbox(event) {
+    const checkboxId = event.target.id;
+    const checkboxpart_id = checkboxId.toLowerCase();
+    const checkboxpart_element = document.getElementById(checkboxpart_id)
+
+    
+    if (event.target.checked) {
+        if(checkboxpart_element){
+          checkboxpart_element.style.display = 'initial';
+        }
+        
+    } else {
+        if(checkboxpart_element){
+          checkboxpart_element.style.display = 'none';
+          const checkboxes = document.querySelectorAll(`.c_${checkboxpart_id}`);
+          // Itera sobre cada checkbox y lo desmarca
+          checkboxes.forEach(checkbox => {
+            console.log(checkbox);
+            
+              checkbox.checked = false;
+          });
+        }
+    }
+}
+  // Añade un event listener a cada checkbox
+  document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', verificarCambioCheckbox);
+});
+
+
+  function obtenerIdsCheckboxMarcados() {
+    // Selecciona todos los checkbox en el documento
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    // Inicializa un arreglo para almacenar los IDs de los checkboxes marcados
+    const idsMarcados = [];
+    
+    // Recorre cada checkbox y verifica si está marcado
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          hierarchyperm = checkbox.getAttribute('hierarchyperm')
+          idsMarcados.push(hierarchyperm); // Agrega el ID al arreglo si está marcado
+        }
+    });
+
+    return idsMarcados; // Retorna el arreglo de IDs marcados
+}
+
+
+</script>
+<!-- Asegúrate de incluir Font Awesome para los iconos -->
+<script>
+  function resetSelect() {
+      document.getElementById('role').selectedIndex = 0;
+      document.getElementById('role-error').style.display = 'none';
+  }
+</script>
+
+
+<script>
+  $(document).ready(function () {
+
+    $("#userForm").submit(function(event) {
+      event.preventDefault();  // Evita el envío por defecto del formulario
+
+      
+      
+      const csrfToken = $("input[name='csrf_token']").val().trim();
+      let urlParams = new URLSearchParams(window.location.search);
+      let actualizar_id = urlParams.get('id');
+      let operacion = "edit_perm";
+      let perms = obtenerIdsCheckboxMarcados()
+
+      console.log(perms);
+
+      // Envío de datos al servidor
+      $.ajax({
+        url: window.location.href,
+        type: "POST",
+        data: {
+          csrf_token: csrfToken,
+          perms: perms,
+          operacion: operacion,
+          actualizar_id:actualizar_id
+        },
+        beforeSend: function () {
+          $("#loader-row").show();  // Mostrar loader durante la solicitud AJAX
+        },
+        success: function (response) {
+          $("#loader-row").hide();  // Ocultar loader al recibir respuesta
+
+          if (response.estatus) {
+
+
+
+            var url = "{{ url_for('app_scaizen.app_catalogo.roles_consultar' ) }}";
+
+            window.location.href = url;
+            alert("Rol actualizado con éxito");
+            $("#userForm")[0].reset();  // Reiniciar formulario después de éxito
+          } else {
+            alert("Error al actualizado el rol");
+          }
+        },
+        error: function (xhr, status, error) {
+          $("#loader-row").hide();  // Ocultar loader en caso de error
+          console.error("Error en la solicitud AJAX:", error);
+          alert("Hubo un problema al guardar el rol. Por favor, intente de nuevo.");
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

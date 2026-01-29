@@ -1,0 +1,261 @@
+{% extends 'scaizen.html' %}
+
+{% block title %}
+CONSULTA USUARIOS
+{% endblock %}
+
+{% block tables %}
+
+    <div class="formulario">
+      <label class="titulo" style="text-transform: uppercase;">CONSULTA USUARIOS</label><br />
+      <p class="dir_vista">Catálogo/Consultar Usuarios</p>
+    </div>
+    <hr class="text-black d-none d-sm-block" />
+
+    <div class="formulario">
+        <form id="cargasForm" method="POST" action="{{ url_for('app_scaizen.catalogo_estacion_consultar') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        </form>
+
+        <table class="table table-striped table-bordered table-hover border-radius-4" id="tabla-cargas">
+            <thead>
+                <tr>
+                    <th>Nombre usuario</th>
+                    <th>Nombre completo</th>
+                    <th>Rol</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="cargasBody">
+                <tr id="search" style="display: table-row">
+                    <td colspan="5" style="font-weight: bold; text-align: center; background-color: #ccc;">
+                            Registre un nuevo Usuario, para continuar
+                    </td>
+                </tr>
+                <tr id="loader-row" style="display: none">
+                    <td colspan="10" style="text-align: center">
+                        <div class="typing-indicator">
+                            <div class="typing-circle"></div>
+                            <div class="typing-circle"></div>
+                            <div class="typing-circle"></div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <thead>
+              <tr>
+                <th>Nombre usuario</th>
+                <th>Nombre completo</th>
+                <th>Rol</th>
+                <th>Acción</th>
+              </tr>
+          </thead>
+        </table>
+        
+        <nav aria-label="Paginación" class="ulpgcds-pager" id="navbar" style="display: none;">
+            <div id="mostrando" class="ulpgcds-pager"></div>
+            <div id="paginacion" class="pagination-container"></div>
+        </nav>
+    </div>
+
+  <script>
+    $(document).ready(function() {
+        var csrfToken = $("input[name='csrf_token']").val();
+        var id_usuarios = "id_usuarios"; // Replace with actual client ID if needed
+        
+        let maxPagesToShow = 5; // Máximo número de páginas a mostrar a la vez
+        let totalPaginas = 0; // Total de páginas
+        let paginaActual = 1; // Página actual
+        const range = 2; // Rango de páginas a mostrar alrededor de la página actual
+
+
+
+
+
+        var formData = {
+            'csrf_token': csrfToken,
+            'id_usuarios': id_usuarios
+        };
+
+        $.ajax({
+            url: "{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}",
+            data: formData,
+            type: 'POST',
+            success: function(response) {
+                paginaActual = response.paginactual;
+                totalPaginas = response.total_paginas;
+                $("#tabla-cargas tbody").empty();
+                if (response.datos_usuario_consulta && response.datos_usuario_consulta.length > 0) {
+                  console.log(response.datos_usuario_consulta);
+                  
+                    response.datos_usuario_consulta.forEach((data, index) => {
+                        var numeroDeFila = index + 1;
+                        //              <td>${numeroDeFila}</td>
+                        row = `
+                            <tr>
+                                <td>${data.usuario.Nombre}</td>
+                                <td>${data.usuario.nombre_completo}</td>
+                                <td>${data.rol}</td>
+                                <td colspan="2">
+                                  `
+                        if (response.user_perms.includes('UsuariosEditar')) {
+                          row += `
+                          <button class="editar button_color_alba" type="button" href="{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}"  value="${data.usuario.Id}">Editar</button>
+                                `   
+                        }
+
+                        if (response.user_perms.includes('UsuariosEliminar')) {
+                          row += `
+                          <button class="eliminar button_color_alba" type="button" value="${data.usuario.Id}">Eliminar</button>
+                                `   
+                        }
+
+                        row += `
+                                </td>
+                            </tr>
+                        `
+                        $("#tabla-cargas tbody").append(row);
+                    });
+                    //                   <button class="editar" href="{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}"  value="${data.id_usuario}"><span class="text">EDITAR</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">  <path d="M14.06 2.94l-1.42 1.42 3.54 3.54 1.42-1.42c.78-.78.78-2.05 0-2.83l-1.42-1.42c-.78-.78-2.05-.78-2.83 0zm-2.83 3.53L4.14 12.95a1.002 1.002 0 0 0-.29.6L2 19c-.1.5.25 1.01.76 1.01h5.5c.24 0 .47-.1.64-.28l7.39-7.39-3.54-3.54z"/></svg></span></button>
+                      //              <button class="eliminar" value="${data.id_usuario}"><span class="text">ELIMNAR</span><span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z"></path></svg></span></button>
+                } else {
+                    $("#tabla-cargas tbody").append(`
+                        <tr>
+                            <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">
+                                Sin registros
+                            </td>
+                        </tr>
+                    `);
+                }
+  
+                $("#mostrando").html(`
+                  Mostrando ${response.mostrando} de ${response.cantidad} registros | Páginas: ${paginaActual} / ${totalPaginas}
+                `);
+
+                $("#paginacion").empty();
+                let paginationHtml = '';
+
+                if (paginaActual > 1) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="1">Primera</a>`;
+                }
+
+                if (paginaActual > 1) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual - 1}">Anterior</a>`;
+                }
+
+                let startPage = Math.max(1, paginaActual - range);
+                let endPage = Math.min(totalPaginas, paginaActual + range);
+
+                for (let i = startPage; i <= endPage; i++) {
+                if (i === paginaActual) {
+                    paginationHtml += `<span class="pagination-current">${i}</span>`;
+                } else {
+                    paginationHtml += `<a href="#" class="pagination-link" data-page="${i}">${i}</a>`;
+                }
+                }
+
+                if (paginaActual < totalPaginas) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${paginaActual + 1}">Siguiente</a>`;
+                }
+
+                if (paginaActual < totalPaginas) {
+                paginationHtml += `<a href="#" class="pagination-link" data-page="${totalPaginas}">Última</a>`;
+                }
+
+                $("#paginacion").append(paginationHtml);
+                $("#navbar").show();
+
+                $(".pagination-link").click(function (e) {
+                e.preventDefault();
+                let pageNumber = $(this).data("page");
+                loadPage(pageNumber);
+                });
+
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", error);
+            }
+        });
+    });    
+
+
+    function loadPage(pageNumber) {
+      const csrfToken = $("input[name='csrf_token']").val();
+      var mostrar = "mostrar";
+      $.ajax({
+        url: "{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}",
+        type: "POST",
+        data: {
+          selected_start: startDate.toISOString(),
+          selected_end: endDate.toISOString(),
+          csrf_token: csrfToken,
+          page: pageNumber,
+          mostrar: mostrar
+        },
+        beforeSend: function () {
+          $("#search").css("display", "none");
+          $("#loader-row").show();
+        },
+        success: function (response) {
+          console.log("Respuesta del servidor:", response);
+          $("#loader-row").hide();
+          updatePagination(response);
+        },
+        error: function (xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", error);
+        }
+      });
+    }
+
+
+
+
+
+
+
+
+    $(document).on('click',  '.editar', function() {
+      var id =  $(this).val();//No POST
+      var url = "{{ url_for('app_scaizen.catalogo_usuario_editar', id='') }}" + id;
+
+      window.location.href = url;
+    });
+
+    // Manejar clic en el botón "Eliminar"
+    $(document).on('click', '.eliminar', function() {
+      const id = $(this).val(); // Obtener el ID del data del valor del botón
+      var eliminar = "eliminar"; // Aquí deberías obtener el ID del data que deseas consultar
+      var csrfToken = $("input[name='csrf_token']").val();
+
+      if (confirm('¿Estás seguro de que deseas eliminar este Usuario?')) {
+        $.ajax({
+          url: "{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}",
+          type: 'POST',
+          data: {
+            csrf_token: csrfToken,
+            id: id,
+            eliminar: eliminar
+          },
+          success: function(response) {
+            // Eliminar la fila de la tabla
+
+            if (response && response.estatus) {
+                        alert("Estación eliminada con éxito");
+                        $(`tr:has(button.eliminar[value="${id}"])`).remove();
+
+            } else {
+                        alert("Error al eliminador Estación");
+            }
+
+          },
+          error: function(xhr, status, error) {
+            console.error("Error en la solicitud AJAX:", error);
+          }
+        });
+      }
+    });
+ </script>
+  
+  
+  {% endblock %}
+  

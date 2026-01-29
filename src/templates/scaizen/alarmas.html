@@ -1,0 +1,192 @@
+{% extends 'scaizen.html' %} {% block title %}Alarmas {% endblock %} {% block
+  tables %}
+  
+  <label class="titulo">Reporte de Alarmas </label><br />
+  
+  <form method="post" action="#">
+    <label>Fecha de inicio:</label>
+  
+    <input type="text" id="datepicker_start" name="selected_start" required />
+  
+    <label>Fecha de finalización:</label>
+  
+    <input
+      class="datepicker"
+      type="text"
+      id="datepicker_end"
+      name="selected_end"
+      required
+    />
+  
+    <button type="button" id="obtenerfechas" class="btn btn-outline-success">
+      Enviar
+    </button>
+  </form>
+  
+  <!-- Tu tabla va aquí -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Fecha</th>
+        <th>Descripcion</th>
+        <th>Origen</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if alarmas%} {% for alarma in alarmas %}
+      <tr>
+        <td>1</td>
+        <td>2023-01-18 13:00:43</td>
+        <td>Se coloco densidad en posicion 3</td>
+        <td>Sistema</td>
+        <td>Evento</td>
+      </tr>
+      {% endfor %} {% else %}
+      <tr>
+        <td
+          style="font-weight: bold; text-align: center; background-color: #ccc"
+          valign="Top"
+          colspan="10"
+        >
+          Ningun dato disponible
+        </td>
+      </tr>
+      {% endif %}
+      <!-- Agrega más filas según sea necesario -->
+    </tbody>
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>Fecha</th>
+        <th>Descripcion</th>
+        <th>Origen</th>
+        <th>Tipo</th>
+      </tr>
+    </thead>
+  </table>
+  
+  <script>
+    $(function () {
+      var startDate, endDate;
+  
+      $("#datepicker_start").datepicker({
+        dayNames: [
+          "Domingo",
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado",
+        ],
+        dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+        monthNames: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ],
+        monthNamesShort: [
+          "Ene",
+          "Feb",
+          "Mar",
+          "Abr",
+          "May",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dic",
+        ],
+        dateFormat: "dd/mm/yy",
+        firstDay: 1, // Lunes como primer día de la semana
+        onSelect: function (selectedDate) {
+          // Al seleccionar una fecha en el primer datepicker
+          startDate = $(this).datepicker("getDate");
+  
+          // Configura la opción minDate del segundo datepicker para ser un día después de la fecha seleccionada en el primer datepicker
+          $("#datepicker_end").datepicker(
+            "option",
+            "minDate",
+            addDays(startDate, 1)
+          );
+          startDate = $(this).datepicker("getDate");
+        },
+      });
+  
+      $("#datepicker_end").datepicker({
+        dayNames: [
+          "Domingo",
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado",
+        ],
+        dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sá"],
+        monthNames: [
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ],
+        monthNamesShort: [
+          "Ene",
+          "Feb",
+          "Mar",
+          "Abr",
+          "May",
+          "Jun",
+          "Jul",
+          "Ago",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dic",
+        ],
+        dateFormat: "dd/mm/yy",
+        firstDay: 1, // Lunes como primer día de la semana
+        onSelect: function (selectedDate) {
+          endDate = $(this).datepicker("getDate");
+        },
+      });
+  
+      $("#obtenerfechas").click(function () {
+        // Aquí puedes usar las variables startDate y endDate como desees
+        if (startDate && endDate) {
+          console.log("Fecha de inicio: ", startDate);
+          console.log("Fecha de finalización: ", endDate);
+        } else {
+          console.log("Seleccione ambas fechas");
+        }
+      });
+      function addDays(date, days) {
+        var result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+      }
+    });
+  </script>
+  {% endblock %}
+  

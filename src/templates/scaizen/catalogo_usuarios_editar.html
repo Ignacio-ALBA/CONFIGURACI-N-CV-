@@ -1,0 +1,273 @@
+{% extends 'scaizen.html' %}
+{% block title %}EDITAR USUARIO{% endblock %}
+{% block tables %}
+  <div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn" style="margin-right: 10px;">
+          <i class="fa-solid fa-circle-arrow-left"></i>
+        </button>
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">EDITAR USUARIO</label>
+            <p class="dir_vista">Catalogo/Usuario Editar</p>
+        </div>
+    </div>  
+  </div>
+
+<hr class="text-black d-none d-sm-block" />
+
+<form id="userForm" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="formulario_alta">
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="user_name">Nombre de usuario:</label>
+      <div class="col-10 position-relative">
+        <input type="text" id="user_name" name="user_name" value="" class="form-control" placeholder="" required>
+      </div>
+    </div>
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="user_full">Nombre completo:</label>
+      <div class="col-10 position-relative">
+        <input type="text" id="user_full" name="user_full" value="" class="form-control" placeholder="" required>
+        <div id="nombre-error" class="text-danger" style="display: none;"></div>
+      </div>
+    </div>
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="password">Contraseña:</label>
+      <div class="col-10 position-relative">
+        <input id="password" type="password" name="password" value="" class="form-control" placeholder="" required>
+        <span id="toggle-password" class="toggle-password">
+          <i class="fas fa-eye" id="eye-icon"></i>
+        </span>
+      </div>
+      <label style="font-size: 12px; color: gray;">La contraseña debe contener al menos:</label> 
+                  <ul style="margin-left: 20px; font-size: 12px; color: gray;">
+                    <li>8 caracteres.</li>
+                    <li>Una letra mayúscula.</li>
+                    <li>Una letra minúscula.</li>
+                    <li>Un número.</li>
+                    <li>Un carácter especial (por ejemplo: @, #, $, %).</li>
+                  </ul>
+    </div>
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="password_confirm">Confirmación de la contraseña:</label>
+      <div class="col-10 position-relative">
+        <input id="password_confirm" type="password" name="password_confirm" value="" class="form-control" placeholder="" required>
+        <span id="toggle-password-confirm" class="toggle-password">
+          <i class="fas fa-eye" id="eye-icon-confirm"></i>
+        </span>
+        <div id="password-error" class="text-danger" style="display: none;">Las contraseñas no coinciden</div>
+        <div id="password-error_length" class="text-danger" style="display: none;"></div>     
+      </div>
+    </div>
+    <label style="font-size: 12px; color: gray;">La contraseña debe contener al menos:</label> 
+                  <ul style="margin-left: 20px; font-size: 12px; color: gray;">
+                    <li>8 caracteres.</li>
+                    <li>Una letra mayúscula.</li>
+                    <li>Una letra minúscula.</li>
+                    <li>Un número.</li>
+                    <li>Un carácter especial (por ejemplo: @, #, $, %).</li>
+                  </ul>
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro">Rol</label>
+      <div class="col-10 d-flex align-items-center">
+        <select name="role" id="role" class="form-control me-2" style="text-align: center;">
+          {%for rol in roles%}
+          <option value="{{rol['IdRol']}}">{{rol['NombreRol']}}</option>
+          {% endfor %}
+        </select>
+        <button type="button" class="btn-icon-restart" onclick="resetSelect()">
+          <i class="fas fa-redo"></i> <!-- Ícono de reinicio -->
+        </button>
+        <div id="role-error" class="text-danger" style="display: none;">Por favor, seleccione un rol</div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" id="crearorden" class="button_color_alba">
+        Editar registro   
+      </button>
+      <button type="reset" class="button_color_alba">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</form>
+<script>
+  function goBack() {
+    window.history.back();
+  }
+</script>
+<!-- Asegúrate de incluir Font Awesome para los iconos -->
+<script>
+  function resetSelect() {
+      document.getElementById('role').selectedIndex = 0;
+      document.getElementById('role-error').style.display = 'none';
+  }
+</script>
+
+<script>
+  $(document).ready(function () {
+  // Recuperar el parámetro id de la URL
+  var urlParams = new URLSearchParams(window.location.search);
+  var actualizar = urlParams.get('id');
+  console.log("ID Cliente:", actualizar);
+
+  // Obtener el token CSRF
+  var csrfToken = $('input[name="csrf_token"]').val();
+  console.log("CSRF Token:", csrfToken);
+
+  // Configurar los datos del formulario
+  var formData = {
+      'csrf_token': csrfToken,
+      'actualizar': actualizar
+  };
+
+  // Realizar la solicitud AJAX
+  $.ajax({
+      url: "{{ url_for('app_scaizen.catalogo_usuario_editar') }}",
+      data: formData,
+      type: 'POST',
+      success: function(response) {
+          console.log(response.datos_usuario_especifico)
+          if (response.datos_usuario_especifico) {
+              const cliente = response.datos_usuario_especifico;
+              console.log(response.datos_usuario_especifico)
+              $("#user_name").val(cliente.usuario.Nombre);
+              $("#user_full").val(cliente.usuario.nombre_completo);
+
+              $("#role option").each(function() {
+                    console.log($(this).text()); // Esto imprimirá el valor de cada opción en la consola
+                    if($(this).text() == cliente.rol){
+                      $(this).prop('selected', true);
+                    }
+                });
+
+ 
+          } else {
+              console.error("No se encontraron datos de la estacion.");
+          }
+      },
+      error: function(xhr, status, error) {
+          console.error("Error en la solicitud AJAX:", error);
+      }
+  });
+});
+</script>
+
+<script>
+  $(document).ready(function () {
+    function togglePasswordVisibility(id, iconId) {
+      const input = $(id);
+      const icon = $(iconId);
+      if (input.attr('type') === 'password') {
+        input.attr('type', 'text');
+        icon.removeClass('fa-eye').addClass('fa-eye-slash');
+      } else {
+        input.attr('type', 'password');
+        icon.removeClass('fa-eye-slash').addClass('fa-eye');
+      }
+    }
+
+    $("#toggle-password").click(function () {
+      togglePasswordVisibility('#password', '#eye-icon');
+    });
+
+    $("#toggle-password-confirm").click(function () {
+      togglePasswordVisibility('#password_confirm', '#eye-icon-confirm');
+    });
+
+    $("#userForm").submit(function(event) {
+      event.preventDefault();  // Evita el envío por defecto del formulario
+
+      const user_name = $("#user_name").val().trim();
+      const user_full = $("#user_full").val().trim();
+      const password = $("#password").val().trim();
+      const password_confirm = $("#password_confirm").val().trim();
+      const role = $("#role").val();
+      const csrfToken = $("input[name='csrf_token']").val().trim();
+      var urlParams = new URLSearchParams(window.location.search);
+      var actualizar_id = urlParams.get('id');
+      const editar = "editar"
+
+        //Para asegurarme que pongan el apellido
+      if (user_full.split(" ").length < 2) {
+        $("#nombre-error").text("Por favor, ingrese su nombre y apellidos").show();
+        return;
+      }else{
+        $("#nombre-error").hide();
+      }
+      // Validación de contraseñas
+      if (password !== password_confirm) {
+        $("#password-error").text("Las contraseñas no coinciden").show();
+        return;
+      } else {
+        $("#password-error").hide();
+      }
+
+      // Validación adicional de la contraseña
+      if (password.length < 8) {
+        $("#password-error_length").text("La contraseña debe tener al menos 8 caracteres").show();
+        return;
+      }else{
+        $("#password-error_length").hide()
+      }
+
+      // Validación de rol
+      if (!role) {
+        $("#role-error").text("Por favor, seleccione un rol").show();
+        return;
+      } else {
+        $("#role-error").hide();
+      }
+
+      // Validación de rol
+      if (!role) {
+        $("#role-error").text("Por favor, seleccione un rol").show();
+        return;
+      } else {
+        $("#role-error").hide();
+      }
+
+      // Envío de datos al servidor
+      $.ajax({
+        url: "{{ url_for('app_scaizen.catalogo_usuario_editar') }}",
+        type: "POST",
+        data: {
+          csrf_token: csrfToken,
+          user_name: user_name,
+          user_full: user_full,
+          password: password,
+          role: role,  // Enviar el rol seleccionado al servidor
+          editar: editar,
+          actualizar_id:actualizar_id
+        },
+        beforeSend: function () {
+          $("#loader-row").show();  // Mostrar loader durante la solicitud AJAX
+        },
+        success: function (response) {
+          $("#loader-row").hide();  // Ocultar loader al recibir respuesta
+
+          if (response.estatus) {
+
+
+
+            var url = "{{ url_for('app_scaizen.catalogo_usuarios_consultar' ) }}";
+
+            window.location.href = url;
+            alert("Usuario actualizado con éxito");
+            $("#userForm")[0].reset();  // Reiniciar formulario después de éxito
+          } else {
+            alert("Error al actualizado usuario");
+          }
+        },
+        error: function (xhr, status, error) {
+          $("#loader-row").hide();  // Ocultar loader en caso de error
+          console.error("Error en la solicitud AJAX:", error);
+          alert("Hubo un problema al guardar el usuario. Por favor, intente de nuevo.");
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

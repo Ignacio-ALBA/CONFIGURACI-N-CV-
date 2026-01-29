@@ -1,0 +1,96 @@
+{% extends 'scaizen.html' %}
+{% block title %}ALTA DE ROL{% endblock %}
+{% block tables %}
+
+
+<div class="formulario" style="width: 600px;">
+  <label class="titulo">ALTA DE ROL</label>
+  <p class="dir_vista">Catalogo/Roles Alta</p>
+</div>
+<hr class="text-black d-none d-sm-block" />
+
+<form id="userForm" method="POST">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="formulario_alta">
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="user_name">Nombre del Rol:</label>
+      <div class="col-10 position-relative">
+        <input type="text" id="rol_name" name="rol_name" value="" class="form-control" placeholder="" required>
+      </div>
+    </div>
+    <div class="form-group row align-items-center mb-3">
+      <label class="col-2 col-form-label texto-negro" for="informacion">Descripción del Rol:</label>
+      <div class="col-10">
+          <textarea id="informacion" style="width: 100%; height: 70px; resize: none;" name="informacion" class="form-control texto-negro" placeholder=""></textarea>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button type="submit" id="crearorden" class="button_color_alba">
+        Alta de registro
+      </button>
+      <button type="reset" class="button_color_alba">
+        Limpiar
+      </button>
+    </div>
+  </div>
+</form>
+
+<!-- Asegúrate de incluir Font Awesome para los iconos -->
+<script>
+  function resetSelect() {
+      document.getElementById('role').selectedIndex = 0;
+      document.getElementById('role-error').style.display = 'none';
+  }
+</script>
+<script>
+  $(document).ready(function () {
+    $("#userForm").submit(function(event) {
+      event.preventDefault();  // Evita el envío por defecto del formulario
+
+      const rol_name = $("#rol_name").val().trim();
+      const informacion = $("#informacion").val().trim();
+      const csrfToken = $("input[name='csrf_token']").val().trim();
+
+
+      // Validación de rol
+      if (!rol_name) {
+        $("#role-error").text("Por favor, de un nombre para el rol").show();
+        return;
+      } else {
+        $("#role-error").hide();
+      }
+
+      // Envío de datos al servidor
+      $.ajax({
+        url: "{{ url_for('app_scaizen.app_catalogo.roles_alta') }}",
+        type: "POST",
+        data: {
+          csrf_token: csrfToken,
+          rol_name: rol_name,
+          informacion: informacion
+        },
+        beforeSend: function () {
+          $("#loader-row").show();  // Mostrar loader durante la solicitud AJAX
+        },
+        success: function (response) {
+          $("#loader-row").hide();  // Ocultar loader al recibir respuesta
+
+          if (response.estatus) {
+            alert("Usuario guardado con éxito");
+            $("#userForm")[0].reset();  // Reiniciar formulario después de éxito
+          } else {
+            alert("Error al crear nuevo usuario");
+          }
+        },
+        error: function (xhr, status, error) {
+          $("#loader-row").hide();  // Ocultar loader en caso de error
+          console.error("Error en la solicitud AJAX:", error);
+          alert("Hubo un problema al guardar el usuario. Por favor, intente de nuevo.");
+        }
+      });
+    });
+  });
+</script>
+
+{% endblock %}

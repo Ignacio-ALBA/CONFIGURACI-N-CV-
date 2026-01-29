@@ -1,0 +1,183 @@
+{% extends 'scaizen.html' %}
+{% block title %}ALTA PROVEEDOR{% endblock %}
+{% block tables %}
+
+
+<div class="formulario" style="width: 600px;">
+    <label class="titulo" style="text-transform: uppercase; display: block; text-align: left;">ALTA PROVEEDOR</label>  
+    <p class="dir_vista">Catalogo/Proveedor Alta</p>
+</div>
+
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+    <div class="formulario_alta">
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="codigo">Código interno:</label>
+            <div class="col-10">
+              <input type="text" id="codigo" name="codigo" class="form-control texto-negro" placeholder="ej. 0021" required pattern="[0-9]{1,10}">
+              <div id="codigo-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="nombre_comercial">Nombre comercial:</label>
+            <div class="col-10">
+                <input type="text" id="nombre_comercial" name="nombre_comercial" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="razon">Razón Social:</label>
+            <div class="col-10">
+                <input type="text" id="razon" name="razon" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="rfc">RFC:</label>
+            <div class="col-10">
+              <input type="text" id="rfc" name="rfc" class="form-control texto-negro" placeholder="" required>
+              <div id="rfc-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="direccion">Dirección:</label>
+            <div class="col-10">
+                <input type="text" id="direccion" name="direccion" class="form-control texto-negro" placeholder="" required>
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="telefono">Teléfono:</label>
+            <div class="col-10">
+              <input type="tel" id="telefono" name="telefono" class="form-control texto-negro" placeholder="" required>
+              <div id="tel-error" class="text-danger" style="display: none;"></div>
+              <div id="tel-error_length" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="email">Email:</label>
+            <div class="col-10">
+              <input type="email" id="email" name="email" class="form-control texto-negro" placeholder="" required>
+              <div id="email-error" class="text-danger" style="display: none;"></div>
+
+            </div>
+        </div>
+
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro" for="informacion">Información adicional:</label>
+            <div class="col-10">
+                <textarea id="informacion" style="width: 100%; height: 70px; resize: none;" name="informacion" class="form-control texto-negro" placeholder=""></textarea>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <button type="submit"  class="button_color_alba" >
+                Alta de registro        </button>
+            
+            <button type="reset" class="button_color_alba">
+                Limpiar
+            </button>
+        </div>
+    </div>
+</form>
+<script>
+    $(document).ready(function () {
+        $("#cargasForm").submit(function (event) {
+            event.preventDefault();
+
+            const codigo = $("#codigo").val().trim();
+            if (isNaN(codigo) || codigo === "") {
+                 $("#codigo-error").text("Debe ingresar un numéro.").show();
+                return;
+            }else{
+                $("#codigo-error").hide();
+            }            
+            const nombre_comercial = $("#nombre_comercial").val().trim();
+            const razon = $("#razon").val().trim();
+            const rfc = $("#rfc").val().trim();
+            const direccion = $("#direccion").val().trim();
+            const telefono = $("#telefono").val().trim();
+            const email = $("#email").val().trim();
+            
+            if (!isValidRFC(rfc)){
+                $("#rfc-error").text("RFC no válido").show();
+                return;
+            }else{
+                $("#rfc-error").hide();
+            }
+            if (isNaN(telefono) || telefono === "") {
+                $("#tel-error").text("El telefono debe ser numérico.").show();
+                return;
+            }else{
+                $("#tel-error").hide();
+            }
+            if (!/^\d{10}$/.test(telefono)) { // Verificar que el teléfono tenga exactamente 10 dígitos
+                $("#tel-error_length").text("El teléfono debe contener exactamente 10 dígitos numéricos.").show();
+                return;
+            }else{
+                $("#tel-error_length").hide();
+            }
+             // Verificar si el email termina en '.com'
+             if (
+                !email.endsWith('.com') &&
+                !email.endsWith('.net') &&
+                !email.endsWith('.org') &&
+                !email.endsWith('.com.mx')
+            ) {
+                $("#email-error").text("El email debe terminar en '.com', '.net', '.org' o '.com.mx'.").show();
+                return; // Detener el envío del formulario
+            } else {
+                $("#email-error").hide();
+            }
+            const informacion = $("#informacion").val().trim();
+            const csrfToken = $("input[name='csrf_token']").val().trim();
+
+            $.ajax({
+                url: "{{ url_for('app_scaizen.catalogo_proveedor_alta') }}",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': csrfToken  // Incluir el token CSRF como un encabezado
+                },
+                data: {
+                    csrf_token: csrfToken,
+                    codigo: codigo,
+                    nombre_comercial: nombre_comercial,
+                    razon: razon,
+                    rfc: rfc,
+                    direccion: direccion,
+                    telefono: telefono,
+                    email: email,
+                    informacion: informacion
+                },
+                beforeSend: function () {
+                    // Mostrar loader u otra acción antes de enviar la solicitud
+                    $("#loader-row").show();
+                },
+                success: function (response) {
+                    $("#loader-row").hide();
+                    if (response && response.estatus) {
+                        alert("Proveedor guardado con éxito");
+                        $("#cargasForm")[0].reset(); // Resetear el formulario después de enviar con éxito
+                    } else {
+                        alert("Error al registrar proveedor");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    $("#loader-row").hide();
+                    console.error("Error en la solicitud AJAX:", error);
+                    alert("Hubo un problema al añadir al cliente. Por favor, intente de nuevo.");
+                }
+            });
+
+            function isValidRFC(rfc) {
+                const rfcRegex = /^[A-Z]{3,4}\d{6}[A-Z0-9]{3}$/; // Acepta 3 o 4 letras
+                return rfcRegex.test(rfc.toUpperCase());
+            } 
+        });
+    });
+</script>
+
+{% endblock %}

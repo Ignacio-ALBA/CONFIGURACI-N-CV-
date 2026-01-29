@@ -1,0 +1,2556 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Mensual.schema.json",
+    "$version": "0.3.1",
+    "type": "object",
+    "description": "Es el elemento madre del archivo JSON.",
+    "properties": {
+        "Version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$",
+            "description": "Requerido para todos los contribuyentes, debe expresar la versión del programa informático que genera el JSON."
+        },
+        "RfcContribuyente": {
+            "$ref": "#/definitions/RFC",
+            "description": "Requerido para todos los contribuyentes, para expresar su RFC. Puede ser de persona moral o física."
+        },
+        "RfcRepresentanteLegal": {
+            "$ref": "#/definitions/RfcPersonaFisica",
+            "description": "Condicional para todos los contribuyentes que sean persona moral, para expresar el RFC de su representante legal. El RFC deberá contener 13 caracteres al tratarse de una persona física."
+        },
+        "RfcProveedor": {
+            "$ref": "#/definitions/RFC",
+            "description": "requerido para todos los contribuyentes, para expresar el RFC del proveedor del programa informático para llevar controles volumétricos. El RFC podrá contener 12 o 13 caracteres."
+        },
+        "RfcProveedores": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Opcional para expresar el RFC de los proveedores de equipos, sistemas, programas o cualquier otro componente de los controles volumétricos. El RFC deberá contener 12 ó 13 caracteres. Este campo deberá repetirse por cada proveedor con que se cuente.",
+            "items": {
+                "$ref": "#/definitions/RFC",
+                "description": "Opcional para expresar el RFC de los proveedores de equipos, sistemas, programas o cualquier otro componente de los controles volumétricos. El RFC deberá contener 12 ó 13 caracteres. Este campo deberá repetirse por cada proveedor con que se cuente."
+            }
+        },
+        "Caracter": {
+            "enum": [
+                "contratista",
+                "asignatario",
+                "permisionario",
+                "usuario"
+            ],
+            "description": "Requerido para expresar el carácter con el que actúa para efectos regulatorios."
+        },
+        "ModalidadPermiso": {
+            "type": "string",
+            "pattern": "^PER([1-9]|[1-4][0-9]|5[0-6])$",
+            "description": "Condicional cuando en el elemento ``Caracter\"{} se haya seleccionado ``permisionario\"{}, para expresar el tipo de permiso conforme a lo señalado en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:Permiso} ``\\nameref{Claves:Permiso}\"{}."
+        },
+        "NumPermiso": {
+            "type": "string",
+            "minLength": 14,
+            "maxLength": 24,
+            "description": "Condicional cuando en el elemento ``Caracter\"{} se haya seleccionado ``permisionario\"{} para expresar el número de permiso otorgado por la Comisión Reguladora de Energía o la Secretaría de Energía, siguiendo el patrón asociado al permiso, conforme a la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:Permiso} ``\\nameref{Claves:Permiso}\"{}."
+        },
+        "NumContratoOAsignacion": {
+            "type": "string",
+            "minLength": 14,
+            "maxLength": 24,
+            "description": "Condicional cuando en el elemento ``Caracter\"{} se haya seleccionado ``contratista\"{} o ``asignatario\"{} para expresar el número de asignación otorgada por la Secretaría de Energía o el número de contrato celebrado con la Comisión Nacional de Hidrocarburos, según corresponda."
+        },
+        "InstalacionAlmacenGasNatural": {
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 250,
+            "description": "Condicional cuando en el elemento \"TipoCaracter\" se haya seleccionado \"usuario\", para identificar de forma descriptiva la instalación que recibe, almacena, entrega o usa hidrocarburos o petrolíferos."
+        },
+        "ClaveInstalacion": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 30,
+            "description": "Requerido para expresar la clave de identificación de la instalación o proceso donde deban instalarse sistemas de medición, conforme a la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:ElementoInstalacion} ``\\nameref{Claves:ElementoInstalacion}\"{}."
+        },
+        "DescripcionInstalacion": {
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 250,
+            "description": "Requerido para describir la instalación o proceso donde deban instalarse sistemas de medición."
+        },
+        "Geolocalizacion": {
+            "type": "array",
+            "minItems": 1,
+            "description": "Nodo opcional, para registrar la ubicación geográfica (Latitud y Longitud) de la instalación expresada en Grados decimales (DD), con los elementos GeolocalizacionLatitud y GeolocalizacionLongitud. Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice.",
+            "items": {
+                "$ref": "#/definitions/Geoloc",
+                "description": "Par de coordenadas geográficas."
+            }
+        },
+        "NumeroPozos": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Requerido para expresar el número de pozos que cuentan con sistemas de medición a boca de pozo. En caso de no tener debe manifestar 0."
+        },
+        "NumeroTanques": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Requerido para expresar el número de tanques con los que cuenta o, en su caso, módulos. Incluye cualquier medio de almacenamiento, transporte o distribución en los que se almacenen hidrocarburos o petrolíferos, tales como tanques, autotanques, carrotanques, buquetanques o en caso de que el punto de medición aprobado o determinado por la CNH sea un medio de almacenamiento. En caso de no tener debe manifestar 0."
+        },
+        "NumeroDuctosEntradaSalida": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Requerido para expresar el número de ductos de entrada y salida a medios de almacenamiento o de carga y descarga a medios de transporte o distribución con los que cuenta o en caso de que el punto de medición aprobado o determinado por la CNH sea un ducto. En caso de no tener debe manifestar 0."
+        },
+        "NumeroDuctosTransporteDistribucion": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Requerido para expresar el número de ductos de transporte o distribución con los que cuenta o en caso de que el punto de medición aprobado o determinado por la CNH sea un ducto. En caso de no tener debe manifestar 0."
+        },
+        "NumeroDispensarios": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Requerido para expresar el número de dispensarios con los que cuenta. En caso de no tener debe manifestar 0."
+        },
+        "FechaYHoraReporteMes": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Requerido para expresar la fecha y hora en la que se genera el reporte, deberá expresarse la hora en UTC con la identificación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601."
+        },
+        "Producto": {
+            "type": "array",
+            "minItems": 1,
+            "description": "En esta sección se deben declarar los datos de identificación del producto.",
+            "items": {
+                "type": "object",
+                "description": "Objeto para describir un producto.",
+                "properties": {
+                    "ClaveProducto": {
+                        "enum": [
+                            "PR03",
+                            "PR07",
+                            "PR08",
+                            "PR09",
+                            "PR10",
+                            "PR11",
+                            "PR12",
+                            "PR13",
+                            "PR14",
+                            "PR15",
+                            "PR16",
+                            "PR17",
+                            "PR18",
+                            "PR19",
+                            "PR20"
+                        ],
+                        "description": "Requerido para expresar la clave del producto conforme a lo señalado en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:Producto} ``\\nameref{Claves:Producto}\"{}."
+                    },
+                    "ClaveSubProducto": {
+                        "type": "string",
+                        "pattern": "^SP([1-9]|[1-3][0-9]|4[0-9])$",
+                        "description": "Condicional cuando hayan seleccionado los productos PR03, PR07, PR08, PR09, PR11, PR13, PR15, PR16, PR17, PR18, PR19 o PR20, para expresar la clave del subproducto conforme a lo señalado en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:Subproducto} ``\\nameref{Claves:Subproducto}\"{}."
+                    },
+                    "ReporteDeVolumenMensual": {
+                        "type": "object",
+                        "description": "En esta sección se deben declarar los registros de los volúmenes de las operaciones de los hidrocarburos o petrolíferos, incluyendo la información sobre la determinación del tipo de hidrocarburo o petrolífero, de que se trate, así como de los CFDI o pedimentos asociados a la adquisición y enajenación de dichos bienes o, en su caso, a los servicios que tuvieron por objeto tales bienes.",
+                        "properties": {
+                            "ControlDeExistencias": {
+                                "type": "object",
+                                "description": "Esta sección la deberán declarar sólo aquellos sujetos que realicen procesos o cuenten con instalaciones que incluyan almacenamiento de hidrocarburos o petrolíferos, así como los sujetos que se dediquen a la comercialización en términos del artículo 19, fracción I del Reglamento de las actividades a que se refiere el Titulo Tercero de la Ley de Hidrocarburos, con la información del volumen que hayan obtenido de los contribuyentes que les presten servicios.",
+                                "properties": {
+                                    "VolumenExistenciasMes": {
+                                        "type": "number",
+                                        "minimum": -100000000000,
+                                        "maximum": 100000000000,
+                                        "fractionDigits": 5,
+                                        "description": "Requerido para expresar las existencias del mes que se está reportando. Deberá corresponder a la existencia del día en que se genera este reporte.  (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados)."
+                                    },
+                                    "FechaYHoraEstaMedicionMes": {
+                                        "type": "string",
+                                        "format": "date-time",
+                                        "description": "Requerido para expresar la fecha y hora de esta existencia. Deberá expresarse la hora en UTC con la identificación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601."
+                                    }
+                                },
+                                "required": [
+                                    "VolumenExistenciasMes",
+                                    "FechaYHoraEstaMedicionMes"
+                                ],
+                                "additionalProperties": false
+                            },
+                            "Recepciones": {
+                                "type": "object",
+                                "description": "En esta sección se deben declarar los registros de los volúmenes de las operaciones de recepción de los hidrocarburos o petrolíferos.",
+                                "properties": {
+                                    "TotalRecepcionesMes": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 100000000,
+                                        "description": "Requerido para expresar el número total de recepciones del mes en el cabezal del pozo o ducto de recolección (por ejemplo reinyecciones), la estación de proceso, en la refinería, en la terminal de almacenamiento o área de almacenamiento para usos propios, en la instalación fija para recibir gas natural, en los ductos de transporte y distribución, en los medios de transporte o distribución distintos a ductos o en la estación de servicio."
+                                    },
+                                    "SumaVolumenRecepcionMes": {
+                                        "$ref": "#/definitions/Volumen",
+                                        "description": "Requerido para expresar la suma del volumen recibido en el mes por compras o por prestaciones de servicio o recepciones provenientes de la misma instalación producto de las actividades del asignatario, contratista (volumen reinyectado en el pozo) o permisionario (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados)."
+                                    },
+                                    "PoderCalorifico": {
+                                        "$ref": "#/definitions/Volumen",
+                                        "description": "Requerido tratándose de permisionarios y usuarios que hayan seleccionado el producto PR09 para registrar el poder calorífico del gas natural recibido en el mes, expresado en Megajoule."
+                                    },
+                                    "TotalDocumentosMes": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 1000000,
+                                        "description": "Requerido para expresar el total de documentos que amparen las recepciones en el mes."
+                                    },
+                                    "ImporteTotalRecepcionesMensual": {
+                                        "type": "number",
+                                        "minimum": 0,
+                                        "maximum": 100000000000,
+                                        "fractionDigits": 5,
+                                        "description": "Requerido para expresar el importe total del mes por compras o por prestaciones de servicio o recepciones provenientes de la misma instalación producto de las actividades del asignatario, contratista, permisionario o usuario (cantidad expresada en pesos mexicanos)."
+                                    },
+                                    "Complemento": {
+                                        "type": "array",
+                                        "description": "Este elemento debe contener el complemento correspondiente a la actividad del obligado.",
+                                        "items": {
+                                            "description": "Este elemento debe contener el complemento correspondiente a la actividad del obligado.",
+                                            "anyOf": [
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Almacenamiento.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Comercializacion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-CDLR.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Distribucion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Extraccion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Expendio.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Refinacion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Transporte.schema.json"
+                                                }
+                                            ]
+                                        },
+                                        "minItems": 1
+                                    }
+                                },
+                                "required": [
+                                    "TotalRecepcionesMes",
+                                    "SumaVolumenRecepcionMes",
+                                    "TotalDocumentosMes",
+                                    "ImporteTotalRecepcionesMensual",
+                                    "Complemento"
+                                ],
+                                "additionalProperties": false
+                            },
+                            "Entregas": {
+                                "type": "object",
+                                "description": "En esta sección se deben declarar los registros de los volúmenes de las operaciones de entrega de los hidrocarburos o petrolíferos.",
+                                "properties": {
+                                    "TotalEntregasMes": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 10000000,
+                                        "description": "Requerido para expresar el número total de registros de volumen producido de hidrocarburos, entregado por ventas, autoconsumo o por prestaciones de servicio en el mes, incluyendo ductos de entrada y salida a medios de almacenamiento, ductos de carga y descarga de medios de transporte."
+                                    },
+                                    "SumaVolumenEntregadoMes": {
+                                        "$ref": "#/definitions/Volumen",
+                                        "description": "Requerido para expresar la suma del volumen producido de hidrocarburos, entregado por ventas, autoconsumo o por prestaciones de servicio en el mes; tratándose de contribuyentes que hayan manifestado permiso de expendio al público, deberán indicar el volumen del totalizador instantáneo (cantidad expresada en litros tratándose de petrolíferos, pie cúbico tratándose de gas natural para contratistas y asignatarios, metro cúbico tratándose de gas natural en los demás casos, barril tratándose de petróleo y condensados)."
+                                    },
+                                    "PoderCalorifico": {
+                                        "$ref": "#/definitions/Volumen",
+                                        "description": "Requerido tratándose de sujetos que hayan seleccionado el producto PR09 para registrar el poder calorífico del gas natural entregado en el mes, expresado en Megajoule tratándose de permisionarios y usuarios y en BTU tratándose de contratistas y asignatarios."
+                                    },
+                                    "TotalDocumentosMes": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 100000000,
+                                        "description": "Requerido para expresar el total de documentos  que amparen las entregas por volumen producido de hidrocarburos, ventas, autoconsumo o por prestaciones de servicio del mes."
+                                    },
+                                    "ImporteTotalEntregasMes": {
+                                        "type": "number",
+                                        "minimum": 0,
+                                        "maximum": 100000000000,
+                                        "fractionDigits": 5,
+                                        "description": "Requerido para expresar el importe total del mes de entregas por volumen producido de hidrocarburos, ventas, autoconsumo o por prestaciones de servicio (cantidad expresada en pesos mexicanos)."
+                                    },
+                                    "Complemento": {
+                                        "type": "array",
+                                        "description": "Este elemento debe contener el complemento correspondiente a la actividad del obligado.",
+                                        "items": {
+                                            "description": "Este elemento debe contener el complemento correspondiente a la actividad del obligado.",
+                                            "anyOf": [
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Almacenamiento.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Comercializacion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-CDLR.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Distribucion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Extraccion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Expendio.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Refinacion.schema.json"
+                                                },
+                                                {
+                                                    "$ref": "https://repositorio.cloudb.sat.gob.mx/Covol/json/Comp-Transporte.schema.json"
+                                                }
+                                            ]
+                                        },
+                                        "minItems": 1
+                                    }
+                                },
+                                "required": [
+                                    "TotalEntregasMes",
+                                    "SumaVolumenEntregadoMes",
+                                    "TotalDocumentosMes",
+                                    "ImporteTotalEntregasMes",
+                                    "Complemento"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "Recepciones",
+                            "Entregas"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "ComposOctanajeGasolina": {
+                        "type": "integer",
+                        "minimum": 70,
+                        "maximum": 130,
+                        "description": "Condicional en caso de que haya seleccionado el producto PR07. Deberá tener un valor mínimo de 70 y un máximo de 130."
+                    },
+                    "GasolinaConCombustibleNoFosil": {
+                        "type": "string",
+                        "enum": [
+                            "Sí",
+                            "No"
+                        ],
+                        "description": "Condicional en caso de que haya seleccionado el producto PR07 para expresar si el producto contiene combustible no fósil."
+                    },
+                    "ComposDeCombustibleNoFosilEnGasolina": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 99,
+                        "description": "Condicional en caso de que haya declarado ``Sí\"{} en el elemento ``GasolinaConCombustibleNoFosil\"{}, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99."
+                    },
+                    "DieselConCombustibleNoFosil": {
+                        "type": "string",
+                        "enum": [
+                            "Sí",
+                            "No"
+                        ],
+                        "description": "Condicional en caso de que haya seleccionado el producto PR03 para expresar si el producto contiene combustible no fósil."
+                    },
+                    "ComposDeCombustibleNoFosilEnDiesel": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 99,
+                        "description": "Condicional en caso de que haya declarado ``Sí\"{} en el elemento ``DieselConCombustibleNoFosil\"{}, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99."
+                    },
+                    "TurbosinaConCombustibleNoFosil": {
+                        "type": "string",
+                        "enum": [
+                            "Sí",
+                            "No"
+                        ],
+                        "description": "Condicional en caso de que haya seleccionado el producto PR11 para expresar si el producto contiene combustible no fósil."
+                    },
+                    "ComposDeCombustibleNoFosilEnTurbosina": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 99,
+                        "description": "Condicional en caso de que haya declarado ``Sí\"{} en el elemento ``TurbosinaConCombustibleNoFosil\"{}, para expresar el porcentaje de combustible no fósil contenido en el producto. Deberá tener un valor mínimo de 1 a 99."
+                    },
+                    "ComposDePropanoEnGasLP": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 99.99,
+                        "fractionDigits": 2,
+                        "description": "Condicional en caso de que haya seleccionado el producto PR12, para expresar el porcentaje normalizado de propano en el gas licuado de petróleo, conforme a los resultados del dictamen emitido por el proveedor del servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero de que se trate. Deberá tener un valor mínimo de 0.01 a 99.99."
+                    },
+                    "ComposDeButanoEnGasLP": {
+                        "type": "number",
+                        "minimum": 0.01,
+                        "maximum": 99.99,
+                        "fractionDigits": 2,
+                        "description": "Condicional en caso de que haya seleccionado el producto PR12, para expresar el porcentaje normalizado de butano en el gas licuado de petróleo, conforme a los resultados del dictamen emitido por el proveedor del servicio de emisión de dictámenes que determinen el tipo de hidrocarburo o petrolífero de que se trate. Deberá tener un valor mínimo de 0.01 a 99.99."
+                    },
+                    "DensidadDePetroleo": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 80,
+                        "fractionDigits": 1,
+                        "description": "Condicional tratándose de sujetos que hayan manifestado ser ``contratista\"{} o ``asignatario\"{} en el elemento ``Caracter\"{}, en caso de que haya seleccionado el producto PR08, para expresar la densidad del petróleo, expresada en °API. Deberá tener un valor mínimo de 0.1 a 80.0."
+                    },
+                    "ComposDeAzufreEnPetroleo": {
+                        "type": "number",
+                        "minimum": 0.1,
+                        "maximum": 10,
+                        "fractionDigits": 1,
+                        "description": "Condicional tratándose de sujetos que hayan manifestado ser ``contratista\"{} o ``asignatario\"{} en el elemento ``Caracter\"{} en caso de que haya seleccionado el producto PR08, para expresar el porcentaje de azufre en el petróleo. Deberá tener un valor mínimo de 0.1 a 10.0."
+                    },
+                    "Otros": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 30,
+                        "description": "Condicional cuando se haya seleccionado el producto PR15 o PR20, y el subproducto SP20 para expresar componentes diferentes a los productos señalados en el catálogo."
+                    },
+                    "MarcaComercial": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 200,
+                        "description": "Opcional para expresar la marca comercial de los petrolíferos."
+                    },
+                    "Marcaje": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 40,
+                        "description": "Opcional para expresar la sustancia química empleada como marcador."
+                    },
+                    "ConcentracionSustanciaMarcaje": {
+                        "type": "number",
+                        "minLength": 1,
+                        "maxLength": 1000,
+                        "description": "Condicional para expresar la concentración de la sustancia cuando se haya manifestado marcaje. Se mide en ppm. Deberá tener un valor mínimo de 1 y máximo de 1000."
+                    },
+                    "GasNaturalOCondensados": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 10,
+                        "description": "Nodo condicional, tratándose de sujetos que hayan manifestado ``contratista\"{} o ``asignatario\"{} en Carácter, en caso de que haya seleccionado los productos PR09 o PR10 para registrar la información detallada de la composición del gas natural o de los condensados. La suma de la fracción molar de todos los componentes debe ser igual a 1.",
+                        "items": {
+                            "type": "object",
+                            "description": "Descripción del objeto Gas Natural o Condensados.",
+                            "properties": {
+                                "ComposGasNaturalOCondensados": {
+                                    "type": "string",
+                                    "pattern": "^GNC(0[1-9]|10)$",
+                                    "description": "Requerido en caso de que haya seleccionado los productos PR09 o PR10, para expresar cada componente en la mezcla, conforme a lo señalado en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:GNC} ``\\nameref{Claves:GNC}\"{}. Únicamente para quienes se hayan ostentado con el carácter de contratista o asignatario. Este campo deberá repetirse cuantos componentes tenga el gas natural o el condensado."
+                                },
+                                "FraccionMolar": {
+                                    "type": "number",
+                                    "minimum": 0,
+                                    "maximum": 0.999,
+                                    "fractionDigits": 3,
+                                    "description": "Requerido para expresar la fracción molar por cada componente expresado en ``ComposGasNaturalOCondensados\"{}. Deberá tener un valor mínimo de 0 a 0.999 por cada componente de la mezcla. La suma de la fracción molar de todos los componentes debe ser igual a 1."
+                                },
+                                "PoderCalorifico": {
+                                    "type": "number",
+                                    "minimum": 0.001,
+                                    "maximum": 150000,
+                                    "description": "Requerido para expresar el poder calorífico por cada componente expresado en ``ComposGasNaturalOCondensados\"{}, expresado en BTU/pie cúbico para el gas natural y MMBTU tratándose de condensados."
+                                }
+                            },
+                            "required": [
+                                "ComposGasNaturalOCondensados",
+                                "FraccionMolar",
+                                "PoderCalorifico"
+                            ],
+                            "additionalProperties": false
+                        }
+                    }
+                },
+                "required": [
+                    "ClaveProducto"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "enum": [
+                                        "PR03",
+                                        "PR07",
+                                        "PR08",
+                                        "PR09",
+                                        "PR11",
+                                        "PR13",
+                                        "PR15",
+                                        "PR16",
+                                        "PR17",
+                                        "PR18",
+                                        "PR19"
+                                    ]
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "ClaveSubProducto"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR03"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP18",
+                                        "SP19",
+                                        "SP22",
+                                        "SP23",
+                                        "SP24",
+                                        "SP25"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "DieselConCombustibleNoFosil"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR07"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP16",
+                                        "SP17"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "ComposOctanajeGasolina",
+                                "GasolinaConCombustibleNoFosil"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR08"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "type": "string",
+                                    "pattern": "^SP([1-9]|1[0-5])$"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR09"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP27",
+                                        "SP28",
+                                        "SP29",
+                                        "SP37",
+                                        "SP38",
+                                        "SP41",
+                                        "SP42",
+                                        "SP43",
+                                        "SP44",
+                                        "SP47"
+                                    ]
+                                },
+                                "ReporteDeVolumenMensual": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Entregas": {
+                                            "type": "object",
+                                            "required": [
+                                                "PoderCalorifico"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "Recepciones"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR11"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP34",
+                                        "SP35"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "TurbosinaConCombustibleNoFosil"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR12"
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "ComposDePropanoEnGasLP",
+                                "ComposDeButanoEnGasLP"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR13"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP30",
+                                        "SP31",
+                                        "SP32",
+                                        "SP33"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR15"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP20",
+                                        "SP21",
+                                        "SP36",
+                                        "SP39",
+                                        "SP40"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR16"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "const": "SP48"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR17"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP45",
+                                        "SP46"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR18"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "const": "SP26"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR19"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "const": "SP42"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR20"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "enum": [
+                                        "SP20",
+                                        "SP49"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "GasolinaConCombustibleNoFosil": {
+                                    "const": "Sí"
+                                }
+                            }
+                        },
+                        "then": {
+                            "additionalRequired": [
+                                "ComposDeCombustibleNoFosilEnGasolina"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "DieselConCombustibleNoFosil": {
+                                    "const": "Sí"
+                                }
+                            }
+                        },
+                        "then": {
+                            "additionalRequired": [
+                                "ComposDeCombustibleNoFosilEnDiesel"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "TurbosinaConCombustibleNoFosil": {
+                                    "const": "Sí"
+                                }
+                            }
+                        },
+                        "then": {
+                            "additionalRequired": [
+                                "ComposDeCombustibleNoFosilEnTurbosina"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveSubProducto": {
+                                    "const": "SP20"
+                                }
+                            }
+                        },
+                        "then": {
+                            "additionalRequired": [
+                                "Otros"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "required": [
+                                "Marcaje"
+                            ]
+                        },
+                        "then": {
+                            "additionalRequired": [
+                                "ConcentracionSustanciaMarcaje"
+                            ]
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "enum": [
+                                        "PR03",
+                                        "PR07",
+                                        "PR08",
+                                        "PR09",
+                                        "PR10",
+                                        "PR11",
+                                        "PR12",
+                                        "PR13",
+                                        "PR14",
+                                        "PR15",
+                                        "PR16",
+                                        "PR17",
+                                        "PR18",
+                                        "PR19"
+                                    ]
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ReporteDeVolumenMensual": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Recepciones": {
+                                            "type": "object",
+                                            "properties": {
+                                                "Complemento": {
+                                                    "items": {
+                                                        "anyOf": [
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "enum": [
+                                                                            "Almacenamiento",
+                                                                            "Expendio"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoImportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "enum": [
+                                                                            "CDLR",
+                                                                            "Comercializacion",
+                                                                            "Distribucion",
+                                                                            "Refinacion"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoImportacionOExportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "const": "Extraccion"
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoExportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "enum": [
+                                        "PR03",
+                                        "PR07",
+                                        "PR08",
+                                        "PR09",
+                                        "PR10",
+                                        "PR11",
+                                        "PR12",
+                                        "PR13",
+                                        "PR14",
+                                        "PR15",
+                                        "PR16",
+                                        "PR17",
+                                        "PR18",
+                                        "PR19"
+                                    ]
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "ReporteDeVolumenMensual": {
+                                    "type": "object",
+                                    "properties": {
+                                        "Entregas": {
+                                            "type": "object",
+                                            "properties": {
+                                                "Complemento": {
+                                                    "items": {
+                                                        "anyOf": [
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "enum": [
+                                                                            "Almacenamiento",
+                                                                            "Expendio"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoImportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "enum": [
+                                                                            "CDLR",
+                                                                            "Comercializacion",
+                                                                            "Distribucion",
+                                                                            "Refinacion"
+                                                                        ]
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoImportacionOExportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                "if": {
+                                                                    "TipoComplemento": {
+                                                                        "const": "Extraccion"
+                                                                    }
+                                                                },
+                                                                "then": {
+                                                                    "properties": {
+                                                                        "Extranjero": {
+                                                                            "items": {
+                                                                                "required": [
+                                                                                    "PermisoExportacion"
+                                                                                ]
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        ]
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "BitacoraMensual": {
+            "type": "array",
+            "description": "Esta sección se debe declarar con los datos de todas las bitácoras del mes, incluyendo los eventos que se hayan registrado, así como las alarmas que éstos hayan generado.",
+            "items": {
+                "type": "object",
+                "description": "Objeto para describir una bitácora.",
+                "properties": {
+                    "NumeroRegistro": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 1000000,
+                        "description": "Requerido para expresar el número de registro, único y consecutivo del evento."
+                    },
+                    "FechaYHoraEvento": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "Requerido para expresar la fecha y hora del evento, deberá expresarse la hora en UTC con la indicación del huso horario yyyy-mm-ddThh:mm:ss+-hh:mm, de acuerdo con la especificación ISO 8601."
+                    },
+                    "UsuarioResponsable": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 1000,
+                        "description": "Condicional tratándose de registros que no se generen automáticamente, para expresar el usuario responsable de registrar el evento."
+                    },
+                    "TipoEvento": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 21,
+                        "description": "Requerido para expresar el tipo de evento conforme a la siguiente clasificación: 1) administración del sistema, 2) eventos de la UCC, 3) eventos relacionados a los programas informáticos, 4) eventos de comunicación, 5) operaciones cotidianas, 6) verificaciones realizadas por la autoridad fiscal o por proveedores autorizados por el SAT; 7) exista una diferencia de más de 0.5\\% tratándose de Hidrocarburos y Petrolíferos líquidos o de 1\\% tratándose de Hidrocarburos y Petrolíferos gaseosos, en el volumen final del periodo, obtenido de sumar al volumen inicial en dicho periodo, las recepciones de producto y restar las entregas de producto, incluyendo las pérdidas por proceso; 8) el volumen de existencias registrado al corte del día, es igual al registrado en el corte del día anterior y existen registros de entradas o salidas en el corte del día; 9) el volumen de existencias registrado por cada tipo de Hidrocarburo o Petrolífero y sistema de medición es menor a cero; 10) el volumen de existencias registrado en el corte del día varía con respecto al corte del día anterior y no existen registros de entradas o salidas en el corte del día; 11) el volumen de salidas en un lapso de veinticuatro horas es mayor al volumen de entradas del mismo lapso más el volumen de existencias del corte del día anterior; 12) calibración no vigente; 13) intento de alteración de cualquier registro; 14) registros incompletos o duplicados; 15) problemas de comunicación; 16) falla del medio de almacenamiento; 17) falla en la red de comunicación; 18) falla de energía; 19) error en la transmisión de información; 20) rechazos de inicio de sesión; 21) paro de emergencia."
+                    },
+                    "DescripcionEvento": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 250,
+                        "description": "Requerido para expresar la descripción del evento de que se trate. Cuando se haya seleccionado el TipoEvento 7, deberá manifestarse como parte de la descripción del evento el porcentaje exacto de diferencia."
+                    },
+                    "IdentificacionComponenteAlarma": {
+                        "type": "string",
+                        "minLength": 2,
+                        "maxLength": 250,
+                        "description": "Condicional cuando se haya seleccionado 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 en TipoEvento, para identificar el componente que originó la alarma (Canal de comunicación, dispensarios, sistemas de medición)."
+                    }
+                },
+                "required": [
+                    "NumeroRegistro",
+                    "FechaYHoraEvento",
+                    "TipoEvento",
+                    "DescripcionEvento"
+                ],
+                "additionalProperties": false,
+                "allOf": [
+                    {
+                        "if": {
+                            "properties": {
+                                "TipoEvento": {
+                                    "type": "integer",
+                                    "minimum": 7,
+                                    "maximum": 21
+                                }
+                            }
+                        },
+                        "then": {
+                            "required": [
+                                "IdentificacionComponenteAlarma"
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "required": [
+        "Version",
+        "RfcContribuyente",
+        "RfcProveedor",
+        "Caracter",
+        "ClaveInstalacion",
+        "DescripcionInstalacion",
+        "NumeroPozos",
+        "NumeroTanques",
+        "NumeroDuctosEntradaSalida",
+        "NumeroDuctosTransporteDistribucion",
+        "NumeroDispensarios",
+        "FechaYHoraReporteMes",
+        "Producto",
+        "BitacoraMensual"
+    ],
+    "additionalProperties": false,
+    "allOf": [
+        {
+            "if": {
+                "properties": {
+                    "RfcContribuyente": {
+                        "type": "string",
+                        "pattern": "^([A-ZÑ]|\\&){3}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+                    }
+                }
+            },
+            "then": {
+                "required": [
+                    "RfcRepresentanteLegal"
+                ]
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "contratista",
+                            "asignatario"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "required": [
+                    "NumContratoOAsignacion"
+                ]
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "contratista",
+                            "asignatario"
+                        ]
+                    },
+                    "Producto": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "enum": [
+                                        "PR09",
+                                        "PR10"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "Producto": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "GasNaturalOCondensados"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "permisionario",
+                            "usuario"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "Producto": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "allOf": [
+                                {
+                                    "if": {
+                                        "properties": {
+                                            "ClaveProducto": {
+                                                "const": "PR09"
+                                            }
+                                        },
+                                        "required": [
+                                            "ClaveProducto"
+                                        ]
+                                    },
+                                    "then": {
+                                        "properties": {
+                                            "ReporteDeVolumenMensual": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "Recepciones": {
+                                                        "type": "object",
+                                                        "required": [
+                                                            "PoderCalorifico"
+                                                        ]
+                                                    }
+                                                },
+                                                "required": [
+                                                    "Recepciones"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "ReporteDeVolumenMensual"
+                                        ]
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "usuario",
+                            "permisionario"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "ClaveInstalacion": {
+                        "type": "string",
+                        "pattern": "^(ACA|AUP|ALM|ACL|ASN|ACO|BSP|BDE|CMN|CO[MN]|DEN|DIS|EMA|ESN|EDS|ESA|EXO|EXP|EXT|GSH|LON|RPO|MNA|PTA|PDD|PGN|RCN|REF|RGN|SIS|SFO|SDA|TDA|TDD|TR[EA]|TDP|USP)-[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "contratista",
+                            "asignatario"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "ClaveInstalacion": {
+                        "type": "string",
+                        "pattern": "^(ACL|ASN)-(TRE|MNA)-[a-zA-Z0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "enum": [
+                            "contratista",
+                            "asignatario"
+                        ]
+                    },
+                    "Producto": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "ClaveProducto": {
+                                    "const": "PR08"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "Producto": {
+                        "type": "array",
+                        "items": {
+                            "required": [
+                                "DensidadDePetroleo",
+                                "ComposDeAzufreEnPetroleo"
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "usuario"
+                    }
+                }
+            },
+            "then": {
+                "required": [
+                    "InstalacionAlmacenGasNatural"
+                ]
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    }
+                }
+            },
+            "then": {
+                "required": [
+                    "ModalidadPermiso"
+                ]
+            },
+            "else": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "[0-9A-Z/\\-]{14,28}"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "enum": [
+                            "PER1",
+                            "PER6"
+                        ]
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^H/[0-9]{1,5}/COM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER2"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/EXP/ES/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER3"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/EXP/ES/MM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER4"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/EXP/ESA/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER5"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/DIS/OM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER7"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/TRA/OM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER8"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER9"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/TRA/TM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER10"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PQ/[0-9]{1,5}/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER11"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/ALM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER12"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PQ/[0-9]{1,5}/ALM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER13"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/ALM/AE/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER14"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/EXP/AE/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER15"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/ALM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER16"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^P/[0-9]{1,5}/ALM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER17"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/COM/GN/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER18"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/COM/PETRO/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER19"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/COM/CEE/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER20"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/COMP/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER21"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/DESC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER22"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/DIS/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER23"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/DIS/OM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER24"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/EXP/ES/FE/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER25"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/EXP/ES/MM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER26"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/GES/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER27"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/LICUE/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER28"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/REG/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER29"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/TUP/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER30"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/SAB/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER31"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/TRA/OM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER32"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^P/[0-9]{1,5}/TRA/TM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER33"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^P/[0-9]{1,5}/TRA/OM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER34"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/TRA/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER35"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^GN/[0-9]{1,5}/P/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER36"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^GN/[0-9]{1,5}/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER37"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^P/[0-9]{1,5}/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER38"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^P/[0-9]{1,5}/P/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER39"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/DIST/AUT/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER40"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/DIST/PLA/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER41"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/DIST/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER42"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/LDP/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER43"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/EXP/ES/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER44"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/EXP/AUT/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER45"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/COM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER46"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/TRA/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER47"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/LPT/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER48"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/TRA/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER49"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/ALM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER50"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^G/[0-9]{1,5}/LPA/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER51"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^LP/[0-9]{1,5}/DIST/REP/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER52"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/EXP/ESA/MM/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER53"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^PL/[0-9]{1,5}/DIS/DUC/[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER54"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^SENER-REF-[0-9]{1,3}-[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER55"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^SENER-TP-[0-9]{1,3}-[0-9]{4}$"
+                    }
+                }
+            }
+        },
+        {
+            "if": {
+                "properties": {
+                    "Caracter": {
+                        "const": "permisionario"
+                    },
+                    "ModalidadPermiso": {
+                        "const": "PER56"
+                    }
+                }
+            },
+            "then": {
+                "properties": {
+                    "NumContratoOAsignacion": {
+                        "type": "string",
+                        "pattern": "^SENER-CPG-[0-9]{1,3}-[0-9]{4}$"
+                    }
+                }
+            }
+        }
+    ],
+    "definitions": {
+        "RFC": {
+            "description": "El Registro Federal de Contribuyentes es la clave que se asigna a las personas físicas y morales que tengan obligación de presentar declaraciones periódicas de pago, informativas o por cuenta de terceros, o estén obligadas a expedir comprobantes fiscales por las actividades que realicen.\n La clave se conforma de 12 dígitos en el caso de personas morales, los primeros 3, corresponden a la denominación o razón social del contribuyente, los siguientes 6 corresponden a su fecha de constitución (aa/mm/dd) y los últimos 3 son los dígitos de la homoclave, la cual permite que el RFC sea único e irrepetible aun y cuando coincidan los primeros 9 dígitos anteriores.\n Para el caso de personas físicas, la clave se conforma de 13 dígitos, los primeros 4, corresponden al nombre del contribuyente (2 dígitos para apellido paterno, 1 para apellido materno y 1 para el nombre del contribuyente), los siguientes 6 corresponden a su fecha de nacimiento (aa/mm/dd) y los últimos 3 son los dígitos de la homoclave, la cual permite que el RFC sea único e irrepetible aun y cuando coincidan los primeros 9 dígitos anteriores.",
+            "type": "string",
+            "pattern": "^([A-ZÑ]|\\&){3,4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+        },
+        "RfcPersonaFisica": {
+            "description": "RFC con longitud de 13 posiciones, correspondiente a una persona física.",
+            "type": "string",
+            "pattern": "^([A-ZÑ]|\\&){4}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+        },
+        "RfcPersonaMoral": {
+            "description": "RFC con longitud de 12 posiciones, correspondiente a una persona moral.",
+            "type": "string",
+            "pattern": "^([A-ZÑ]|\\&){3}[0-9]{2}(0[1-9]|1[0-2])([12][0-9]|0[1-9]|3[01])[A-Z0-9]{3}$"
+        },
+        "Geoloc": {
+            "type": "object",
+            "description": "Estructura que almacena pares de coordenadas.",
+            "properties": {
+                "GeolocalizacionLatitud": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90,
+                    "fractionDigits": 7,
+                    "description": "Requerido para expresar la ubicación geográfica de la instalación, expresada en Grados decimales (DD). Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice. Este elemento se puede repetir por cada vértice del área o asignación."
+                },
+                "GeolocalizacionLongitud": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180,
+                    "fractionDigits": 7,
+                    "description": "Requerido para expresar la ubicación geográfica de la instalación expresada en Grados decimales (DD). Para el caso de áreas Contractuales o Asignaciones se deberán indicar las coordenadas de cada vértice. Este elemento se puede repetir por cada vértice del área o asignación."
+                }
+            },
+            "required": [
+                "GeolocalizacionLatitud",
+                "GeolocalizacionLongitud"
+            ]
+        },
+        "Volumen": {
+            "type": "object",
+            "description": "Objeto para describir un volumen y su unidad de medida.",
+            "properties": {
+                "ValorNumerico": {
+                    "description": "Valor adimensional del volumen.",
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100000000000,
+                    "fractionDigits": 5
+                },
+                "UnidadDeMedida": {
+                    "description": "Unidad de medida asociada al valor numérico.",
+                    "$ref": "#/definitions/UM"
+                }
+            },
+            "required": [
+                "ValorNumerico",
+                "UnidadDeMedida"
+            ],
+            "additionalProperties": false
+        },
+        "UM": {
+            "description": "Este tipo de variable sólo permite los valores indicados en la sección \\ref{Claves} ``\\nameref{Claves}\"{}, subsección \\ref{Claves:UnidadDeMedida} ``\\nameref{Claves:UnidadDeMedida}\"{}.",
+            "type": "string",
+            "pattern": "^UM0[1-6]$"
+        }
+    }
+}

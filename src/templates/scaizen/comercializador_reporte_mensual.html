@@ -1,0 +1,594 @@
+{% extends 'scaizen.html' %} 
+
+{% block title %}Reporte volumétrico Mensual{% endblock %} 
+
+{%block tables %}
+    <!--<button onclick="goBack()" class="btn btn-outline-success btn-sm ver-btn">
+      <i class="fa-solid fa-circle-arrow-left"></i>
+    </button>-->
+    <div class="formulario">
+      <label class="titulo">REPORTE VOLUMÉTRICO MENSUAL</label><br />
+      <p class="dir_vista">Comercializador/Reporte Mensual</p>
+    </div>
+    
+    <hr class="text-black d-none d-sm-block" />
+
+    <div  class="formulario" >
+      <div id="cargasForm"
+      style="width: 100%; height: 70px; display: flex; justify-content: space-between; align-items: center;">
+        <div class="formulario_bts">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+          <label>Año:</label>
+          <select id="anio" name="anio" class="btn btn-outline-success" style="width: 250px; text-align: center">
+            <option value="" disabled selected>Seleccione un año</option>
+            {% for year in years %}
+                <option value="{{year}}">{{year}}</option>
+            {% endfor %}
+          </select>
+          
+          <label>Mes:</label>
+          <select name="mes" id="mes" class="btn btn-outline-success" style="width:250px; text-align: center">
+              <option value="" disabled selected>Seleccione un mes</option>
+              <option value="01">Enero</option>
+              <option value="02">Febrero</option>
+              <option value="03">Marzo</option>
+              <option value="04">Abril</option>
+              <option value="05">Mayo</option>
+              <option value="06">Junio</option>
+              <option value="07">Julio</option>
+              <option value="08">Agosto</option>
+              <option value="09">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+          </select>
+
+          <select style="text-align: center" name="transport1" id="transport1" class="btn btn-outline-success">
+            <option value="" disabled selected>Seleccione el Producto</option>
+            <option value="all" >Todos</option>
+            <option value="premium" >Premium</option>
+            <option value="regular" >Magna</option>
+            <option value="diesel" >Diesel</option>
+          </select>
+          <!--<select style="text-align: center" name="transport1" id="transport1" class="btn btn-outline-success">
+            <option value="" disabled selected>Seleccione el Tanque</option>
+          </select>-->
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualVer']%}
+          <button type="button" id="obtenerfechas" class="btn btn-outline-success">
+            Enviar
+          </button>
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualGenerar']%}
+          <button onclick="generate_mensual_report()" type="button" class="btn btn-outline-success" id="bt_generar" style="display: none;">
+            GENERAR
+          </button>
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualGenerar']%}
+          <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="generate_pdf()" type="button" id="PDF" class="btn btn-outline-success">
+            <i class="fas fa-file-pdf"></i><a style="color: black;">  PDF</a>
+          </button>
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualJSON']%}
+          <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="download_json_file()" type="button" id="JSON" class="btn btn-outline-success">
+            <i class="fab fa-js"></i><a style="color: black;"> JSON</a>
+          </button>
+          {% endif %}
+          {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualXML']%}
+          <button style="width: 80px; display: flex; justify-content: space-between; align-items: center;" onclick="download_xml_file()" type="button" id="XML" class="btn btn-outline-success">
+            <i class="fas fa-file-excel"></i><a style="color: black;">XML</a> 
+          </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Tu tabla va aquí -->
+      <div class="reporte_info" style="width: 100%; height: 100%; overflow-y: auto;">
+      </div>
+
+      <nav aria-label="Paginación" class="ulpgcds-pager" id="navbar" style="display: none">
+        <div id="mostrando"></div>
+        <div id="paginacion"></div>
+      </nav>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const productos_colors = {{ productos_color | tojson }};
+  function goBack() {
+    window.history.back();
+  }
+
+  {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']['sub_permisos']['CReportemensualGenerar']%}
+  function generate_mensual_report() {
+    // Obtiene la URL de la ruta del servidor usando Jinja para Flask
+    const url = "{{ url_for('app_scaizen.'+ blueprint + '.control_mensual_volumetrico') }}";
+    // Obtiene el token CSRF del campo oculto en el formulario
+    var csrfToken = $("input[name='csrf_token']").val();
+    // Crea un objeto FormData
+    const formData = new FormData();
+
+
+    let month = document.getElementById('mes').value;
+    let year = document.getElementById('anio').value;
+    let generar = true;
+    
+    
+
+    // Agrega los datos al FormData
+    if(month,year){
+    formData.append('month', month);
+    formData.append('year', year);
+    formData.append('generar', generar);
+    formData.append('csrf_token', csrfToken);
+    // Realiza la solicitud fetch
+    fetch(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => {
+        // Verifica si la respuesta fue exitosa (código de estado 200-299)
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json(); // Convierte la respuesta a JSON
+    })
+    .then(data => {
+        // Maneja los datos recibidos
+        console.log(data);
+        if(data.error){
+          alert(data.error)
+        }else{
+          if(data['response'] == true){
+            alert("El reporte se genero con éxito, ahora puedes descargarlo.")
+          }
+          if(data['response'] == false){
+            alert("Error al generar el reporte, vuelve a intentar generarlo.")
+          }
+        }
+        document.getElementById('bt_generar').style.display = 'none';
+        //loadPage(1);
+    })
+    .catch(error => {
+        // Maneja cualquier error ocurrido durante la solicitud
+        console.error('There was a problem with the fetch operation:', error);
+    });
+    }else{
+      alert("Ingresa un mes y un año para generar el reporte.")
+    }
+    
+  }
+  {% endif %}
+
+  const anio = document.getElementById('anio');
+  const mesSelect = document.getElementById('mes');
+
+  anio.addEventListener('change', function () {
+    const anios = new Date().getFullYear(); // Año actual
+    const year = parseInt(anio.value); // Año seleccionado por el usuario
+    const mesActual = new Date().getMonth(); // Mes actual (0 = Enero, 11 = Diciembre)
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    // Limpiar opciones del select de meses
+    mesSelect.innerHTML = '';
+
+    // Generar opciones dependiendo si el año es el actual o uno diferente
+    // Se detiene un mes antes del mes actual si el año es el actual
+    const limiteMes = year === anios ? mesActual : 12;
+    const option = document.createElement('option');
+    option.value = '';
+    option.text = 'Seleccione un mes';
+    option.disabled = true;
+    option.selected = true;
+    mesSelect.appendChild(option);
+
+    for (let i = 0; i < limiteMes; i++) {
+      const option = document.createElement('option');
+      const numeroMes = (i + 1).toString().padStart(2, '0'); // Agregar cero si es menor a 10
+      option.value = numeroMes;
+      option.text = `${meses[i]}`;
+      mesSelect.appendChild(option);
+    }
+  });
+
+  async function download_xml_file() {
+    var month = document.getElementById('mes').value;
+    var year = document.getElementById('anio').value;
+
+    // Verificar que todos los campos están completos
+    if (month && year) {
+      show_load_window('XML');
+        try {
+            // Construir la URL para obtener el archivo XML
+            var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_mensual_xml') }}"; // Ajusta la URL según sea necesario
+            url += '?month=' + encodeURIComponent(month) +
+                  '&year=' + encodeURIComponent(year);
+
+            // Hacer el fetch para obtener el archivo XML
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            // Verificar si la respuesta es correcta
+            if (!response.ok) {
+                const errorData = await response.text(); // Leer el error como texto
+                hide_load_window()
+                alert('Error al descargar el archivo XML: ' + errorData);
+                console.log(errorData);
+                return;
+            }
+            // Obtener el encabezado Content-Disposition para extraer el nombre del archivo
+            const contentDisposition = response.headers.get('Content-Disposition');
+              let fileName = 'archivo.json'; // Valor por defecto
+              if (contentDisposition) {
+                  // Buscar el filename dentro de Content-Disposition
+                  const match = contentDisposition.match(/filename="?([^"]+)"?/);
+                  if (match && match[1]) {
+                      fileName = match[1];  // Nombre del archivo extraído
+                  }
+              }
+
+            // Verificar si el contenido es un archivo XML
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/xml')) {
+                // Leer el archivo XML como texto
+                const xmlData = await response.text();
+
+                // Convertir el XML a un Blob para descargar
+                const xmlBlob = new Blob([xmlData], { type: 'application/xml' });
+
+                // Crear una URL temporal para el archivo XML
+                const xmlUrl = window.URL.createObjectURL(xmlBlob);
+                const link = document.createElement('a');
+
+                // Definir nombre dinámico para el archivo (puedes definir el valor de `producto` en el contexto adecuado)
+                const producto = 'producto'; // Ajusta el valor de 'producto' según tu contexto
+                link.href = xmlUrl;
+                link.setAttribute('download', fileName); // Nombre dinámico del archivo
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Liberar la URL temporal
+                window.URL.revokeObjectURL(xmlUrl);
+              
+            } else {
+                // Manejar el caso en que la respuesta no es XML
+                const errorData = await response.json();; // Leer como texto
+                alert(errorData.error || 'Error inesperado.');
+                hide_load_window();
+                document.getElementById('bt_generar').style.display = 'initial';
+
+            }
+            
+        } catch (error) {
+            console.error('Error al obtener el archivo XML:', error);
+            alert('Error al obtener el archivo XML. Por favor, intente nuevamente.');
+        }
+      hide_load_window()
+    } else {
+        // Mostrar alerta si falta algún campo
+        hide_load_window()
+        alert('Por favor, complete todos los campos.');
+    }
+  }
+
+  async function download_json_file() {
+    var month = document.getElementById('mes').value;
+    var year = document.getElementById('anio').value;
+
+    // Verificar que todos los campos están completos
+    if (month && year) {
+        try {
+          show_load_window('JSON');
+            // Construir la URL para obtener el archivo JSON
+            var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_mensual_json') }}"; // Ajusta la URL según sea necesario
+            url += '?month=' + encodeURIComponent(month) +
+                    '&year=' + encodeURIComponent(year);
+
+            // Hacer el fetch para obtener el JSON
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            // Verificar si la respuesta es correcta
+            if (!response.ok) {
+                const errorData = await response.json();
+                hide_load_window()
+                alert('Error al descargar el archivo JSON: ' + (errorData.error || 'Error desconocido'));
+                console.log(errorData.error);
+                
+                return;  // Detener la ejecución si hay un error
+            }
+
+            // Obtener el encabezado Content-Disposition para extraer el nombre del archivo
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let fileName = 'archivo.json'; // Valor por defecto
+            if (contentDisposition) {
+                // Buscar el filename dentro de Content-Disposition
+                const match = contentDisposition.match(/filename="?([^"]+)"?/);
+                if (match && match[1]) {
+                    fileName = match[1];  // Nombre del archivo extraído
+                }
+            }
+            
+
+            // Verificar si el contenido es JSON
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/json')) {
+                // Obtener el contenido JSON
+                const jsonData = await response.json();
+
+                // Verificar si hay un error en la respuesta JSON
+                if (jsonData.error) {
+                    alert(jsonData.error || 'Error inesperado al generar el informe.');
+                    hide_load_window();
+                    document.getElementById('bt_generar').style.display = 'initial';
+                    return;
+                }
+
+                // Convertir el JSON a un Blob
+                const jsonBlob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+
+                // Crear una URL temporal para descargar el JSON
+                const jsonUrl = window.URL.createObjectURL(jsonBlob);
+                const link = document.createElement('a');
+                link.href = jsonUrl;
+                link.setAttribute('download', fileName); // Nombre del archivo
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Liberar la URL temporal
+                window.URL.revokeObjectURL(jsonUrl);
+            } else {
+                alert('Respuesta no es de tipo JSON.');
+            }
+        } catch (error) {
+            console.error('Error al obtener el archivo JSON:', error);
+            alert('Error al obtener el archivo JSON. Por favor, intente nuevamente.');
+        }
+        hide_load_window()
+    } else {
+      hide_load_window()
+        // Mostrar alerta si falta algún campo
+        alert('Por favor, complete todos los campos.');
+    }
+  } 
+
+  async function generate_pdf() {
+    var producto = document.getElementById('transport1').value;
+    var month = document.getElementById('mes').value;
+    var year = document.getElementById('anio').value;
+
+    // Verificar que todos los campos están completos
+    if (producto && month && year) {
+        try {
+          show_load_window('PDF');
+            // Construir la URL con los parámetros
+            var url = "{{ url_for('app_scaizen.'+ blueprint + '.informe_mensual_pdf') }}";
+            url += '?producto=' + encodeURIComponent(producto) +
+                  '&month=' + encodeURIComponent(month) +
+                  '&year=' + encodeURIComponent(year);
+
+            // Hacer el fetch para obtener el PDF
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            // Verificar si la respuesta es correcta
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert('Error al generar el informe: ' + errorData.error);
+                return;  // Detener la ejecución si hay un error
+            }
+
+            // Verificar si la respuesta es un PDF
+            const contentType = response.headers.get('Content-Type');
+            if (contentType && contentType.includes('application/pdf')) {
+                const pdfBlob = await response.blob();
+
+                // Obtener el nombre del archivo desde el encabezado 'Content-Disposition'
+                let filename = 'informe_mensual.pdf'; // Valor por defecto
+                const disposition = response.headers.get('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    const matches = /filename[^;=\n]*=((['"]).*?\2|([^;\n]*))/i.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, ''); // Limpiar comillas
+                    }
+                }
+
+                // Crear una URL temporal para descargar el PDF
+                const pdfUrl = window.URL.createObjectURL(pdfBlob);
+                const link = document.createElement('a');
+                link.href = pdfUrl;
+                link.setAttribute('download', filename); // Nombre del archivo
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                const jsonResponse = await response.json();
+                alert(jsonResponse.error || 'Error inesperado al generar el informe.');
+                document.getElementById('bt_generar').style.display = 'initial';
+            }
+        } catch (error) {
+            console.error('Error fetching the mensual informe:', error);
+            alert('Error al obtener el informe mensual. Por favor, intente nuevamente.');
+        }
+        hide_load_window()
+    } else {
+      hide_load_window()
+        // Mostrar alerta si falta algún campo
+        alert('Por favor, complete todos los campos.');
+    }
+  }
+
+  $(document).ready(function() {
+    
+    $('#obtenerfechas').on('click', function() {
+      // Obtener el token CSRF y otros datos necesarios
+      var csrfToken = $("input[name='csrf_token']").val();
+      var producto = $('#transport1').val();
+      var month = $('#mes').val();
+      var year = $('#anio').val();
+
+      var formData = {
+          'csrf_token': csrfToken,
+          'producto': producto,
+          'month': month,
+          'year': year
+      };
+      console.log(formData);
+      
+      if (producto && month && year) {
+        show_load_window('VISTA');
+        $.ajax({
+            url: "{{ url_for('app_scaizen.'+ blueprint + '.control_mensual_volumetrico') }}",
+            data: formData,
+            type: 'POST',
+            success: function(response) {
+                $("#loader-row").hide();
+                console.log(response.data);
+                var rows = `<hr class="text-black d-none d-sm-block">`;  // Inicializa rows como una cadena vacía
+                hide_load_window()
+                if (response.data) {
+                    response.data.forEach(function(data) {
+                        console.log(data);
+                        if(rows != ''){
+                          rows += `<br>
+                                    <br>`
+                        }
+
+                        rows += `
+                        <div style="width: 100%; height: auto; display: flex; flex-direction: column; justify-content: start; align-items: start;">
+                          <div style="width: 100%; display: flex; justify-content: start; align-items: center; margin-bottom: 5px;">
+                            <h4 style="color:${productos_colors[data['nombre_producto']]}">Producto ${productos_names[data['nombre_producto']]}</h4>
+                          </div>
+                          <div style="width: 80%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <div style="width:280px; display:flex;"><h4>Clave de producto:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ClaveProducto']}</h4></div>
+                            <div style="width:320px; display:flex;"><h4>Clave de subproducto:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ClaveSubProducto']}</h4></div>
+                            <div style="width:300px; display:flex;"><h4>Marca Comercial:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['MarcaComercial']}</h4></div>
+                          </div>
+                              `
+                        if(data['ClaveProducto'] == "PR07"){
+                        rows += `
+                        <div style="width: 70%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                          <div style="width:400px; display:flex;"><h4>Gasolina con combustible No fósil:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['GasolinaConCombustibleNoFosil']}</h4></div>
+                          <div style="width:600px; display:flex;"><h4>Campos de combustible No fósil en Gasolina:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposDeCombustibleNoFosilEnGasolina'] ? data['ComposDeCombustibleNoFosilEnGasolina'] : 'No'}</h4></div>
+                        </div>
+                        <div style="width: 80%; display: flex; justify-content: start; align-items: center; margin-bottom: 5px;">
+                          <h4>Campos Octanaje en Gasolina: </h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposOctanajeGasolina']}</h4>
+                        </div>
+                        `
+                      }else if(data['ClaveProducto'] == "PR03"){
+                        rows += `
+                        <div style="width: 70%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                          <div style="width:400px; display:flex;"><h4>Diésel con combustible No fósil:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['DieselConCombustibleNoFosil']}</h4></div>
+                          <div style="width:600px; display:flex;"><h4>Campos de combustible No fósil en Diésel:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ComposDeCombustibleNoFosilEnDiesel'] ? data['ComposDeCombustibleNoFosilEnDiesel'] : 'No'}</h4></div>
+                        </div>
+                        `
+                            }
+                            
+                        rows += `
+                          <div style="width: 60%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <div style="width:350px; display:flex;"><h4>Marcaje:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['Marcaje'] ? data['Marcaje'] : 'N/A'}</h4></div>
+                            <div style="width:420px; display:flex;"><h4>Concentración Sustancia Marcaje:</h4><h4 style="font-weight:300; margin-left: 10px;">${data['ConcentracionSustanciasMarcaje'] ? data['ConcentracionSustanciasMarcaje'] : 'N/A'}</h4></div>
+                          </div>
+
+                          <br>
+                          <h4>Existencias</h4>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Volumen</th>
+                                <th>Fecha y Hora</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.CONTROLDEEXISTENCIAS.VolumenExistenciasMes.ValorNumerico} ${data.VolumenUnidadDeMedida}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.CONTROLDEEXISTENCIAS.FechaYHoraEstaMedicionMes}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                          <h4>Recepciones</h4>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Total de Recepciones</th>
+                                <th>Volumen</th>
+                                <th>Total de documentos</th>
+                                <th>Importe Total de Recepciones</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.RECEPCIONES.TotalRecepcionesMes}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.RECEPCIONES.SumaVolumenRecepcionMes.ValorNumerico} ${data.VolumenUnidadDeMedida}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.RECEPCIONES.TotalDocumentosMes}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.RECEPCIONES.ImporteTotalRecepcionesMensual}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                          <h4>Entregas</h4>
+                          <table>
+                            <thead>
+                              <tr>
+                                <th>Total de Entregas</th>
+                                <th>Volumen</th>
+                                <th>Total de documentos</th>
+                                <th>Importe Total de Entregas</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.ENTREGAS.TotalEntregasMez}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.ENTREGAS.SumaVolumenEntregadoMes.ValorNumerico} ${data.VolumenUnidadDeMedida}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.ENTREGAS.TotalDocumentosMes}</td>
+                                <td>${data.REPORTEDEVOLUMENMENSUAL.ENTREGAS.ImporteTotalEntregasMes}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      `;
+                    });
+
+                    // Agregar las filas construidas a la tabla
+                    $('.reporte_info').html(rows);
+                } else {
+                    console.log("No se encontraron datos");
+                    document.getElementById('bt_generar').style.display = 'initial';
+                    rows = ''
+                    $('.reporte_info').html(rows);
+                }
+                if(response.error){
+                    alert(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+              hide_load_window()
+                console.error("Error en la solicitud AJAX:", error);
+            }
+        });
+      }else{
+        alert('Por favor, complete todos los campos.');
+      }
+    });
+  });
+
+</script>
+{% endblock %}

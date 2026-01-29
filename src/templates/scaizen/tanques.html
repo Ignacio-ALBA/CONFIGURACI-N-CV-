@@ -1,0 +1,126 @@
+{% extends 'scaizen.html' %}
+{% block title %}Cargas {% endblock %}
+{% block tables %}
+        
+<label class="titulo">{{ titulo }}</label><br>
+<hr class="text-black d-none d-sm-block" />
+<div   class="formulario">
+
+<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<input type="hidden" name="value" value="{{ value  }}">
+
+<!-- Tu tabla va aquí -->
+
+
+<div class="tabla-container">
+    <table class="table" id="tabla-tanques">
+        <thead>
+            <tr>
+                <th>Ítem</th>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Tanques</th>
+                <th>Acción</th>   
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="loader-row" style="display: none;">
+                <td colspan="5" style="text-align:center;">
+                    <div class="typing-indicator">
+                        <div class="typing-circle"></div>
+                        <div class="typing-circle"></div>
+                        <div class="typing-circle"></div>
+                        <div class="typing-shadow"></div>
+                        <div class="typing-shadow"></div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+        <thead>
+            <tr>
+                <th>Ítem</th>
+                <th>Producto</th>
+                <th>Tipo</th>
+                <th>Tanques</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+<nav aria-label="Paginación" class="ulpgcds-pager" id="navbar">
+    <div id="mostrando"></div>
+    <div id="paginacion"></div>
+</nav>  
+</div>
+<script>
+    $(document).ready(function(pageNumber) {
+        var pageNum = $(this).data('page');
+        var csrfToken = $("input[name='csrf_token']").val();
+        var value = $("input[name='value']").val();
+
+        var formData = {
+            'csrf_token': csrfToken,
+            'page': pageNum 
+        };
+          
+        $.ajax({
+            url: "{{ url_for('app_scaizen.tanques', id=1) }}",
+            data: formData,
+            type: 'POST',
+            beforeSend: function() {
+                // Mostrar el loader antes de enviar la solicitud AJAX
+                $('#loader-row').show();
+            },
+            success: function(response) {
+                 // Ocultar el loader cuando se carguen los datos
+                $('#loader-row').hide();
+                $('#tabla-tanques tbody').empty();
+                if (response.tanques && response.tanques.length > 0) {
+                    response.tanques.forEach(function(tanque) {
+                        $('#tabla-tanques tbody').append(`
+                            <tr>
+                                <td>${tanque.id_tanque}</td>
+                                <td>${tanque.producto_tanque == 'regular' ? '<span style="color:#f6f6f6; background-color:#00923f;" class="b-r-xl label">PX MAGNA</span>' : (tanque.producto_tanque == 'diesel' ? '<span style="color:#f6f6f6; background-color:#5B5655;" class="b-r-xl label">PX DIESEL</span>':'' )}</td>
+                                <td>${tanque.tipo_venta_tanque == 1 ? '<span class="label label-success">Venta</span>' : (tanque.tipo_a_recibo_tanque == 1 ? '<span class="label label-primary">A recibo</span>' : (tanque.tipo_a_recibo_tanque == 0 ? '<span class="label label-default">En espera</span>' : ''))}</td>
+                                <td>${tanque.codigo_tanque}</td>
+                                <td class="left"> 
+                                    <div class="btn-group">
+                                        <a href="#" class="btn-white btn btn-sm ver-btn" data-id="${tanque.id_tanque}">Ver</a>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        `);
+                    });
+                    
+                    // Manejar el clic en el botón 'Ver' fuera del bucle forEach
+                    $(document).on('click', '.ver-btn', function() {
+                        var idTanque = $(this).data('id');
+                        console.log("ID del tanque:", idTanque);
+
+                        if (value == 1){       
+                            var url = "{{ url_for('app_scaizen.informe_de_tanque', id_tanque='') }}" + idTanque;
+                        }else if(value == 2){
+                            var url = "{{ url_for('app_scaizen.informe_de_tanque', id_tanque='') }}" + idTanque;
+
+                        }else if(value == 3){
+                            var url = "{{ url_for('app_scaizen.reporte_ordenmes', id_tanque='') }}" + idTanque;
+
+                        }
+                        window.location.href = url;
+                    });
+                } else {
+                    $('#tabla-tanques tbody').append(`
+                        <tr>
+                            <td colspan="10" style="font-weight:bold; text-align:center; background-color:#ccc;">Ningún dato disponible</td>
+                        </tr>
+                    `);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error en la solicitud AJAX:", error);
+            }
+        });
+    });
+    </script>
+{% endblock %}
