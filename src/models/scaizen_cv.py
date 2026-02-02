@@ -200,8 +200,60 @@ class ControlesVolumetricos(Base):
 
         finally:
             session.close()
+    @staticmethod ##metodo estatico    
+    def check(tabla, campo, new_data):
+        if new_data is not None:
+            setattr(tabla, campo, new_data)
 
+    @classmethod
+    def update(cls, id, version=None, rfc_contribuyente=None, rfc_representante_legal=None, rfc_proveedor=None, rfc_proveedores=None,
+            tipo_caracter=None, modalidad_permiso=None, num_permiso=None, num_contrato_o_asignacion=None, instalacion_almacen_gas_natural=None,
+            clave_instalacion=None, descripcion_instalacion=None, geolocalizacion_latitud=None, geolocalizacion_longitud=None,
+            numero_pozos=None, numero_tanques=None, numero_ductos_entrada_salida=None, numero_ductos_transporte_distribucion=None, numero_dispensarios=None, tipo=None):
+        session = SessionLocal()
+        try:
+            record = session.query(cls).filter_by(Id_CV=id).first()  # Filtro correcto
+            if not record:
+                return False  # No existe el registro
+            if record:
+                # Lista de campos a actualizar
+                updates = {
+                    "Version": version,
+                    "RfcContribuyente": rfc_contribuyente,
+                    "RfcRepresentanteLegal": rfc_representante_legal,
+                    "RfcProveedor": rfc_proveedor,
+                    "RfcProveedores": rfc_proveedores,
+                    "TipoCaracter": tipo_caracter,
+                    "ModalidadPermiso": modalidad_permiso,
+                    "NumPermiso": num_permiso,
+                    "NumContratoOAsignacion": num_contrato_o_asignacion,
+                    "InstalacionAlmacenGasNatural": instalacion_almacen_gas_natural,
+                    "ClaveInstalacion": clave_instalacion,
+                    "DescripcionInstalacion": descripcion_instalacion,
+                    "GeolocalizacionLatitud": geolocalizacion_latitud,
+                    "GeolocalizacionLongitud": geolocalizacion_longitud,
+                    "NumeroPozos": numero_pozos,
+                    "NumeroTanques": numero_tanques,
+                    "NumeroDuctosEntradaSalida": numero_ductos_entrada_salida,
+                    "NumeroDuctosTransporteDistribucion": numero_ductos_transporte_distribucion,
+                    "NumeroDispensarios": numero_dispensarios,
+                    "Tipo": tipo
+                }
 
+                # Actualizar solo los campos que no son None
+                for field, value in updates.items():
+                    cls.check(record, field, value)
+
+                session.commit()
+                return id
+
+        except Exception as e:
+            session.rollback()
+            logging.error(f"Error al actualizar el registro Id_CV={id}: {e}")
+            return False
+        finally:
+            session.close()
+    
 
     @classmethod
     def select_by_id(cls, id_cv):
@@ -471,6 +523,32 @@ class Producto(Base):
         session = SessionLocal()
         consulta = session.query(cls).all()
         session.close()
+        return consulta
+
+    @classmethod
+    def select_clave(cls, clave):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(ClaveProducto=clave).all()
+        session.close()
+        return consulta
+
+
+    """@classmethod
+    def select_producto(cls):
+        session = SessionLocal()
+        # Session toma la columna ClaveProducto y with_entitie se seleccione asegura que solo sea claveproductos
+        consulta = session.query(cls.ClaveProducto).with_entities(cls.ClaveProducto).all()
+        session.close()
+        # Convierto la lista de tuplas a una lista simple
+        return [c[0] for c in consulta]
+    """
+    @classmethod
+    def select_producto(cls):
+        session = SessionLocal()
+        consulta = session.query(cls.Id_PRODUCTO , cls.ClaveProducto).all()
+        session.close()
+        # Convierte la lista de tuplas a diccionarios
         return consulta
 
 class ProductoGasNatural(Base):

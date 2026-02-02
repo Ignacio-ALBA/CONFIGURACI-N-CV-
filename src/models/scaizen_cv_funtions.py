@@ -980,3 +980,243 @@ class Cv_configuration():
     def Delete_cv(self,data):
         result = cv.ControlesVolumetricos.delete(data)
         return result   
+    def Update_cv(self,id, data):
+
+        def filter_dict(data, allowed_fields):
+            return {k: v for k, v in data.items() if k in allowed_fields and v is not None}
+
+        CAMPOS_PERMITIDOS_CV = {
+            "Actividad","Version","RfcContribuyente","RfcRepresentanteLegal",
+            "RfcProveedor","RfcProveedores","ClaveInstalacion","DescripcionInstalacion",
+            "NumeroPozos","NumeroTanques","NumeroDuctosEntradaSalida",
+            "NumeroDuctosTransporte","NumeroDispensario","Caracter","Geolocalizacion"
+        }
+
+        CAMPOS_PERMITIDOS_CARACTER = {
+            "TipoCaracter","ModalidadPermiso","NumPermiso",
+            "NumContratoOAsignacion","InstalacionAlmacenGasNatural"
+        }
+
+        CAMPOS_PERMITIDOS_GEO = {"GeolocalizacionLatitud","GeolocalizacionLongitud"}
+
+        # Primer filtro
+        data = filter_dict(data, CAMPOS_PERMITIDOS_CV)
+
+        # Segundo filtro anidado: Caracter
+        if "Caracter" in data and isinstance(data["Caracter"], dict):
+            data["Caracter"] = filter_dict(data["Caracter"], CAMPOS_PERMITIDOS_CARACTER)
+
+        # Segundo filtro anidado: Geolocalizacion
+        if "Geolocalizacion" in data and isinstance(data["Geolocalizacion"], dict):
+            data["Geolocalizacion"] = filter_dict(data["Geolocalizacion"], CAMPOS_PERMITIDOS_GEO)
+
+
+        Actividad = data.get("Actividad")
+        Version = data.get("Version")
+        RfcContribuyente = data.get("RfcContribuyente")
+        RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+        RfcProveedor = data.get("RfcProveedor")
+        RfcProveedores = data.get("RfcProveedores")
+            
+        Caracter = data.get("Caracter",{})#es un dict
+
+        TipoCaracter = Caracter["TipoCaracter"]
+        ModalidadPermiso = Caracter["ModalidadPermiso"]
+        NumPermiso =  Caracter["NumPermiso"]
+        NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+        InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+        ClaveInstalacion = data.get("ClaveInstalacion")
+        DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+        Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+        GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+        GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+        NumeroPozos= data.get("NumeroPozos")
+        NumeroTanques =data.get("NumeroTanques")
+        NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+        NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+        NumeroDispensario=data.get("NumeroDispensario")
+
+
+
+
+        if data and "Caracter" in data and "Geolocalizacion" in data:
+            result = cv.ControlesVolumetricos.update(id,Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+            )
+        else:
+            result = None
+
+
+        return result
+
+
+
+
+class Producto_configuration():
+    def __init__(self):
+        self.cv_Configuration = None
+    def map_producto():
+        map_data = cv.Producto.select_producto()
+        data = []
+        if map_data:
+            data = [{'Id_PRODUCTO': map_[0],
+                    'ClaveProducto': map_[1]
+                    } for map_ in map_data]
+
+        return data
+
+
+    def Select_producto(id):
+            producto= cv.Producto.select_by_id(id)
+            data = []
+            if producto:
+                data = {'Id_PRODUCTO':producto.Id_PRODUCTO ,
+                         'ClaveProducto':producto.ClaveProducto,
+                         'ClaveSubProducto':producto.ClaveSubProducto,
+                         'ComposOctanajeGasolina':producto.ComposOctanajeGasolina,
+                         'GasolinaConCombustibleNoFosil':producto.GasolinaConCombustibleNoFosil,
+                         'ComposDeCombustibleNoFosilEnGasolina':producto.ComposDeCombustibleNoFosilEnGasolina,
+                         'DieselConCombustibleNoFosil':producto.DieselConCombustibleNoFosil,
+                         'ComposDeCombustibleNoFosilEnDiesel':producto.ComposDeCombustibleNoFosilEnDiesel,
+                         'TurbosinaConCombustibleNoFosil':producto.TurbosinaConCombustibleNoFosil,
+                         'ComposDeCombustibleNoFosilEnTurbosina':producto.ComposDeCombustibleNoFosilEnTurbosina,
+                         'ComposDePropanoEnGasLP':producto.ComposDePropanoEnGasLP,
+
+                         'ComposDeButanoEnGasLp':producto.ComposDeButanoEnGasLp,
+                         'DensidadDePetroleo':producto.DensidadDePetroleo,
+                         'ComposDeAzufreEnPetroleo':producto.ComposDeAzufreEnPetroleo,
+                         'Otros':producto.Otros,
+                         'MarcaComercial':producto.MarcaComercial,
+                         'Marcaje':producto.Marcaje,
+                         'ConcentracionSustanciasMarcaje':producto.ConcentracionSustanciasMarcaje,
+                         'nombre_producto':producto.nombre_producto,
+                         'UnidadDeMedida':producto.UnidadDeMedida,
+
+                         }
+                return data
+
+
+    def Add_cv(self,data):
+            Actividad = data.get("Actividad")
+            Version = data.get("Version")
+            RfcContribuyente = data.get("RfcContribuyente")
+            RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+            RfcProveedor = data.get("RfcProveedor")
+            RfcProveedores = data.get("RfcProveedores")
+            
+            Caracter = data.get("Caracter",{})#es un dict
+
+            TipoCaracter = Caracter["TipoCaracter"]
+            ModalidadPermiso = Caracter["ModalidadPermiso"]
+            NumPermiso =  Caracter["NumPermiso"]
+            NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+            InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+            ClaveInstalacion = data.get("ClaveInstalacion")
+            DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+            Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+            GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+            GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+            NumeroPozos= data.get("NumeroPozos")
+            NumeroTanques =data.get("NumeroTanques")
+            NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+            NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+            NumeroDispensario=data.get("NumeroDispensario")
+            #FechaYHoraCorte=data.get("FechaYHoraCorte")
+
+            result = cv.ControlesVolumetricos.add(
+                Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+                )
+            return result
+    def Delete_cv(self,data):
+        result = cv.ControlesVolumetricos.delete(data)
+        return result   
+    def Update_cv(self,id, data):
+
+        def filter_dict(data, allowed_fields):
+            return {k: v for k, v in data.items() if k in allowed_fields and v is not None}
+
+        CAMPOS_PERMITIDOS_CV = {
+            "Actividad","Version","RfcContribuyente","RfcRepresentanteLegal",
+            "RfcProveedor","RfcProveedores","ClaveInstalacion","DescripcionInstalacion",
+            "NumeroPozos","NumeroTanques","NumeroDuctosEntradaSalida",
+            "NumeroDuctosTransporte","NumeroDispensario","Caracter","Geolocalizacion"
+        }
+
+        CAMPOS_PERMITIDOS_CARACTER = {
+            "TipoCaracter","ModalidadPermiso","NumPermiso",
+            "NumContratoOAsignacion","InstalacionAlmacenGasNatural"
+        }
+
+        CAMPOS_PERMITIDOS_GEO = {"GeolocalizacionLatitud","GeolocalizacionLongitud"}
+
+        # Primer filtro
+        data = filter_dict(data, CAMPOS_PERMITIDOS_CV)
+
+        # Segundo filtro anidado: Caracter
+        if "Caracter" in data and isinstance(data["Caracter"], dict):
+            data["Caracter"] = filter_dict(data["Caracter"], CAMPOS_PERMITIDOS_CARACTER)
+
+        # Segundo filtro anidado: Geolocalizacion
+        if "Geolocalizacion" in data and isinstance(data["Geolocalizacion"], dict):
+            data["Geolocalizacion"] = filter_dict(data["Geolocalizacion"], CAMPOS_PERMITIDOS_GEO)
+
+
+        Actividad = data.get("Actividad")
+        Version = data.get("Version")
+        RfcContribuyente = data.get("RfcContribuyente")
+        RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+        RfcProveedor = data.get("RfcProveedor")
+        RfcProveedores = data.get("RfcProveedores")
+            
+        Caracter = data.get("Caracter",{})#es un dict
+
+        TipoCaracter = Caracter["TipoCaracter"]
+        ModalidadPermiso = Caracter["ModalidadPermiso"]
+        NumPermiso =  Caracter["NumPermiso"]
+        NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+        InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+        ClaveInstalacion = data.get("ClaveInstalacion")
+        DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+        Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+        GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+        GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+        NumeroPozos= data.get("NumeroPozos")
+        NumeroTanques =data.get("NumeroTanques")
+        NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+        NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+        NumeroDispensario=data.get("NumeroDispensario")
+
+
+
+
+        if data and "Caracter" in data and "Geolocalizacion" in data:
+            result = cv.ControlesVolumetricos.update(id,Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+            )
+        else:
+            result = None
+
+
+        return result

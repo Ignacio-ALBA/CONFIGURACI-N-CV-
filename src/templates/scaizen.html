@@ -612,8 +612,9 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
     {% if PRODUCTOS_NAMES %}
       const productos_names = {{ productos_names | tojson }};
 
-      const productosNames = {{ productos_names | tojson }};
-      
+      //const productosNames = {{ productos_names | tojson }};
+      const productosNames = {{ productos_names | default({}) | tojson }};
+
       function getProductoName(key) {
         key = key.replace('PEMEX', '').trim().toLowerCase(); // Elimina el prefijo 'PEMEX' y convierte a minúsculas
         return productosNames[key];
@@ -696,8 +697,9 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
     {% endif %}
   </script>
 
-  // En tu template base (layout.html o similar)
 <script>
+  // En tu template base (layout.html o similar)
+
   document.addEventListener('DOMContentLoaded', function() {
       let sessionCheckInterval;
       let inactivityTimer;

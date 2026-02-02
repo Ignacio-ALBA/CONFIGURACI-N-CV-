@@ -13,7 +13,6 @@
     
     <div class="formulario_alta">
         <div id="Control">
-            <h3 class="text-center">Controles Volumetricos</h3> <!-- Título añadido -->
 
             <div style="display: flex; justify-content: center;">
                 <div class="campo">
@@ -37,31 +36,25 @@
             
             <div style="display: flex; justify-content: center;">
                 <div class="campo">
-
                     <label style="display: flex; justify-content: center;" for="terminalSelect">Terminal:</label>
-
                     <select  class="btn options_input select-small" name="" id="terminalSelect" disabled>
                         <option value="" disabled selected>Seleccione Terminal</option>
-                    
                     </select>
                 </div>
                 <div class="campo">
-
                     <label style="display: flex; justify-content: center;" for="medidoresSelect">Medidores:</label>
-
                     <select  class="btn options_input select-small" name="" id="medidoresSelect" disabled>
                         <option value="" disabled selected>Seleccione Medidor</option>
                     </select>
                 </div>
-
             </div>
             <hr class="text-black d-none d-sm-block" />
-
         </div>
 
 
         <!-- Sección 1 -->
         <div id="controles_volumetricos">
+            <h3 class="text-center">Controles Volumetricos</h3> <!-- Título añadido -->
 
 
             <div class="row mb-3">
@@ -92,7 +85,7 @@
                     <div class="form-group d-flex align-items-center">
                         <label class="col-form-label texto-negro mb-0 me-2" for="No_rfc_proveedores">No. de Rfc Proveedores:</label>
                 
-                        <input type="number" id="No_rfc_proveedores" name="numero_de_rfc_proveedores" min="1" max="100" value="1">
+                        <input type="number" id="No_rfc_proveedores" name="numero_de_rfc_proveedores" min="0" max="100" value="0">
                 
                         <button type="button" class="button_color_alba button_color_alba--sm" id="add_save_rfc_provedores"  > + </button>
                 
@@ -298,7 +291,7 @@
                 <div class="d-flex justify-content-center mt-4">
                     <button type="button" class="button_color_alba me-2" id="Añadir_CV" disabled>0 / 1</button>
                     <button type="button" class="button_color_alba me-2" id="Eliminar_CV" disabled>ELIMINAR</button>
-                    <button type="button" class="button_color_alba me-2" id="editar" >EDITAR</button>
+                    <button type="button" class="button_color_alba me-2" id="Editar" >EDITAR</button>
                     <button type="button" class="button_color_alba  me-2" id="limpiar_cv" disabled>LIMPIAR</button>
                 </div>
         </div>
@@ -451,54 +444,75 @@
                 <div id="GasLP" style="display: none;">
                     <hr class="text-black d-none d-sm-block" />
 
-                    <label class="col-form-label texto-negro mb-0 me-2"  > Gas L.P.</label>
+                   <!-- <label class="col-form-label texto-negro mb-0 me-2"  > Gas L.P.</label>-->
                     <div class="col-md-6">
-                        <label class="col-form-label texto-negro mb-0 me-2" > Compos de propano en Gas L.P. :</label>
-                        <input type="number" id="compospropanogaslp" name="Compos_propano_gas_lp" min="0" max="100" value="0">
+                        <div class="form-group d-flex align-items-center">
+
+                            <label class="col-form-label texto-negro mb-0 me-2" > Compos de propano en Gas L.P. :</label>
+                            <input type="number" id="compospropanogaslp" name="Compos_propano_gas_lp" min="0" max="100" value="0">
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-form-label texto-negro mb-0 me-2" > Compos de butano en Gas L.P. :</label>
-                        <input type="number" id="Compos_butano_gaslp" name="Composbutanogaslp" min="0" max="100" value="0">
+                        <div class="form-group d-flex align-items-center">
+
+                            <label class="col-form-label texto-negro mb-0 me-2" > Compos de butano en Gas L.P. :</label>
+                            <input type="number" id="Compos_butano_gaslp" name="Composbutanogaslp" min="0" max="100" value="0">
+                        </div>
                     </div>
                 </div>
                 <div id="Petroleo" style="display: none;">
-                    <label class="col-form-label texto-negro mb-0 me-2"> Petroleo</label>
+                    <!--<label class="col-form-label texto-negro mb-0 me-2"> Petroleo</label>-->
                     <div class="col-md-6">
-                        <label class="col-form-label texto-negro mb-0 me-2"> Densidad de petroleo</label>
-                        <input type="number" id="densidad_petroleo" name="densidadpetroleo" min="0" max="100" value="0">
+                        <div class="form-group d-flex align-items-center">
+
+                            <label class="col-form-label texto-negro mb-0 me-2"> Densidad de petroleo</label>
+                            <input type="number" id="densidad_petroleo" name="densidadpetroleo" min="0" max="100" value="0">
+                        </div>
                     </div>
                     <div class="col-md-6">
-                        <label class="col-form-label texto-negro mb-0 me-2"> Compos de azufre en petroleo</label>
-                        <input type="number" id="Compos_azufre_petroleo" name="Composazufrepetroleo" min="0" max="100" value="0">
+                        <div class="form-group d-flex align-items-center">
+
+                            <label class="col-form-label texto-negro mb-0 me-2"> Compos de azufre en petroleo</label>
+                            <input type="number" id="Compos_azufre_petroleo" name="Composazufrepetroleo" min="0" max="100" value="0">
+                        </div>
                     </div>
                 </div>
                 <div id="GasNatural" style="display: none;">
-                    <label class= "col-form-label texto-negro mb-0 me-2"> Gas Natural</label>
+                    <!--<label class= "col-form-label texto-negro mb-0 me-2"> Gas Natural</label>-->
                     <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+
                         <label class="col-form-label texto-negro mb-0 me-2"> Compos de gas natural o condensados</label>
                         <input type="number" id="Compos_gas_natural_o_condensados" name="ComposgasnaturalOcondensados" min="0" max="100" value="0">
-
+                        </div>
 
                     </div>
                     <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+
                         <label class="col-form-label texto-negro mb-0 me-2"> Fraccion molar:</label>
                         <input type="number" id="fraccion_molar" name="fraccionmolar" min="0" max="100" value="0">
-
+                        </div>
                     
                     </div>
                     <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+
                         <label class="col-form-label texto-negro mb-0 me-2"> Poder Calorifico</label>
                         <input type="number" id="Poder_Calorifico" name="PoderCalorifico" min="0" max="100" value="0">
-
+                        </div>
                     </div>
                 </div>
                 <div id="Otros" style="display: none;">
                     <hr class="text-black d-none d-sm-block" />
 
-                    <label class="col-form-label texto-negro mb-0 me-2">Otros</label>
+                    <!--<label class="col-form-label texto-negro mb-0 me-2">Otros</label>-->
                     <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+
                         <label class="col-form-label texto-negro mb-0 me-2">Otros:</label>
                         <input type="text" id="OtrosInput" name="Otros" class="form-control texto-negro" placeholder="Ej. biometanol" required>
+                        </div>
                     </div>
                 </div>
 
@@ -513,8 +527,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group d-flex align-items-center">
-                            <label class="col-form-label texto-negro mb-0 me-2">Marca:</label>
-                            <input type="text" id="Marca" name="Marca" class="form-control texto-negro" placeholder="Ej. Nitrógeno " required>
+                            <label class="col-form-label texto-negro mb-0 me-2">Marcaje:</label>
+                            <input type="text" id="Marca" name="Marca_" class="form-control texto-negro" placeholder="Ej. Nitrógeno " required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -871,15 +885,17 @@
                     break;
 
                 case "number":
-                    if (campo.id === "No_Productos" ){
+                    if (campo.id === "No_Productos"){
                         campo.value=1;
+                        campo.disabled=true;
+
                     }else if (campo.id ==="GeolocalizacionLatitud"||
                      campo.id==="GeolocalizacionLongitud"){
-                        
                         campo.value="";
-
+                        
                     }else{
                         campo.value=0;//reinicia inputs numericos
+                        campo.disabled=true;
                     }
                     break;
                 default:
@@ -897,25 +913,75 @@
     }
 
 
+    function send_map(method, actividad=null,producto=null,terminal=null,medidores=null){
+        const csrfToken = $('input[name="csrf_token"]').val();
+
+        return $.ajax({
+            url: "{{url_for('app_scaizen.app_configuracion.configuracion')}}",
+            type: method,
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: {
+                map_actividad: actividad,
+                map_producto:producto,
+                map_terminal:terminal,
+                map_medidores:medidores
+
+            },
+            beforeSend: function () {
+                $("#loader-row").show();
+            }
+        }).always(() => {
+            $("#loader-row").hide();
+        });
+    }
+
+
+
+
+
+
+    function send_select(method, actividad=null,producto=null,terminal=null,medidores=null,id=null){
+        const csrfToken = $('input[name="csrf_token"]').val();
+
+        return $.ajax({
+            url: "{{url_for('app_scaizen.app_configuracion.configuracion')}}",
+            type: method,
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            data: {
+                id:id,
+                actividad: actividad,
+                producto:producto,
+                terminal:terminal,
+                medidores:medidores
+
+            },
+            beforeSend: function () {
+                $("#loader-row").show();
+            }
+        }).always(() => {
+            $("#loader-row").hide();
+        });
+    }
+
+
+
+
     const select_cv = document.getElementById("productoSelect");
     let idCVActual = null;
     select_cv.addEventListener("change",function(){
         var csrfToken = $('input[name="csrf_token"]').val();
         
-        var formData= {
-            'csrf_token':csrfToken,
-            'actividad':this.value
-       
-        }
-        $.ajax({
-            url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
-            data:formData,
-            type:'POST',
-            success:function(response){
-                if(response.actividad && Array.isArray(response.actividad) && response.actividad.length ){
+        var actividad= this.value;
+        send_map("POST",  actividad)
+            .done(response => {
+                if(response.map_actividad && Array.isArray(response.map_actividad) && response.map_actividad.length ){
                         contador_cv=1;
 
-                        const cv = response.actividad[0];
+                        const cv = response.map_actividad[0];
                             idCVActual = cv.Id_CV;
                             $("#RfcContribuyente").val(cv.RfcContribuyente);
                             $("#RfcRepresentantelegal").val(cv.RfcContribuyente);
@@ -946,15 +1012,27 @@
 
                         }else{
                             //console.error("No se encontraron datos para rellenar el formulario CV");
-                            alert(`No se encontraron datos para ${formData.actividad}. Favor de registrar datos para ${formData.actividad}.`);
+                            alert(`No se encontraron datos para ${actividad}. Favor de registrar datos para ${actividad}.`);
 
                             idCVActual= null;
                             contador_cv=0;
                             clearForm("controles_volumetricos");
-                            inicializarProductoSelect();
-                            
+                            inicializarProductoSelect();                            
                 }
                 actualizarEstado();
+
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+        });
+
+        /*$.ajax({
+            url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
+            data:formData,
+            type:'POST',
+            success:function(response){
+
 
             },
             error: function(xhr, status, error) {
@@ -962,14 +1040,117 @@
             }
 
         });
+        */
+    const select_producto = document.getElementById("productoproductoSelect");
+    let idProductoActual= null;
+    select_producto.addEventListener("change",function(){
+        var csrfToken = $('input[name="csrf_token"]').val();
+        var producto_id=this.value;
+        var producto_text = this.options[this.selectedIndex].text;
+        send_select("POST",null,  producto_text, null,null,producto_id)
+            .done(response => {
+                if(response.producto ){
+
+
+                    alert(response.producto);
+                    const producto =response.producto;
+
+                    const  claveproducto = document.getElementById("claveproducto");
+                    claveproducto.value = producto.ClaveProducto;
+                    claveproducto.dispatchEvent(new Event("change"));
+                    
+                    const clavesubproducto = document.getElementById("clavesubproducto");
+                    clavesubproducto.value = producto.ClaveSubProducto;
+                    clavesubproducto.dispatchEvent(new Event("change"));
+                    switch(producto.ClaveProducto){
+                        case 'PR07':
+                            $("#ComposOctanajeGasolina").val(producto.ComposOctanajeGasolina);
+                            const Gasolina_combustible_no_fosil = document.getElementById("Gasolina_combustible_no_fosil");
+                            Gasolina_combustible_no_fosil.value = producto.GasolinaConCombustibleNoFosil;
+                            Gasolina_combustible_no_fosil.dispatchEvent(new Event("change"));
+
+                            $("#ComposCombustibleNoFosilGasolina").val(ComposCombustibleNoFosilGasolina);
+                            break;
+                        case 'PR03':
+                            const Diesel_combustible_no_fosil= document.getElementById("Diesel_combustible_no_fosil");
+                            Diesel_combustible_no_fosil.value = producto.DieselConCombustibleNoFosil; 
+                            clavesubproducto.dispatchEvent(new Event("change"));
+
+                            $("#Compos_combustible_no_fosil_diesel").val(producto.ComposDeCombustibleNoFosilEnDiesel);
+                            break;
+
+                        case 'PR11':
+                            const Turbosina_combustible_no_fosil = document.getElementById("Turbosina_combustible_no_fosil");
+                            Turbosina_combustible_no_fosil.value = producto.TurbosinaConCombustibleNoFosil; 
+                            Turbosina_combustible_no_fosil.dispatchEvent(new Event("change"));
+                            
+                            $("#Compos_combustible_no_fosil_turbosina").val(producto.ComposDeCombustibleNoFosilEnTurbosina);
+                            break;
+
+                        case 'PR12':
+                            $("#compospropanogaslp").val(producto.ComposDePropanoEnGasLP);
+                            $("#Compos_butano_gaslp").val(producto.ComposDeButanoEnGasLp);
+                            break;
+
+                        case 'PR08'://añadir mas condicionales,creo que solo sera para añadir
+
+                            $("#densidad_petroleo").val(producto.ComposDePropanoEnGasLP);
+                            $("#Compos_azufre_petroleo").val(producto.ComposDeButanoEnGasLp);
+                            break;
+                        case 'PR09'://añadir GasNaturalOCondensados
+                        case 'PRO10'://GasNaturalOCondensados
+                            break;
+                        
+                        case 'PR15'://añadir GasNaturalOCondensados
+                        case 'PR20'://GasNaturalOCondensados
+                            if(producto.ClaveSubProducto == "SP20"){
+                                $("#OtrosInput").val(prodcuto.Otros);
+                            }
+
+                            break;
+
+                    }
+
+                    $("#MarcaComercial").val(producto.MarcaComercial);
+                    $("#Marca").val(producto.Marcaje);
+                    $("#ConcentracionSustanciaMarcaje").val(producto.ConcentracionSustanciasMarcaje);
+
+                }else{
+                            //console.error("No se encontraron datos para rellenar el formulario CV");
+                            alert(`No se encontraron datos para ${producto_text}. Favor de registrar datos para ${producto_text}.`);
+
+                            //idCVActual= null;
+                            //contador_cv=0;
+                            clearForm("CreateProduct");
+                            //inicializarProductoSelect();                            
+                }
+                //actualizarEstado();
+
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+
+
+
 
     });
 
+    const productoSelect = document.getElementById("productoSelect");
+    const productoproductoSelect = document.getElementById("productoproductoSelect");
+    const medidoresSelect = document.getElementById("medidoresSelect");
+    const terminalSelect = document.getElementById("terminalSelect");
 
 
-
-
-
+    const select_tanques = document.getElementById("add_tanques");
+    select_tanques.addEventListener("change",function(){
+        productoSelect.disabled = true;
+        productoproductoSelect.disabled = true;
+        medidoresSelect.disabled = true;
+        terminalSelect.disabled = false;
+        map("tanque");
+  
+    });
 
 
 
@@ -1287,10 +1468,67 @@
 
 
 
+    //escaneo de datos
+    function map(seccion){
+       switch(seccion){
+       
+        case 'producto':
+                    send_map("POST",  null,seccion,null,null)
+                        .done(response => {
+                            if(response.map_producto && Array.isArray(response.map_producto) && response.map_producto.length ){
+                                const select = document.getElementById("productoproductoSelect");
+                                
+                                // Habilito el select
+                                select.disabled = false;
+
+                                // Limpio las opciones anteriores excepto la primera
+                                select.innerHTML = '<option value="" disabled selected>Seleccione Producto</option>';
+
+                                // Las nuevas opciones
+                                response.map_producto.forEach(item => {
+                                    const option = document.createElement("option");
+                                    option.value = item.Id_PRODUCTO; // el value del select
+                                    option.textContent = item.ClaveProducto; // lo que se ve
+                                    select.appendChild(option);
+                                });
+                                alert(`Exito al recuperar la lista de productos.`);
+
+                            }else{
+                                alert(`Sin datos de productos. Favor de registrar datos.`);
+
+                            }
+
+                        })
+                        .fail(() => {
+                        alert("Error de comunicación con el servidor.");
+                        });
+                        break;
+
+        case 'tanque':
+                        break;   
+
+        case 'pozo':
+                        break; 
+
+        case 'ductos':
+                        break; 
+        case 'dispensario':
+            break;
+        
+        
+        }
+    }
+
 
     document.getElementById('add_productos').addEventListener('click', function() {
         showSection('CreateProduct');
-        //mostrar_contadores('tanques');
+
+        productoSelect.disabled = true;
+        productoproductoSelect.disabled = false;
+        medidoresSelect.disabled = true;
+        terminalSelect.disabled = true;
+        map("producto");
+
     });
 
 
@@ -1309,6 +1547,13 @@
 
     document.getElementById('anteriorBtn_CreateProduct').addEventListener('click', function() {
         showSection('controles_volumetricos');
+        productoSelect.disabled = false;
+        productoproductoSelect.disabled = true;
+        medidoresSelect.disabled = true;
+        terminalSelect.disabled = true;    
+    
+    
+    
     });
     document.getElementById('anteriorBtn_CreateProduct_RFC').addEventListener('click', function() {
         showSection('controles_volumetricos');
@@ -1941,6 +2186,8 @@
     let add_cv = document.getElementById('Añadir_CV');
     let delete_cv = document.getElementById('Eliminar_CV');
     delete_cv.disabled = true;
+    
+    let update_cv = document.getElementById('Editar');
 
     let limite_cv = 1;
     add_cv.textContent = `${contador_cv} / ${limite_cv}`;
@@ -1984,6 +2231,13 @@
     };
 
   // Contenedor global CORRECTO
+   
+ 
+  const formulario_actividad = "controles_volumetricos";
+  const formulario_producto = "producto";
+  const formulario_terminal = "terminal";
+  const formulario_medicion = "medidores";
+
   let Controles_volumetricos = {
         //CV: [],
         CV:{
@@ -2107,6 +2361,116 @@
         },
     };
 
+    function sendCV(method,formulario, proceso, payload=null,id = null) {
+        const body = {
+            formulario: formulario,
+            proceso: proceso
+        };
+
+        if (id !== null) {
+            body.id = id;
+        }
+
+        if (payload !== null) {
+            body.data = payload;
+        }
+            
+        
+        return $.ajax({
+            url: "{{url_for('app_scaizen.app_configuracion.configuracion')}}",
+            type: method,
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
+            contentType: "application/json",
+            data: method !== "GET" ? JSON.stringify(body) : null,
+            beforeSend: function () {
+                $("#loader-row").show();
+            }
+        }).always(() => {
+            $("#loader-row").hide();
+        });
+    }
+
+
+
+
+
+    function  buildPayloadGeneral(formulario){
+            let cont_vol  =Controles_volumetricos.CV;       
+            switch(formulario){
+                case 'controles_volumetricos':
+                        cont_vol.Actividad = $("#productoSelect").val().trim();
+                        cont_vol.RfcContribuyente = $("#RfcContribuyente").val().trim();
+                        cont_vol.RfcRepresentanteLegal =$("#RfcRepresentantelegal").val().trim();
+                        cont_vol.RfcProveedor = $("#RfcProveedor").val().trim();
+                        
+                        let caracter = cont_vol.Caracter
+                        caracter.TipoCaracter =  $("#tipoCaracter").val().trim();
+                        caracter.ModalidadPermiso = $("#modalidadPermiso").val().trim();
+                        caracter.NumPermiso = $("#numeroPermiso").val().trim();
+                        caracter.NumContratoOAsignacion= $("#numeroContrato").val().trim();
+                        caracter.InstalacionAlmacenGasNatural = $("#instalacionGas").val().trim();
+            
+                        cont_vol.ClaveInstalacion= $("#ClaveInstalacion").val().trim();
+                        cont_vol.DescripcionInstalacion= $("#DescripcionInstalacion").val().trim();
+                        
+                        let geo = Controles_volumetricos.CV.Geolocalizacion;
+                        geo.GeolocalizacionLatitud = $("#GeolocalizacionLatitud").val().trim();
+                        geo.GeolocalizacionLongitud = $("#GeolocalizacionLongitud").val().trim();
+
+                        cont_vol.NumeroPozos= $("#numero_pozos").val().trim();
+                        cont_vol.NumeroTanques= $("#numero_tanques").val().trim();
+                        cont_vol.NumeroDuctosEntradaSalida= $("#Numeroductosentradasalida").val().trim();
+                        cont_vol.NumeroDuctosTransporte= $("#Numeroductostransportedistribucion").val().trim();
+                        cont_vol.NumeroDispensario = $("#numero_dispensarios").val().trim();
+                        return {
+                            Version: "4.0",
+                            Actividad: cont_vol.Actividad,
+                            RfcContribuyente: cont_vol.RfcContribuyente,
+                            RfcRepresentanteLegal: cont_vol.RfcRepresentanteLegal,
+                            RfcProveedor: cont_vol.RfcProveedor,
+
+                            Caracter: {
+                                TipoCaracter: caracter.TipoCaracter,
+                                ModalidadPermiso: caracter.ModalidadPermiso,
+                                NumPermiso: caracter.NumPermiso,
+                                NumContratoOAsignacion: caracter.NumContratoOAsignacion,
+                                InstalacionAlmacenGasNatural: caracter.InstalacionAlmacenGasNatural
+                            },
+
+                            ClaveInstalacion: cont_vol.ClaveInstalacion,
+                            DescripcionInstalacion: cont_vol.DescripcionInstalacion,
+
+                            Geolocalizacion: {
+                                GeolocalizacionLatitud: geo.GeolocalizacionLatitud,
+                                GeolocalizacionLongitud: geo.GeolocalizacionLongitud
+                            },
+
+                            NumeroPozos: cont_vol.NumeroPozos,
+                            NumeroTanques: cont_vol.NumeroTanques,
+                            NumeroDuctosEntradaSalida: cont_vol.NumeroDuctosEntradaSalida,
+                            NumeroDuctosTransporte: cont_vol.NumeroDuctosTransporte,
+                            NumeroDispensario: cont_vol.NumeroDispensario
+
+                        }
+                        break;
+
+
+                    case '':
+                        break;   
+
+                    case '':
+                        break; 
+
+                    case '':
+                        break; 
+
+                }
+
+
+
+    }
 
     add_cv.addEventListener('click',function(e){
         e.preventDefault();
@@ -2121,71 +2485,28 @@
             //var actualizar_id = urlParams.get('id');
             console.log("Logica para guardar");
 
-            let cont_vol  =Controles_volumetricos.CV;       
-            
-            cont_vol.Actividad = $("#productoSelect").val().trim();
-            cont_vol.RfcContribuyente = $("#RfcContribuyente").val().trim();
-            cont_vol.RfcRepresentanteLegal =$("#RfcRepresentantelegal").val().trim();
-            cont_vol.RfcProveedor = $("#RfcProveedor").val().trim();
-            
-            let caracter = cont_vol.Caracter
-            caracter.TipoCaracter =  $("#tipoCaracter").val().trim();
-            caracter.ModalidadPermiso = $("#modalidadPermiso").val().trim();
-            caracter.NumPermiso = $("#numeroPermiso").val().trim();
-            caracter.NumContratoOAsignacion= $("#numeroContrato").val().trim();
-            caracter.InstalacionAlmacenGasNatural = $("#instalacionGas").val().trim();
- 
-            cont_vol.ClaveInstalacion= $("#ClaveInstalacion").val().trim();
-            cont_vol.DescripcionInstalacion= $("#DescripcionInstalacion").val().trim();
-            
-            let geo = Controles_volumetricos.CV.Geolocalizacion;
-            geo.GeolocalizacionLatitud = $("#GeolocalizacionLatitud").val().trim();
-            geo.GeolocalizacionLongitud = $("#GeolocalizacionLongitud").val().trim();
-
-            cont_vol.NumeroPozos= $("#numero_pozos").val().trim();
-            cont_vol.NumeroTanques= $("#numero_tanques").val().trim();
-            cont_vol.NumeroDuctosEntradaSalida= $("#Numeroductosentradasalida").val().trim();
-            cont_vol.NumeroDuctosTransporte= $("#Numeroductostransportedistribucion").val().trim();
-            cont_vol.NumeroDispensario = $("#numero_dispensarios").val().trim();
-
-
-            console.log(Controles_volumetricos.CV);
+           console.log(Controles_volumetricos.CV);
 
 
 
-            let payloadCV = {
-                Version: "4.0",
-                Actividad: cont_vol.Actividad,
-                RfcContribuyente: cont_vol.RfcContribuyente,
-                RfcRepresentanteLegal: cont_vol.RfcRepresentanteLegal,
-                RfcProveedor: cont_vol.RfcProveedor,
-
-                Caracter: {
-                    TipoCaracter: caracter.TipoCaracter,
-                    ModalidadPermiso: caracter.ModalidadPermiso,
-                    NumPermiso: caracter.NumPermiso,
-                    NumContratoOAsignacion: caracter.NumContratoOAsignacion,
-                    InstalacionAlmacenGasNatural: caracter.InstalacionAlmacenGasNatural
-                },
-
-                ClaveInstalacion: cont_vol.ClaveInstalacion,
-                DescripcionInstalacion: cont_vol.DescripcionInstalacion,
-
-                Geolocalizacion: {
-                    GeolocalizacionLatitud: geo.GeolocalizacionLatitud,
-                    GeolocalizacionLongitud: geo.GeolocalizacionLongitud
-                },
-
-                NumeroPozos: cont_vol.NumeroPozos,
-                NumeroTanques: cont_vol.NumeroTanques,
-                NumeroDuctosEntradaSalida: cont_vol.NumeroDuctosEntradaSalida,
-                NumeroDuctosTransporte: cont_vol.NumeroDuctosTransporte,
-                NumeroDispensario: cont_vol.NumeroDispensario
-
-            };
-
-
-            $.ajax({
+            let payloadCV = buildPayloadGeneral(formulario_actividad);
+            sendCV("POST", "CV", "add", payloadCV)
+            .done(response => {
+                if (response.estatus) {
+                    contador_cv++;
+                    idCVActual = response.id;
+                    actualizarEstado();
+                    alert("Datos añadidos con éxito.");
+                } else {
+                    alert("Error al añadir datos.");
+                }
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+        }
+    });
+            /*$.ajax({
                 url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
                 type:"POST",
                 headers:{
@@ -2216,19 +2537,43 @@
                 },
                  
             })
-        }
-    });
+
+        
+            */
+
 
     delete_cv.addEventListener('click',function(e){
         e.preventDefault();
+        if (!confirm("¿Seguro que deseas eliminar este registro?")) return;
+
+        delete_cv.disabled = true;
+
+        sendCV( "DELETE","CV","delete",null,idCVActual)
+            .done(response => {
+                if(response.estatus){
+                        contador_cv--;
+                        idCVActual =null;
+                        actualizarEstado();
+                        clearForm("controles_volumetricos");
+
+                        alert("Datos eliminados con exito.");
+                }else{
+                        alert("Error al eliminar datos de CV");
+                }
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+            /*.always(() => {
+                    delete_cv.disabled = false; 
+                });*/
+    });
         /*
         if (contador_cv > 0) {
             contador_cv--;
             console.log("Lógica para eliminar");
         }
-
         actualizarEstado();
-        */
 
         $.ajax({
                 url:"{{url_for('app_scaizen.app_configuracion.configuracion') }}",
@@ -2263,9 +2608,45 @@
                 },
                  
             })
-        });
+            */
+        
+        
 
 
+
+    update_cv.addEventListener('click',function(e){
+        e.preventDefault();
+        if (contador_cv != 0) {
+                if (!confirm("¿Seguro que deseas editar este registro?")) return;
+                
+                let payloadCV = buildPayloadGeneral(formulario_actividad);
+                if (!payloadCV || Object.keys(payloadCV).length === 0) {
+                    alert("No hay datos para actualizar.");
+                    return;
+                }
+                
+                update_cv.disabled = true;
+
+                sendCV("PUT", "CV", "update", payloadCV,idCVActual)
+                .done(response => {
+                    if (response.estatus) {
+                        idCVActual = response.id;
+
+                        alert("Datos actualizados con éxito.");
+                    } else {
+                        alert("Error al actualizar datos.");
+                    }
+                })
+                .fail(() => {
+                alert("Error de comunicación con el servidor.");
+                })
+                .always(() => {
+                    update_cv.disabled = false; // Rehabilita el botón
+                });
+
+
+        }
+    });
 
 
 

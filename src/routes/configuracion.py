@@ -40,18 +40,46 @@ def configuracion():
         if contexto is False:  # No tiene permisos
             return redirect("/scaizen/")
     if request.method == 'POST':
-        
-        actividad =request.form.get('actividad')
- 
-        print(actividad)
-        if actividad:
-                print("Entre a la actividad")
+        #Mapeo del select        
+        map_actividad =request.form.get('map_actividad')
+        map_producto =request.form.get('map_producto')
+        map_terminal =request.form.get('map_terminal')
+        map_medidores =request.form.get('map_medidores')
 
-                datos =scaizen_cv_funtions.Cv_configuration.Select_cv(actividad)
+ 
+        if map_actividad == "distribuidor" or map_actividad == "comercializador": 
+
+                datos =scaizen_cv_funtions.Cv_configuration.Select_cv(map_actividad)
                 print(datos)
 
-                return jsonify({'actividad': datos})
-                      
+                return jsonify({'map_actividad': datos})
+        elif map_producto:
+                datos =scaizen_cv_funtions.Producto_configuration.map_producto()
+                return jsonify({'map_producto': datos})
+        elif map_terminal:
+             pass
+        elif map_medidores:
+            pass
+
+
+        #Recuperacion de datos
+        id = request.form.get('id')
+        actividad =request.form.get('actividad')
+        producto =request.form.get('producto')
+        terminal =request.form.get('terminal')
+        medidores =request.form.get('medidores')
+
+        if producto:
+            logging.info("Entre a la actividad")
+
+            datos=scaizen_cv_funtions.Producto_configuration.Select_producto(id)
+            logging.info('datos recuperados'+str(datos))
+            return jsonify({'producto': datos})
+
+
+
+
+        #Add,Delete,Update
         payload = request.get_json(silent=True)
         if not payload:
                 return jsonify({"error": "JSON inválido"}), 400
@@ -60,31 +88,40 @@ def configuracion():
         data = payload.get("data") 
         id = int(payload.get('id', 0))
         proceso = payload.get("proceso")
-        print("Payload recibido:", payload)
-        print("Proceso:", proceso)
-        print("ID dato"+str(id))
-        if formulario == "CV":
-                cv_config = scaizen_cv_funtions.Cv_configuration()
-                print("todo bien")
+        #print("Payload recibido:", payload)
+        #print("Proceso:", proceso)
+        #print("ID dato"+str(id))
 
+        if formulario == "CV":
+            cv_config = scaizen_cv_funtions.Cv_configuration()
+            print("todo bien")
+            try:
                 if proceso =="add":
                     add_data_result = cv_config.Add_cv(data)            
-                    logging.info(f"CV recibido: {data}")
-                    logging.info(f"Resultado de add: {add_data_result}")
-                    logging.info(f"ID CV creado: {add_data_result.Id_CV}")
-
-                    
-                    if add_data_result:
+                    #logging.info(f"CV recibido: {data}")
+                    #logging.info(f"Resultado de add: {add_data_result}")
+                    #logging.info(f"ID CV creado: {add_data_result.Id_CV}")
+                    if add_data_result != 0:
                         return jsonify({"estatus": True,"id":add_data_result.Id_CV})
-                    ##return jsonify({"estatus": False, "mensaje": "Error al agregar CV"}), 400
-
+                
                 elif proceso =="delete":
-                    print("ingrese a delete")
                     delete_data_result = cv_config.Delete_cv(id)            
                     if delete_data_result:
                         return jsonify({"estatus": True})
-                    ##return jsonify({"estatus": False, "mensaje": "Error al eliminar CV"}), 400        
-             # 👉 Aquí va:
+                
+                elif proceso =="update":
+                    print("ingrese a update")
+
+                    update_data_result = cv_config.Update_cv(id,data)
+                    logging.info(f"Resultado de add: {update_data_result}")
+                    if update_data_result:
+                         return jsonify({"estatus":True})
+
+            except Exception as e:
+                logging.error(f"Error procesando CV: {e}")
+                return jsonify({"estatus": False, "mensaje": "Error interno"}), 500
+
+            # 👉 Aquí va:
             # - validación
             # - guardado en DB
             # - generación XML
