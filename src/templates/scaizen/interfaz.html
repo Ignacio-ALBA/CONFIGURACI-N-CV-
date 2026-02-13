@@ -1,0 +1,83 @@
+{% extends 'scaizen.html' %}
+{% block title %}    Configuración de la interfaz
+{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">Interfaz</label>
+            <p class="dir_vista">Configuración/Interfaz</p>
+        </div>
+      </div>  
+</div>
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+
+    <div class="formulario_alta">
+
+        <!-- GENERAL -->
+        <label class="titulo text-uppercase m-0">General</label>  
+        <hr class="text-black d-none d-sm-block" />
+    
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro">
+                Logotipo del login:
+            </label>
+            <div class="col-10">
+                <input type="file" id="logo_login" name="logo_login" class="form-control">
+            </div>
+        </div>
+    
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro">
+                Imagen de fondo:
+            </label>
+            <div class="col-10">
+                <input type="file" id="imagen_fondo" name="imagen_fondo" class="form-control">
+            </div>
+        </div>
+    
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro">
+                Color barra navegación:
+            </label>
+            <div class="col-10">
+                <input type="color" id="barra_color" name="barra_color"
+                       class="form-control form-control-color">
+            </div>
+        </div>
+    
+        <!-- SCAIZEN -->
+        <label class="titulo text-uppercase m-0">Scaizen</label>       
+        <hr class="text-black d-none d-sm-block" />
+    
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro">
+                Logotipo de Scaizen:
+            </label>
+            <div class="col-10">
+                <input type="file" id="logo_scaizen" name="logo_scaizen" class="form-control">
+            </div>
+        </div>
+    
+        <!-- EMPRESA -->
+        <label class="titulo text-uppercase m-0">Empresa</label>  
+        <hr class="text-black d-none d-sm-block" />
+    
+        <div class="form-group row align-items-center mb-3">
+            <label class="col-2 col-form-label texto-negro">
+                Logotipo de la empresa:
+            </label>
+            <div class="col-10">
+                <input type="file" id="logo_empresa" name="logo_empresa" class="form-control">
+            </div>
+        </div>
+    
+    </div>
+</form>
+
+
+{% endblock %}

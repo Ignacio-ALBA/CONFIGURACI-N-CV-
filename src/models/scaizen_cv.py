@@ -1,6 +1,6 @@
 from datetime import datetime, timezone, date
 from flask_login import UserMixin
-from sqlalchemy import Column, JSON ,Integer, Float, String, Text, DateTime, SmallInteger, ForeignKey, Enum, extract, desc, asc, Double,Boolean
+from sqlalchemy import Column, JSON ,Integer, Float, String, Text, DateTime, SmallInteger, ForeignKey, Enum, extract, desc, asc, Double,Boolean,Numeric
 from sqlalchemy.orm import relationship
 from config_carpet.config import GlobalConfig, clave_hex_hash
 from config_carpet.db_conector import connect_db
@@ -338,6 +338,15 @@ class CvProductoBitacoraBitacoraMensual(Base):
         consulta = session.query(cls).all()
         return consulta
 
+    @classmethod
+    def scout_select(cls,id_cv_fk):
+        session = SessionLocal()
+        consulta = None
+        consulta = session.query(cls, cls.Id_PRODUCTO_fk).filter_by(Id_CV_fk=id_cv_fk).all()
+        session.close()
+        return consulta
+
+
 class Bitacora(Base):
     __tablename__ = 'bitacora'
 
@@ -544,9 +553,9 @@ class Producto(Base):
         return [c[0] for c in consulta]
     """
     @classmethod
-    def select_producto(cls):
+    def select_producto(cls,id):
         session = SessionLocal()
-        consulta = session.query(cls.Id_PRODUCTO , cls.ClaveProducto).all()
+        consulta = session.query(cls.Id_PRODUCTO , cls.ClaveProducto).filter_by(Id_PRODUCTO=id).all()
         session.close()
         # Convierte la lista de tuplas a diccionarios
         return consulta
@@ -1083,6 +1092,9 @@ class Existencias(Base):
         session.close()
         return consulta
 
+
+
+
 class MedicionTanque(Base):
     __tablename__ = 'mediciontanque'
 
@@ -1122,6 +1134,16 @@ class MedicionTanque(Base):
         consulta = session.query(cls).all()
         session.close()
         return consulta
+
+    @classmethod
+    def scout_select(cls,id):
+        session = SessionLocal()
+        consulta = None
+        consulta = session.query(cls.Id_MedicionTanque,cls.SistemaMedicionTanque).filter_by(Id_MedicionTanque=id).all()
+        session.close()
+        return consulta
+
+
 
 class Tanque(Base):
     __tablename__ = 'tanque'
@@ -1212,6 +1234,349 @@ class Tanque(Base):
         except Exception as e:
             print(f"Error al recuperar el tanque por producto: {e}")
             return None
+
+    @classmethod
+    def scout_select(cls, id_producto_fk):
+        try:
+            consulta = None
+            session = SessionLocal()
+            consulta = session.query(cls.Id_TANQUE,cls.codigo).filter_by(Id_PRODUCTO_fk=id_producto_fk).all()
+            session.close()
+            return consulta
+        except Exception as e:
+            print(f"Error al recuperar el tanque por producto: {e}")
+            return None
+
+
+class Ducto(Base):
+    __tablename__='ducto'
+    Id_DUCTO = Column(Integer, primary_key=True, autoincrement=True)
+    Id_PRODUCTO_fk=Column(Integer,ForeignKey('prodcuto.Id_PRODUCTO'),nullable=False)
+    ClaveIdentificacionDucto=Column(String(45), nullable=False)
+    DescripcionDucto=Column(String(45), nullable=False)
+    DiametroDucto=Column(Numeric(10,3), nullable=False)
+    CapacidadGasTalon=Column(Numeric(10,3), nullable=False)
+    CapacidadGasTalon_UM=Column(String(5), nullable=False)
+    def __repr__(self):
+        return (f"<Ducto(Id_DUCTO={self.Id_DUCTO}>")
+
+    @classmethod
+    def add(cls,id_producto_fk,claveidentificacionducto,descripcionducto,diametroducto,
+    capacidadgastalon,capacidadgastalon_um):
+        nuevo_ducto=cls(
+            Id_PRODUCTO_fk=id_producto_fk,
+            ClaveIdentificacionDucto=claveidentificacionducto,
+            DescripcionDucto=descripcionducto,
+            DiametroDucto=diametroducto,
+            CapacidadGasTalon=capacidadgastalon,
+            CapacidadGasTalon_UM=capacidadgastalon_um
+        )
+        result_data = add_to_table(nuevo_ducto)
+        return result_data if result_data else None
+
+
+    @classmethod
+    def select_by_id(cls, id_ducto):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_DUCTO=id_ducto).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+
+    @classmethod
+    def scout_select(cls, id):
+        try:
+            consulta = None
+            session = SessionLocal()
+            consulta = session.query(cls.Id_DUCTO,cls.ClaveIdentificacionDucto).filter_by(Id_PRODUCTO_fk=id).all()
+            session.close()
+            return consulta
+        except Exception as e:
+            print(f"Error al recuperar el tanque por producto: {e}")
+            return None
+
+
+
+
+class MedicionDucto(Base):
+    __tablename__ = 'medicionducto'
+
+    Id_MedicionDucto = Column(Integer, primary_key=True, autoincrement=True)
+    ##Id_DUCTO_fk=Column(Integer,ForeignKey('ducto.Id_DUCTO'),nullable=False)
+    SistemaMedicionDucto = Column(String(45), nullable=False)
+    LocalizODescripSistMedicionDucto = Column(String(150), nullable=False)
+    VigenciaCalibracionSistMedicionDucto = Column(DateTime, nullable=False)
+    IncertidumbreMedicionSistMedicionDucto = Column(Float, nullable=False)
+
+    def __repr__(self):
+        return (f"<MedicionDucto(Id_MedicionDucto={self.Id_MedicionDucto}>")
+
+    @classmethod
+    def add(cls,sistemamedicionducto,
+            localizodescripsistmedicionducto,
+            vigenciacalibracionsistmedicionducto,
+            incertidumbremedicionsistmedicionducto):
+
+        nuevo_medicion_ducto = cls(
+            SistemaMedicionDucto=sistemamedicionducto,
+            LocalizODescripSistMedicionDucto=localizodescripsistmedicionducto,
+            VigenciaCalibracionSistMedicionDucto=vigenciacalibracionsistmedicionducto,
+            IncertidumbreMedicionSistMedicionDucto=incertidumbremedicionsistmedicionducto
+        )
+
+        result_data = add_to_table(nuevo_medicion_ducto)
+        return result_data
+    @classmethod
+    def select_by_id(cls, id):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_MedicionDucto=id).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+
+class Pozo(Base):
+    __tablename__='pozo'
+    Id_POZO =Column(Integer,primary_key=True,autoincrement=True)
+    Id_PRODUCTO_fk=Column(Integer, ForeignKey('producto.Id_PRODUCTO'), nullable=False)
+    ClavePozo=Column(String(45),nullable=False)
+    DescripcionPozo=Column(String(45),nullable=False)
+
+    def __repr__(self):
+        return (f"<Pozo(Id_TANQUE={self.Id_POZO}, Id_PRODUCTO_fk={self.Id_PRODUCTO_fk}, "
+                f"ClavePozo={self.ClavePozo}, DescripcionPozo={self.DescripcionPozo})>")
+
+    @classmethod
+    def add(cls,id_producto_fk,clavepozo,descripcionpozo):
+        nuevo_pozo=cls(
+            Id_PRODUCTO_fk =id_producto_fk,
+            ClavePozo=clavepozo,
+            DescripcionPozo=descripcionpozo
+        )
+        result_data = add_to_table(nuevo_pozo)
+        return result_data if result_data else None
+        
+
+    @classmethod
+    def select_by_id(cls, id):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_POZO=id).first()
+        session.close()
+        return consulta
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+    @classmethod
+    def scout_select(cls, id):
+        try:
+            consulta = None
+            session = SessionLocal()
+            consulta = session.query(cls.Id_POZO,cls.ClavePozo).filter_by(Id_PRODUCTO_fk=id).all()
+            session.close()
+            return consulta
+        except Exception as e:
+            print(f"Error al recuperar el tanque por producto: {e}")
+            return None
+
+
+
+
+
+
+class MedicionPozo(Base):
+    __tablename__='medicionpozo'
+        
+    Id_MedicionPozo = Column(Integer, primary_key=True, autoincrement=True)
+    #Id_Pozo_fk = Column(Integer, ForeignKey('pozo.Id_POZO'), nullable=False)
+    SistemaMedicionPozo = Column(String(45), nullable=False)
+    LocalizODescripSistMedicionPozo = Column(String(45), nullable=False)
+    VigenciaCalibracionSistMedicionPozo = Column(String(45), nullable=False)
+    IncertidumbreMedicionSistMedicionPozo = Column(Numeric(10,3), nullable=False)
+
+    def __repr__(self):
+        return (f"<Medicion Pozo(Id_MedicionPozo={self.Id_MedicionPozo}, SistemaMedicionPozo={self.SistemaMedicionPozo}, "
+                f"LocalizODescripSistMedicionPozo={self.LocalizODescripSistMedicionPozo}, VigenciaCalibracionSistMedicionPozo={self.VigenciaCalibracionSistMedicionPozo},IncertidumbreMedicionSistMedicionPozo={self.IncertidumbreMedicionSistMedicionPozo})>")
+
+    @classmethod
+    def add(cls,sistemamedicionpozo,localizodescipsistmedicionpozo,
+    Vigenciacalibracionsistmedicionpozo,incertidumbremedicionsistmeidcionpozo):
+        nuevo_medidor_pozo=cls(
+            SistemaMedicionPozo=sistemamedicionpozo,
+            LocalizODescripSistMedicionPozo=localizodescipsistmedicionpozo,
+            VigenciaCalibracionSistMedicionPozo=Vigenciacalibracionsistmedicionpozo,
+            IncertidumbreMedicionSistMedicionPozo=incertidumbremedicionsistmeidcionpozo
+        )
+        result_data = add_to_table(nuevo_medidor_pozo)
+        return result_data if result_data else None
+
+    @classmethod
+    def select_by_id(cls, id_medicion_pozo):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_MedicionPozo=id_medicion_pozo).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+    
+class Dispensario(Base):
+    __tablename__='dispensario'
+    Id_DISPENSARIO = Column(Integer, primary_key=True, autoincrement=True)
+    Id_PRODUCTO_fk=Column(Integer, ForeignKey('producto.Id_PRODUCTO'),nullable=False)
+    ClaveDispensario = Column(String(45), nullable=False)
+    def __repr__(self):
+        return (f"<Dispensario(Id_DISPENSARIO={self.Id_DISPENSARIO}")
+
+    @classmethod
+    def add(cls,id_producto_fk,clavedispensario):
+        nuevo_dispensario=cls(
+            Id_PRODUCTO_fk =id_producto_fk,
+            ClaveDispensario=clavedispensario
+        )
+        result_data = add_to_table(nuevo_dispensario)
+        return result_data if result_data else None
+
+    @classmethod
+    def select_by_id(cls, id_dispensario):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_DISPENSARIO=id_dispensario).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+    @classmethod
+    def scout_select(cls, id):
+        try:
+            consulta = None
+            session = SessionLocal()
+            consulta = session.query(cls.Id_DISPENSARIO,cls.ClaveDispensario).filter_by(Id_PRODUCTO_fk=id).all()
+            session.close()
+            return consulta
+        except Exception as e:
+            print(f"Error al recuperar el tanque por producto: {e}")
+            return None
+
+
+
+
+class MedicionDispensario(Base):
+    __tablename__='mediciondispensario'
+        
+    Id_MedicionDispensario  = Column(Integer, primary_key=True, autoincrement=True)
+    ##Id_DISPENSARIO_fk = Column(Integer, ForeignKey('dispensario.Id_DISPENSARIO'), nullable=False)
+    SistemaMedicionDispensario = Column(String(45), nullable=False)
+    LocalizODescripSistMedicionDispensario = Column(String(45), nullable=False)
+    VigenciaCalibracionSistMedicionDispensario = Column(String(45), nullable=False)
+    IncertidumbreMedicionSistMedicionDispensario = Column(Numeric(10,3), nullable=False)
+
+    def __repr__(self):
+        return (f"<Medicion Dispensario(Id_MedicionDispensario={self.Id_MedicionDispensario}")
+    
+    @classmethod
+    def add(cls,sistemmediciondispensrio,localizodescripsistmediciondispensario,
+    vigenciacalibracionsistmediciondispensario,incertidumbremedicionsistmediciondispensario):
+        nuevo_medidor_dispensario=cls(
+            SistemaMedicionDispensario=sistemmediciondispensrio,
+            LocalizODescripSistMedicionDispensario=localizodescripsistmediciondispensario,
+            VigenciaCalibracionSistMedicionDispensario=vigenciacalibracionsistmediciondispensario,
+            IncertidumbreMedicionSistMedicionDispensario=incertidumbremedicionsistmediciondispensario
+        )
+        result_data = add_to_table(nuevo_medidor_dispensario)
+        return result_data if result_data else None
+ 
+    @classmethod
+    def select_by_id(cls, id_mediciondispensario):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_MedicionDispensario=id_mediciondispensario).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+
+
+class Manguera(Base):
+    __tablename__='manguera'
+    Id_MANGUERA =Column(Integer, primary_key=True, autoincrement=True)
+    ##Id_DISPENSARIO_fk=Column(Integer, ForeignKey('dispensario.Id_DISPENSARIO'), nullable=False)
+    IdentificadorManguera=Column(String(45), nullable=False)
+    def __repr__(self):
+        return (f"<Manguera(Id_MANGUERA ={self.Id_MANGUERA}")
+    
+    @classmethod
+    def add(cls,identificadormanguera):
+        nuevo_manguera=cls(
+            IdentificadorManguera=identificadormanguera
+        )
+        result_data=add_to_table(nuevo_manguera)
+        return result_data if result_data else None
+
+    @classmethod
+    def select_by_id(cls, id_manguera):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_MANGUERA=id_manguera).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
+
+
+
+
+
 
 class Entrega(Base):
     __tablename__ = 'entrega'

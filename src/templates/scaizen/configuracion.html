@@ -398,7 +398,7 @@
                     <label class="col-form-label texto-negro mb-0 me-2"  >Disel</label>
                     <div class="col-md-6">
                         <div class="form-group d-flex align-items-center">
-                            <label class="col-form-label texto-negro mb-0 me-2" for="Diesel_combustible_no_fosil">Diesel con combustible no fosil:</label>
+                            <!--<label class="col-form-label texto-negro mb-0 me-2" for="Diesel_combustible_no_fosil">Diesel con combustible no fosil:</label>-->
                             <select class="btn options_input" name="Dieselcombustiblenofosil" id="Diesel_combustible_no_fosil">
                                 <option value="" disabled selected>Seleccione Sí o No</option>
                                 <option value="Si"> Sí </option>
@@ -913,8 +913,14 @@
     }
 
 
-    function send_map(method, actividad=null,producto=null,terminal=null,medidores=null){
+    function send_map(method, actividad=null,producto=null,terminal=null,type_terminal=null,medidores=null,type_medidores=null){
         const csrfToken = $('input[name="csrf_token"]').val();
+        
+        let scout_Cv = idCVActual ?? null;
+        let scout_producto = idProductoActual ?? null;
+        let scout_terminal = idTerminalActual ?? null;
+        let scout_medidores = idMedidorActual ?? null;
+                        
 
         return $.ajax({
             url: "{{url_for('app_scaizen.app_configuracion.configuracion')}}",
@@ -923,11 +929,17 @@
                 'X-CSRFToken': csrfToken
             },
             data: {
+                scout_actividad:scout_Cv,
                 map_actividad: actividad,
+                scout_producto:scout_producto,
                 map_producto:producto,
-                map_terminal:terminal,
-                map_medidores:medidores
 
+                scout_terminal:scout_terminal,
+                map_terminal:terminal,
+                type_terminal:type_terminal,
+                scout_medidores:scout_medidores,
+                map_medidores:medidores,
+                type_medidores:type_medidores
             },
             beforeSend: function () {
                 $("#loader-row").show();
@@ -942,8 +954,9 @@
 
 
 
-    function send_select(method, actividad=null,producto=null,terminal=null,medidores=null,id=null){
+    function send_select(method, actividad=null,producto=null,terminal=null,terminal_producto=null,medidores=null,medidores_terminal=null, id=null){
         const csrfToken = $('input[name="csrf_token"]').val();
+
 
         return $.ajax({
             url: "{{url_for('app_scaizen.app_configuracion.configuracion')}}",
@@ -956,7 +969,9 @@
                 actividad: actividad,
                 producto:producto,
                 terminal:terminal,
-                medidores:medidores
+                terminal_producto:terminal_producto,
+                medidores:medidores,
+                medidores_terminal:medidores_terminal
 
             },
             beforeSend: function () {
@@ -969,7 +984,7 @@
 
 
 
-
+    //Actividad
     const select_cv = document.getElementById("productoSelect");
     let idCVActual = null;
     select_cv.addEventListener("change",function(){
@@ -998,7 +1013,7 @@
                             $("#ClaveInstalacion").val(cv.ClaveInstalacion);
                             $("#DescripcionInstalacion").val(cv.DescripcionInstalacion);
                             $("#GeolocalizacionLatitud").val(cv.GeolocalizacionLatitud);
-                            $("#GeolocalizacionLongitud").val(cv.GeolocalizacionLongitud);
+                            
                             //chec el error de 2/1
                             controlSwitch("check_Pozos", cv.NumeroPozos,"numero_pozos");
 
@@ -1009,6 +1024,9 @@
                             controlSwitch("check_ductos_transporte_distribucion", cv.NumeroDuctosTransporteDistribucion,"Numeroductostransportedistribucion");
 
                             controlSwitch("check_dispensarios", cv.NumeroDispensarios,"numero_dispensarios");
+
+                            $("#No_Productos").val(cv.total_anexos);
+                            contador_productos= cv.total_anexos;
 
                         }else{
                             //console.error("No se encontraron datos para rellenar el formulario CV");
@@ -1041,20 +1059,20 @@
 
         });
         */
+    
+    //Productos
     const select_producto = document.getElementById("productoproductoSelect");
     let idProductoActual= null;
     select_producto.addEventListener("change",function(){
         var csrfToken = $('input[name="csrf_token"]').val();
         var producto_id=this.value;
         var producto_text = this.options[this.selectedIndex].text;
-        send_select("POST",null,  producto_text, null,null,producto_id)
+        send_select("POST",null,  producto_text,null,null, null,null,producto_id)
             .done(response => {
                 if(response.producto ){
 
-
-                    alert(response.producto);
                     const producto =response.producto;
-
+                    idProductoActual = producto.Id_PRODUCTO;
                     const  claveproducto = document.getElementById("claveproducto");
                     claveproducto.value = producto.ClaveProducto;
                     claveproducto.dispatchEvent(new Event("change"));
@@ -1106,7 +1124,6 @@
                             if(producto.ClaveSubProducto == "SP20"){
                                 $("#OtrosInput").val(prodcuto.Otros);
                             }
-
                             break;
 
                     }
@@ -1115,10 +1132,19 @@
                     $("#Marca").val(producto.Marcaje);
                     $("#ConcentracionSustanciaMarcaje").val(producto.ConcentracionSustanciasMarcaje);
 
+
+
+                    controlSwitch("check_productos_Tanques", producto.Tanque,"No_producto_tanque");
+                    contador_terminal_tanque = parseInt(producto.Tanque);
+                    controlSwitch("check_productos_ductos_transporte_distribucion", producto.Ducto,"No_producto_ductos");
+                    controlSwitch("check_productos_Pozos", producto.Pozo,"No_producto_pozo");
+                    controlSwitch("check_productos_dispensarios", producto.Dispensario,"No_producto_dispensario");
+
+
                 }else{
                             //console.error("No se encontraron datos para rellenar el formulario CV");
                             alert(`No se encontraron datos para ${producto_text}. Favor de registrar datos para ${producto_text}.`);
-
+                            idProductoActual=null;
                             //idCVActual= null;
                             //contador_cv=0;
                             clearForm("CreateProduct");
@@ -1136,21 +1162,208 @@
 
     });
 
+    const select_terminal = document.getElementById("terminalSelect");
+    let idTerminalActual = null;
+    let  idMedidorActual=null;
+    select_terminal.addEventListener("change",function(){
+        var csrfToken = $('input[name="csrf_token"]').val();
+        var terminal_id=this.value;
+        var terminal_text = this.options[this.selectedIndex].text;
+        send_select("POST",null,null,terminal_text,"tanque",null,null,terminal_id)
+            .done(response =>{
+                if(response.terminal){
+                    const terminal=response.terminal;
+                    idTerminalActual = terminal.Id_TANQUE;
+                    idMedidorActual=terminal.Id_MedicionTanque_fk;
+                    $("#Label_clave_identificacion").val(terminal.ClaveIdentificacionTanque);
+                    $("#Label_localizacion_yo_identificacion_").val(terminal.LocalizacionYODescripcionTanque);
+                    $("#Label_vigencia_calibracion_tanque").val(terminal.VigenciaCalibracionTanque);
+                    $("#Label_capacidad_total_").val(terminal.CapacidadTotalTanque);
+                    $("#Label_capacidad_operativa_").val(terminal.CapacidadOperativaTanque);
+                    $("#Label_capacidad_util_").val(terminal.CapacidadUtilTanque);
+                    $("#Label_capacidad_fondaje_").val(terminal.CapacidadFondajeTanque);
+                    $("#Label_capacidad_gas_").val(terminal.CapacidadGasTalon);
+                    $("#Label_vol_min_operacion").val(terminal.VolumenMinimoOperacion);
+                    const estado_tanque =document.getElementById("Label_estado_");
+                    estado_tanque.value = terminal.EstadoTanque;
+                    estado_tanque.dispatchEvent(new Event("change"));
+                    $("#No_medicion_tanques").val(terminal.Numero_Medidores);
+                    alert(`Se encontraron datos para ${terminal_text}.`);
+
+                }else{
+                    alert(`No se encontraron datos para ${terminal_text}. Favor de registrar datos para ${terminal_text}.`);
+                    idTerminalActual=null;
+                    idMedidorActual=null;
+                }
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+        
+    });
+
+    const select_medidores = document.getElementById("medidoresSelect");
+
+    select_medidores.addEventListener("change",function(){
+        var csrfToken = $('input[name="csrf_token"]').val();
+        var medidores_id=this.value;
+        var medidores_text =this.options[this.selectedIndex].text;
+        send_select("POST",null,null,null,null,medidores_text,"medidores_tanque",idMedidorActual)
+            .done(response =>{
+                if(response.medidores){
+                    const medidores=response.medidores;
+                    idMedidorActual=medidores.Id_MedicionTanque;
+                    $("#Sistemademedicion").val(medidores.SistemaMedicionTanque);
+                    $("#Localizacion_descripicion_sistema_medicion").val(medidores.LocalizODescripSistMedicionTanque);
+                    $("#vigencia_calibracion").val(medidores.VigenciaCalibracionSistMedicionTanque);
+                    $("#Incertidumbre_medicion_tanque").val(medidores.IncertidumbreMedicionSistMedicionTanque);
+
+                    alert(`Se encontraron datos para ${medidores_text}.`);
+
+                }else{
+                    alert(`No se encontraron datos para ${medidores_text}. Favor de registrar datos para ${medidores_text}.`);
+                    idMedidorActual=null;
+
+                }
+            })
+            .fail(() => {
+            alert("Error de comunicación con el servidor.");
+            });
+
+
+
+
+    });
+
+
     const productoSelect = document.getElementById("productoSelect");
     const productoproductoSelect = document.getElementById("productoproductoSelect");
     const medidoresSelect = document.getElementById("medidoresSelect");
     const terminalSelect = document.getElementById("terminalSelect");
+    function select_status(formulario){
+        if (!productoSelect || !productoproductoSelect || !terminalSelect || !medidoresSelect){
+        console.log("Alguno de los selects no existe");
+        return;
+        }
+        switch(formulario){
+            case 'controles_volumetricos':
+                productoSelect.disabled = false;
+                productoproductoSelect.disabled = true;
+                terminalSelect.disabled = true;
+                medidoresSelect.disabled = true;
 
+                break;
+            case 'producto':
+                productoSelect.disabled = true;
+                productoproductoSelect.disabled = false;
+                terminalSelect.disabled = true;
+                medidoresSelect.disabled = true;
+                break;
+            case 'terminal':
+                productoSelect.disabled = true;
+                productoproductoSelect.disabled = true;
+                terminalSelect.disabled = false;
+                medidoresSelect.disabled = true;
+                break;
+            case 'medicion':
+                productoSelect.disabled = true;
+                productoproductoSelect.disabled = true;
+                terminalSelect.disabled = true;
+                medidoresSelect.disabled = false;
+                
+                break
+        }
+    }
+    //Terminales
+    document.addEventListener("DOMContentLoaded", function() {
+        let add_tanques = document.getElementById("add_tanques");
+        add_tanques.addEventListener("click", function() {
+            console.log(contador_terminal_tanque);
 
-    const select_tanques = document.getElementById("add_tanques");
-    select_tanques.addEventListener("change",function(){
-        productoSelect.disabled = true;
-        productoproductoSelect.disabled = true;
-        medidoresSelect.disabled = true;
-        terminalSelect.disabled = false;
-        map("tanque");
-  
+            let No_producto_tanque = parseInt(document.getElementById('No_producto_tanque').value);
+            let Save_product_tanque = document.getElementById("Save_product_tanque");
+
+            if (Save_product_tanque) { // <-- importante chequear
+                Save_product_tanque.textContent = `${contador_terminal_tanque} / ${No_producto_tanque}`;
+            } else {
+                console.error("No se encontró el elemento Save_product_tanque");
+            }
+
+            select_status("terminal");
+            map("tanque");
+        });
+
+        let add_ductos = document.getElementById("add_ductos_entrada_salida");
+        add_ductos.addEventListener("click",function(){
+            let No_producto_ductos = parseInt(document.getElementById('No_producto_ductos').value);
+            let Save_product_ducto = document.getElementById("Save_product_ducto");
+
+            if (Save_product_ducto) { // <-- importante chequear
+                //Save_product_ducto.textContent = `${} / ${No_producto_tanque}`;
+            } else {
+                console.error("No se encontró el elemento Save_product_tanque");
+            }
+           
+           
+            select_status("terminal");
+            map("ducto");
+    
+        });
+
+        let add_pozos = document.getElementById("add_pozos");
+        add_pozos.addEventListener("click",function(){
+            let No_producto_pozo = parseInt(document.getElementById('No_producto_pozo').value);
+            let Save_product_pozo = document.getElementById("Save_product_pozo");
+
+            if (Save_product_pozo) { // <-- importante chequear
+                //Save_product_ducto.textContent = `${} / ${No_producto_pozo}`;
+            } else {
+                console.error("No se encontró el elemento Save_product_pozo");
+            }
+            select_status("terminal");
+            map("pozo");
+    
+        });
+        let add_dispensarios = document.getElementById("add_dispensarios");
+        add_dispensarios.addEventListener("click",function(){
+            let No_producto_dispensario = parseInt(document.getElementById('No_producto_dispensario').value);
+            let Save_product_dispensario = document.getElementById("Save_product_dispensario");
+
+            if (Save_product_dispensario) { // <-- importante chequear
+                //Save_product_ducto.textContent = `${} / ${No_producto_dispensario}`;
+            } else {
+                console.error("No se encontró el elemento Save_product_dispensario");
+            }
+            select_status("terminal");
+            map("dispensario");
+
+        });
+
     });
+
+ 
+
+
+
+
+
+    //Medicion
+    document.addEventListener("click", function(e) {
+        const mapping = {
+            "add_medicion_tanques": "medidor_tanque",
+            "add_medicion_ductos_entrada_salida": "medidor_ducto",
+            "add_medicion_pozos": "medidor_pozo",
+            "add_medicion_dispensarios": "medidor_dispensario"
+        };
+
+        if (e.target && mapping[e.target.id]) {
+            select_status("medicion");
+            map(mapping[e.target.id]);
+        }
+    });
+
+
+    
 
 
 
@@ -1473,9 +1686,10 @@
        switch(seccion){
        
         case 'producto':
-                    send_map("POST",  null,seccion,null,null)
+                    send_map("POST",  null,seccion,null,null,null,null)
                         .done(response => {
-                            if(response.map_producto && Array.isArray(response.map_producto) && response.map_producto.length ){
+                            if(response.map_producto  && response.map_producto.length ){
+ 
                                 const select = document.getElementById("productoproductoSelect");
                                 
                                 // Habilito el select
@@ -1491,7 +1705,7 @@
                                     option.textContent = item.ClaveProducto; // lo que se ve
                                     select.appendChild(option);
                                 });
-                                alert(`Exito al recuperar la lista de productos.`);
+                                alert(`Exito al recuperar la lista de productos asociados.`);
 
                             }else{
                                 alert(`Sin datos de productos. Favor de registrar datos.`);
@@ -1505,7 +1719,72 @@
                         break;
 
         case 'tanque':
-                        break;   
+                    send_map("POST",  null,null,seccion,"tanque",null,null)
+                        .done(response => {
+                            if(response.map_terminal  && response.map_terminal.length ){
+                                
+                                const select = document.getElementById("terminalSelect");
+                                
+                                // Habilito el select
+                                select.disabled = false;
+
+                                // Limpio las opciones anteriores excepto la primera
+                                select.innerHTML = '<option value="" disabled selected>Seleccione Terminal</option>';
+
+                                // Las nuevas opciones
+ 
+                                response.map_terminal.forEach(item => {
+                                    const option = document.createElement("option");
+                                    option.value = item.Id_TANQUE; // el value del select
+                                    option.textContent = item.codigo; // lo que se ve
+                                    select.appendChild(option);
+                                });
+                                alert(`Exito al recuperar la lista de tanques asociados.`);
+
+                            }else{
+                                alert(`Sin datos de los tanques. Favor de registrar datos.`);
+
+                            }
+
+                        })
+                        .fail(() => {
+                        alert("Error de comunicación con el servidor.");
+                        });
+                        break; 
+        case 'medidor_tanque':
+                    send_map("POST",  null,null,null,null,seccion,"medidor_tanque")
+                        .done(response => {
+                            if(response.map_medidores  && response.map_medidores.length ){
+                                
+                                const select = document.getElementById("medidoresSelect");
+                                
+                                // Habilito el select
+                                select.disabled = false;
+
+                                // Limpio las opciones anteriores excepto la primera
+                                select.innerHTML = '<option value="" disabled selected>Seleccione Medidor</option>';
+
+                                // Las nuevas opciones
+ 
+                                response.map_medidores.forEach(item => {
+                                    const option = document.createElement("option");
+                                    option.value = item.Id_MedicionTanque; // el value del select
+                                    option.textContent = item.SistemaMedicionTanque; // lo que se ve
+                                    select.appendChild(option);
+                                });
+                                alert(`Exito al recuperar la lista de medidores asociados.`);
+
+                            }else{
+                                alert(`Sin datos de los medidores. Favor de registrar datos.`);
+
+                            }
+
+                        })
+                        .fail(() => {
+                        alert("Error de comunicación con el servidor.");
+                        });
+            break;
+
 
         case 'pozo':
                         break; 
@@ -1522,11 +1801,9 @@
 
     document.getElementById('add_productos').addEventListener('click', function() {
         showSection('CreateProduct');
+        select_status("producto");
 
-        productoSelect.disabled = true;
-        productoproductoSelect.disabled = false;
-        medidoresSelect.disabled = true;
-        terminalSelect.disabled = true;
+
         map("producto");
 
     });
@@ -1547,10 +1824,8 @@
 
     document.getElementById('anteriorBtn_CreateProduct').addEventListener('click', function() {
         showSection('controles_volumetricos');
-        productoSelect.disabled = false;
-        productoproductoSelect.disabled = true;
-        medidoresSelect.disabled = true;
-        terminalSelect.disabled = true;    
+        select_status("controles_volumetricos");
+   
     
     
     
@@ -1561,10 +1836,18 @@
   
     document.getElementById('anteriorBtn_ProductController').addEventListener('click', function() {
         showSection('CreateProduct');
+        select_status("producto");
+
     });
   
     document.getElementById('anteriorBtn_Measurement_system').addEventListener('click', function() {
         showSection('ProductController');
+        select_status("terminal");
+
+
+
+
+
     });
 
   
@@ -2225,6 +2508,10 @@
 
 
 
+
+
+
+
     var formData  = {
         csrf_token: $("input[name='csrf_token']").val().trim()
 
@@ -2651,7 +2938,7 @@
 
 
 
-    let contador_productos = 0;
+    //let add_tanques = 0;
     let total_productos = 0;
 
     let new_add_producto = document.getElementById('añadir_producto_producto');

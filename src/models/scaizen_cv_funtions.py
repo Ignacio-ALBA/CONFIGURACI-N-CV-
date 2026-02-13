@@ -908,35 +908,55 @@ class Cv_configuration():
         self.cv_Configuration = None
 
     def Select_cv(dato):
-            data_type= cv.ControlesVolumetricos.select_type(dato)
-            data = []
+        registros = cv.ControlesVolumetricos.select_type(dato)
 
-            if data_type:
-                data = [{'Id_CV':cv.Id_CV,
-                         'Version':cv.Version,
-                         'RfcContribuyente':cv.RfcContribuyente,
-                         'RfcRepresentanteLegal':cv.RfcRepresentanteLegal,
-                         'RfcProveedor':cv.RfcProveedor,
-                         'RfcProveedores':cv.RfcProveedores,
-                         'TipoCaracter':cv.TipoCaracter,
-                         'ModalidadPermiso':cv.ModalidadPermiso,
-                         'NumPermiso':cv.NumPermiso,
-                         'NumContratoOAsignacion':cv.NumContratoOAsignacion,
-                         'InstalacionAlmacenGasNatural':cv.InstalacionAlmacenGasNatural,
-                         'ClaveInstalacion':cv.ClaveInstalacion,
+        if not registros:
+            return []
 
-                         'DescripcionInstalacion':cv.DescripcionInstalacion,
-                         'GeolocalizacionLatitud':cv.GeolocalizacionLatitud,
-                         'GeolocalizacionLongitud':cv.GeolocalizacionLongitud,
-                         'NumeroPozos':cv.NumeroPozos,
-                         'NumeroTanques':cv.NumeroTanques,
-                         'NumeroDuctosEntradaSalida':cv.NumeroDuctosEntradaSalida,
-                         'NumeroDuctosTransporteDistribucion':cv.NumeroDuctosTransporteDistribucion,
-                         'NumeroDispensarios':cv.NumeroDispensarios,
-                         'Tipo':cv.Tipo,
-                         }for cv in data_type]
-                return data
+        data = []
 
+        for registro in registros:
+            cv_dict = {
+                'Id_CV': registro.Id_CV,
+                'Version': registro.Version,
+                'RfcContribuyente': registro.RfcContribuyente,
+                'RfcRepresentanteLegal': registro.RfcRepresentanteLegal,
+                'RfcProveedor': registro.RfcProveedor,
+                'RfcProveedores': registro.RfcProveedores,
+                'TipoCaracter': registro.TipoCaracter,
+                'ModalidadPermiso': registro.ModalidadPermiso,
+                'NumPermiso': registro.NumPermiso,
+                'NumContratoOAsignacion': registro.NumContratoOAsignacion,
+                'InstalacionAlmacenGasNatural': registro.InstalacionAlmacenGasNatural,
+                'ClaveInstalacion': registro.ClaveInstalacion,
+                'DescripcionInstalacion': registro.DescripcionInstalacion,
+                'GeolocalizacionLatitud': registro.GeolocalizacionLatitud,
+                'GeolocalizacionLongitud': registro.GeolocalizacionLongitud,
+                'NumeroPozos': registro.NumeroPozos,
+                'NumeroTanques': registro.NumeroTanques,
+                'NumeroDuctosEntradaSalida': registro.NumeroDuctosEntradaSalida,
+                'NumeroDuctosTransporteDistribucion': registro.NumeroDuctosTransporteDistribucion,
+                'NumeroDispensarios': registro.NumeroDispensarios,
+                'Tipo': registro.Tipo,
+                ##'anexos': []
+                'total_anexos':0
+            }
+
+            anexos = cv.CvProductoBitacoraBitacoraMensual \
+                .select_by_id_cv_fk(registro.Id_CV)
+
+            #for anexo in anexos:
+            cv_dict['total_anexos'] =len(anexos)
+            """    cv_dict['anexos'].append({
+                    'id': anexo.id,
+                    'id_producto_fk': anexo.id_producto_fk,
+                    'id_bitacora_fk': anexo.id_bitacora_fk,
+                    'id_bitacoramensual_fk': anexo.id_bitacoramensual_fk,
+                })
+            """
+            data.append(cv_dict)
+
+        return data
 
     def Add_cv(self,data):
             Actividad = data.get("Actividad")
@@ -1055,6 +1075,8 @@ class Cv_configuration():
 
 
         return result
+
+
 
 
 
@@ -1062,45 +1084,68 @@ class Cv_configuration():
 class Producto_configuration():
     def __init__(self):
         self.cv_Configuration = None
-    def map_producto():
-        map_data = cv.Producto.select_producto()
+    def map_producto(scout):
+
+        scouts= cv.CvProductoBitacoraBitacoraMensual.scout_select(scout)
         data = []
-        if map_data:
-            data = [{'Id_PRODUCTO': map_[0],
-                    'ClaveProducto': map_[1]
-                    } for map_ in map_data]
+        logging.info(scouts)
+        for scout_obj, id_producto in scouts:
+            map_data = cv.Producto.select_producto(id_producto)            
+            if map_data:
+                ##voy agregando datos
+                data.extend([
+                    {
+                        'Id_PRODUCTO': map_[0],
+                        'ClaveProducto': map_[1]
+                    }
+                    for map_ in map_data
+            ])
+        logging.info(data)
+        #logging.info(scouts)
 
         return data
 
 
     def Select_producto(id):
-            producto= cv.Producto.select_by_id(id)
-            data = []
-            if producto:
-                data = {'Id_PRODUCTO':producto.Id_PRODUCTO ,
-                         'ClaveProducto':producto.ClaveProducto,
-                         'ClaveSubProducto':producto.ClaveSubProducto,
-                         'ComposOctanajeGasolina':producto.ComposOctanajeGasolina,
-                         'GasolinaConCombustibleNoFosil':producto.GasolinaConCombustibleNoFosil,
-                         'ComposDeCombustibleNoFosilEnGasolina':producto.ComposDeCombustibleNoFosilEnGasolina,
-                         'DieselConCombustibleNoFosil':producto.DieselConCombustibleNoFosil,
-                         'ComposDeCombustibleNoFosilEnDiesel':producto.ComposDeCombustibleNoFosilEnDiesel,
-                         'TurbosinaConCombustibleNoFosil':producto.TurbosinaConCombustibleNoFosil,
-                         'ComposDeCombustibleNoFosilEnTurbosina':producto.ComposDeCombustibleNoFosilEnTurbosina,
-                         'ComposDePropanoEnGasLP':producto.ComposDePropanoEnGasLP,
+        producto = cv.Producto.select_by_id(id)
+        if not producto:
+            return {}
 
-                         'ComposDeButanoEnGasLp':producto.ComposDeButanoEnGasLp,
-                         'DensidadDePetroleo':producto.DensidadDePetroleo,
-                         'ComposDeAzufreEnPetroleo':producto.ComposDeAzufreEnPetroleo,
-                         'Otros':producto.Otros,
-                         'MarcaComercial':producto.MarcaComercial,
-                         'Marcaje':producto.Marcaje,
-                         'ConcentracionSustanciasMarcaje':producto.ConcentracionSustanciasMarcaje,
-                         'nombre_producto':producto.nombre_producto,
-                         'UnidadDeMedida':producto.UnidadDeMedida,
+        data = {
+            'Id_PRODUCTO': producto.Id_PRODUCTO,
+            'ClaveProducto': producto.ClaveProducto,
+            'ClaveSubProducto': producto.ClaveSubProducto,
+            'ComposOctanajeGasolina': producto.ComposOctanajeGasolina,
+            'GasolinaConCombustibleNoFosil': producto.GasolinaConCombustibleNoFosil,
+            'ComposDeCombustibleNoFosilEnGasolina': producto.ComposDeCombustibleNoFosilEnGasolina,
+            'DieselConCombustibleNoFosil': producto.DieselConCombustibleNoFosil,
+            'ComposDeCombustibleNoFosilEnDiesel': producto.ComposDeCombustibleNoFosilEnDiesel,
+            'TurbosinaConCombustibleNoFosil': producto.TurbosinaConCombustibleNoFosil,
+            'ComposDeCombustibleNoFosilEnTurbosina': producto.ComposDeCombustibleNoFosilEnTurbosina,
+            'ComposDePropanoEnGasLP': producto.ComposDePropanoEnGasLP,
+            'ComposDeButanoEnGasLp': producto.ComposDeButanoEnGasLp,
+            'DensidadDePetroleo': producto.DensidadDePetroleo,
+            'ComposDeAzufreEnPetroleo': producto.ComposDeAzufreEnPetroleo,
+            'Otros': producto.Otros,
+            'MarcaComercial': producto.MarcaComercial,
+            'Marcaje': producto.Marcaje,
+            'ConcentracionSustanciasMarcaje': producto.ConcentracionSustanciasMarcaje,
+            'nombre_producto': producto.nombre_producto,
+            'UnidadDeMedida': producto.UnidadDeMedida,
+            'Tanque': 0,
+            'Ducto': 0,
+            'Pozo': 0,
+            'Dispensario': 0
+        }
 
-                         }
-                return data
+        numero_tanques = cv.Tanque.get_for_Id_PRODUCTO_fk(producto.Id_PRODUCTO)
+        for t in numero_tanques:
+         logging.info(f"Tanque ID: {t.Id_TANQUE}")
+        
+        logging.info(numero_tanques)
+        data['Tanque'] = len(numero_tanques)
+
+        return data
 
 
     def Add_cv(self,data):
@@ -1220,3 +1265,446 @@ class Producto_configuration():
 
 
         return result
+
+
+
+
+
+
+
+class Terminal_configuration():
+    def __init__(self):
+        self.cv_Configuration = None
+    def map_terminal(scout,type_):
+        if type_=="tanque":
+                scouts= cv.Tanque.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_tanque, codigo in scouts:
+                    data.append({
+                        'Id_TANQUE': id_tanque,
+                        'codigo': codigo
+                    })
+                return data
+        elif type_ =="pozo":
+                scouts= cv.Pozo.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_pozo, codigo in scouts:
+                    data.append({
+                        'Id_POZO': id_pozo,
+                        'ClavePozo': codigo
+                    })
+                return data
+        elif type_ =="ducto":
+                scouts= cv.Ducto.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_ducto, codigo in scouts:
+                    data.append({
+                        'Id_DUCTO': id_ducto,
+                        'ClaveIdentificacionDucto': codigo
+                    })
+                return data
+        elif type_ =="dispensario":
+                scouts= cv.Dispensario.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_dispensario, codigo in scouts:
+                    data.append({
+                        'Id_DISPENSARIO': id_dispensario,
+                        'ClaveDispensario': codigo
+                    })
+                return data
+
+    def Select_terminal(id,type_):
+            if type_=="tanque":
+                    tanque= cv.Tanque.select_by_id(id)
+
+                    data = []
+                    if tanque:
+                        data = {'Id_TANQUE':tanque.Id_TANQUE ,
+                                'Id_MedicionTanque_fk':tanque.Id_MedicionTanque_fk,
+                                'ClaveIdentificacionTanque':tanque.ClaveIdentificacionTanque,
+                                'codigo':tanque.codigo,
+                                'Id_PRODUCTO_fk':None,
+                                'LocalizacionYODescripcionTanque':tanque.LocalizacionYODescripcionTanque,
+                                'VigenciaCalibracionTanque':tanque.VigenciaCalibracionTanque,
+                                'CapacidadTotalTanque':tanque.CapacidadTotalTanque,
+                                'CapacidadTotalTanque_UM':tanque.CapacidadTotalTanque_UM,
+                                'CapacidadOperativaTanque':tanque.CapacidadOperativaTanque,
+                                'CapacidadOperativaTanque_UM':tanque.CapacidadOperativaTanque_UM,
+                                'CapacidadUtilTanque':tanque.CapacidadUtilTanque,
+                                'CapacidadUtilTanque_UM':tanque.CapacidadUtilTanque_UM,
+                                'CapacidadFondajeTanque':tanque.CapacidadFondajeTanque,
+                                'CapacidadFondajeTanque_UM':tanque.CapacidadFondajeTanque_UM,
+                                'CapacidadGasTalon':tanque.CapacidadGasTalon,
+                                'CapacidadGasTalon_UM':tanque.CapacidadGasTalon_UM,
+                                'VolumenMinimoOperacion':tanque.VolumenMinimoOperacion,
+                                'VolumenMinimoOperacion_UM':tanque.VolumenMinimoOperacion_UM,
+                                'EstadoTanque':tanque.EstadoTanque,
+                                'Numero_Medidores':1
+                                }
+                        ##modificar
+                        #data['Numero_Medidores']=len(tanque.Id_MedicionTanque_fk)
+
+                        return data
+
+
+    def Add_cv(self,data):
+            Actividad = data.get("Actividad")
+            Version = data.get("Version")
+            RfcContribuyente = data.get("RfcContribuyente")
+            RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+            RfcProveedor = data.get("RfcProveedor")
+            RfcProveedores = data.get("RfcProveedores")
+            
+            Caracter = data.get("Caracter",{})#es un dict
+
+            TipoCaracter = Caracter["TipoCaracter"]
+            ModalidadPermiso = Caracter["ModalidadPermiso"]
+            NumPermiso =  Caracter["NumPermiso"]
+            NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+            InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+            ClaveInstalacion = data.get("ClaveInstalacion")
+            DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+            Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+            GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+            GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+            NumeroPozos= data.get("NumeroPozos")
+            NumeroTanques =data.get("NumeroTanques")
+            NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+            NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+            NumeroDispensario=data.get("NumeroDispensario")
+            #FechaYHoraCorte=data.get("FechaYHoraCorte")
+
+            result = cv.ControlesVolumetricos.add(
+                Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+                )
+            return result
+    def Delete_cv(self,data):
+        result = cv.ControlesVolumetricos.delete(data)
+        return result   
+    def Update_cv(self,id, data):
+
+        def filter_dict(data, allowed_fields):
+            return {k: v for k, v in data.items() if k in allowed_fields and v is not None}
+
+        CAMPOS_PERMITIDOS_CV = {
+            "Actividad","Version","RfcContribuyente","RfcRepresentanteLegal",
+            "RfcProveedor","RfcProveedores","ClaveInstalacion","DescripcionInstalacion",
+            "NumeroPozos","NumeroTanques","NumeroDuctosEntradaSalida",
+            "NumeroDuctosTransporte","NumeroDispensario","Caracter","Geolocalizacion"
+        }
+
+        CAMPOS_PERMITIDOS_CARACTER = {
+            "TipoCaracter","ModalidadPermiso","NumPermiso",
+            "NumContratoOAsignacion","InstalacionAlmacenGasNatural"
+        }
+
+        CAMPOS_PERMITIDOS_GEO = {"GeolocalizacionLatitud","GeolocalizacionLongitud"}
+
+        # Primer filtro
+        data = filter_dict(data, CAMPOS_PERMITIDOS_CV)
+
+        # Segundo filtro anidado: Caracter
+        if "Caracter" in data and isinstance(data["Caracter"], dict):
+            data["Caracter"] = filter_dict(data["Caracter"], CAMPOS_PERMITIDOS_CARACTER)
+
+        # Segundo filtro anidado: Geolocalizacion
+        if "Geolocalizacion" in data and isinstance(data["Geolocalizacion"], dict):
+            data["Geolocalizacion"] = filter_dict(data["Geolocalizacion"], CAMPOS_PERMITIDOS_GEO)
+
+
+        Actividad = data.get("Actividad")
+        Version = data.get("Version")
+        RfcContribuyente = data.get("RfcContribuyente")
+        RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+        RfcProveedor = data.get("RfcProveedor")
+        RfcProveedores = data.get("RfcProveedores")
+            
+        Caracter = data.get("Caracter",{})#es un dict
+
+        TipoCaracter = Caracter["TipoCaracter"]
+        ModalidadPermiso = Caracter["ModalidadPermiso"]
+        NumPermiso =  Caracter["NumPermiso"]
+        NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+        InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+        ClaveInstalacion = data.get("ClaveInstalacion")
+        DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+        Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+        GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+        GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+        NumeroPozos= data.get("NumeroPozos")
+        NumeroTanques =data.get("NumeroTanques")
+        NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+        NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+        NumeroDispensario=data.get("NumeroDispensario")
+
+
+
+
+        if data and "Caracter" in data and "Geolocalizacion" in data:
+            result = cv.ControlesVolumetricos.update(id,Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+            )
+        else:
+            result = None
+
+
+        return result
+
+
+
+
+
+
+
+class Medidore_configuration():
+    def __init__(self):
+        self.cv_Configuration = None
+    def map_medidores(scout,type_):
+        if type_=="medidor_tanque":
+                scouts= cv.MedicionTanque.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_medicion_tanque, SistemaMedicionTanque in scouts:
+                    data.append({
+                        'Id_MedicionTanque': id_medicion_tanque,
+                        'SistemaMedicionTanque': SistemaMedicionTanque
+                    })
+                return data
+        
+        elif type_ =="medidor_pozo":
+                scouts= cv.MedicionPozo.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_medicion_pozo, SistemaMedicionPozo in scouts:
+                    data.append({
+                        'Id_MedicionPozo': id_medicion_pozo,
+                        'SistemaMedicionPozo': SistemaMedicionPozo
+                    })
+                return data
+        elif type_ =="medidor_ducto":
+                scouts= cv.MedicionDucto.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_medicion_ducto, SistemaMedicionDucto in scouts:
+                    data.append({
+                        'Id_MedicionDucto': id_medicion_ducto,
+                        'SistemaMedicionDucto': SistemaMedicionDucto
+                    })
+                return data
+        elif type_ =="medidor_dispensario":
+                scouts= cv.MedicionDispensario.scout_select(scout)
+                data = []
+                logging.info(scouts)
+                for id_medicion_dispensario, SistemaMedicionDispensario in scouts:
+                    data.append({
+                        'Id_MedicionDispensario': id_medicion_dispensario,
+                        'SistemaMedicionDispensario': SistemaMedicionDispensario
+                    })
+                return data
+
+
+    def Select_medidores(id,type_):
+            if type_=="medidores_tanque":
+                    medicion= cv.MedicionTanque.select_by_id(id)
+
+                    data = []
+                    if medicion:
+                        data = {'Id_MedicionTanque':medicion.Id_MedicionTanque ,
+                                'SistemaMedicionTanque':medicion.SistemaMedicionTanque,
+                                'LocalizODescripSistMedicionTanque':medicion.LocalizODescripSistMedicionTanque,
+                                'VigenciaCalibracionSistMedicionTanque':medicion.VigenciaCalibracionSistMedicionTanque,
+                                'IncertidumbreMedicionSistMedicionTanque':medicion.IncertidumbreMedicionSistMedicionTanque,
+
+                                }
+                        ##modificar
+                        #data['Numero_Medidores']=len(tanque.Id_MedicionTanque_fk)
+
+                        return data
+            elif type_=="medidores_pozo":
+                    medicion= cv.MedicionPozo.select_by_id(id)
+
+                    data = []
+                    if medicion:
+                        data = {'Id_MedicionPozo':medicion.Id_MedicionPozo ,
+                                'SistemaMedicionPozo':medicion.SistemaMedicionPozo,
+                                'LocalizODescripSistMedicionPozo':medicion.LocalizODescripSistMedicionPozo,
+                                'VigenciaCalibracionSistMedicionPozo':medicion.VigenciaCalibracionSistMedicionPozo,
+                                'IncertidumbreMedicionSistMedicionPozo':medicion.IncertidumbreMedicionSistMedicionPozo,
+
+                                }
+                        ##modificar
+                        #data['Numero_Medidores']=len(tanque.Id_MedicionTanque_fk)
+
+                        return data
+                
+            elif type_=="medidores_ducto":
+                    medicion= cv.MedicionDucto.select_by_id(id)
+
+                    data = []
+                    if medicion:
+                        data = {'Id_MedicionDucto':medicion.Id_MedicionDucto ,
+                                'SistemaMedicionDucto':medicion.SistemaMedicionDucto,
+                                'LocalizODescripSistMedicionDucto':medicion.LocalizODescripSistMedicionDucto,
+                                'VigenciaCalibracionSistMedicionDucto':medicion.VigenciaCalibracionSistMedicionDucto,
+                                'IncertidumbreMedicionSistMedicionDucto':medicion.IncertidumbreMedicionSistMedicionDucto,
+
+                                }
+                        ##modificar
+                        #data['Numero_Medidores']=len(tanque.Id_MedicionTanque_fk)
+
+                        return data
+            elif type_=="medidores_dispensario":
+                    medicion= cv.MedicionDispensario.select_by_id(id)
+
+                    data = []
+                    if medicion:
+                        data = {'Id_MedicionDispensario':medicion.Id_MedicionDispensario  ,
+                                'SistemaMedicionDispensario':medicion.SistemaMedicionPozo,
+                                'LocalizODescripSistMedicionDispensario':medicion.LocalizODescripSistMedicionDispensario,
+                                'VigenciaCalibracionSistMedicionDispensario':medicion.VigenciaCalibracionSistMedicionDispensario,
+                                'IncertidumbreMedicionSistMedicionDispensario':medicion.IncertidumbreMedicionSistMedicionDispensario,
+
+                                }
+                        ##modificar
+                        #data['Numero_Medidores']=len(tanque.Id_MedicionTanque_fk)
+
+                        return data
+ 
+    def Add_cv(self,data):
+            Actividad = data.get("Actividad")
+            Version = data.get("Version")
+            RfcContribuyente = data.get("RfcContribuyente")
+            RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+            RfcProveedor = data.get("RfcProveedor")
+            RfcProveedores = data.get("RfcProveedores")
+            
+            Caracter = data.get("Caracter",{})#es un dict
+
+            TipoCaracter = Caracter["TipoCaracter"]
+            ModalidadPermiso = Caracter["ModalidadPermiso"]
+            NumPermiso =  Caracter["NumPermiso"]
+            NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+            InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+            ClaveInstalacion = data.get("ClaveInstalacion")
+            DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+            Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+            GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+            GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+            NumeroPozos= data.get("NumeroPozos")
+            NumeroTanques =data.get("NumeroTanques")
+            NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+            NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+            NumeroDispensario=data.get("NumeroDispensario")
+            #FechaYHoraCorte=data.get("FechaYHoraCorte")
+
+            result = cv.ControlesVolumetricos.add(
+                Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+                )
+            return result
+    def Delete_cv(self,data):
+        result = cv.ControlesVolumetricos.delete(data)
+        return result   
+    def Update_cv(self,id, data):
+
+        def filter_dict(data, allowed_fields):
+            return {k: v for k, v in data.items() if k in allowed_fields and v is not None}
+
+        CAMPOS_PERMITIDOS_CV = {
+            "Actividad","Version","RfcContribuyente","RfcRepresentanteLegal",
+            "RfcProveedor","RfcProveedores","ClaveInstalacion","DescripcionInstalacion",
+            "NumeroPozos","NumeroTanques","NumeroDuctosEntradaSalida",
+            "NumeroDuctosTransporte","NumeroDispensario","Caracter","Geolocalizacion"
+        }
+
+        CAMPOS_PERMITIDOS_CARACTER = {
+            "TipoCaracter","ModalidadPermiso","NumPermiso",
+            "NumContratoOAsignacion","InstalacionAlmacenGasNatural"
+        }
+
+        CAMPOS_PERMITIDOS_GEO = {"GeolocalizacionLatitud","GeolocalizacionLongitud"}
+
+        # Primer filtro
+        data = filter_dict(data, CAMPOS_PERMITIDOS_CV)
+
+        # Segundo filtro anidado: Caracter
+        if "Caracter" in data and isinstance(data["Caracter"], dict):
+            data["Caracter"] = filter_dict(data["Caracter"], CAMPOS_PERMITIDOS_CARACTER)
+
+        # Segundo filtro anidado: Geolocalizacion
+        if "Geolocalizacion" in data and isinstance(data["Geolocalizacion"], dict):
+            data["Geolocalizacion"] = filter_dict(data["Geolocalizacion"], CAMPOS_PERMITIDOS_GEO)
+
+
+        Actividad = data.get("Actividad")
+        Version = data.get("Version")
+        RfcContribuyente = data.get("RfcContribuyente")
+        RfcRepresentanteLegal = data.get("RfcRepresentanteLegal")
+        RfcProveedor = data.get("RfcProveedor")
+        RfcProveedores = data.get("RfcProveedores")
+            
+        Caracter = data.get("Caracter",{})#es un dict
+
+        TipoCaracter = Caracter["TipoCaracter"]
+        ModalidadPermiso = Caracter["ModalidadPermiso"]
+        NumPermiso =  Caracter["NumPermiso"]
+        NumContratoOAsignacion = Caracter["NumContratoOAsignacion"]
+        InstalacionAlmacenGasNatural = Caracter["InstalacionAlmacenGasNatural"]
+            
+        ClaveInstalacion = data.get("ClaveInstalacion")
+        DescripcionInstalacion = data.get("DescripcionInstalacion")
+            
+        Geolocalizacion = data.get("Geolocalizacion")#es un dict
+
+        GeolocalizacionLatitud = Geolocalizacion.get("GeolocalizacionLatitud")
+        GeolocalizacionLongitud = Geolocalizacion.get("GeolocalizacionLongitud")
+
+        NumeroPozos= data.get("NumeroPozos")
+        NumeroTanques =data.get("NumeroTanques")
+        NumeroDuctosEntradaSalida = data.get("NumeroDuctosEntradaSalida")
+        NumeroDuctosTransporte = data.get("NumeroDuctosTransporte")
+        NumeroDispensario=data.get("NumeroDispensario")
+
+
+
+
+        if data and "Caracter" in data and "Geolocalizacion" in data:
+            result = cv.ControlesVolumetricos.update(id,Version,RfcContribuyente,RfcRepresentanteLegal,RfcProveedor,RfcProveedores,
+                TipoCaracter,ModalidadPermiso,NumPermiso,NumContratoOAsignacion,InstalacionAlmacenGasNatural,
+                ClaveInstalacion,DescripcionInstalacion,
+                GeolocalizacionLatitud,GeolocalizacionLongitud,
+                NumeroPozos,NumeroTanques,NumeroDuctosEntradaSalida,NumeroDuctosTransporte,NumeroDispensario,Actividad
+            )
+        else:
+            result = None
+
+
+        return result
+
+

@@ -427,18 +427,36 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
           {% endif %}
           
           {% if current_user.RolPerms['Configuración'] %}
-          <li class="nav-item my-sm-1 my-2" id="configuracion">
-            <a href="#" class="nav-link text-white" data-bs-toggle="collapse" data-bs-target="#configuracion_submenu" aria-expanded="false" aria=current="page">
-              <i class="fa-solid fa-gears"></i><span style="font-size: 16px;" class="ms-3 d-none d-sm-inline">Configuración</span>
+          <li class="nav-item my-sm-1 my-2">
+            <a href="#" class="nav-link text-white" data-bs-toggle="collapse" 
+               data-bs-target="#configuracion_submenu" aria-expanded="false">
+          
+              <i class="fa-solid fa-gears"></i>
+              <span class="ms-3 d-none d-sm-inline">Configuración</span>
               <i class="fa fa-caret-down"></i>
-
             </a>
-            <ul class="nav collapse submenu-indented flex-column" id="configuracion_submenu" data-bs-parent="#configuracion">
+          
+            <ul class="nav collapse submenu-indented flex-column"
+                id="configuracion_submenu">
+          
               <li class="nav-item">
-                <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_configuracion.configuracion') }}" aria=current="page">
-                  <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
+                <a class="nav-link text-white"
+                   href="{{ url_for('app_scaizen.app_configuracion.configuracion') }}"
+                   aria-current="page">
+                  <i class="fa-solid fa-plus"></i>
+                  <span class="ms-2 d-none d-sm-inline">C.V.</span>
                 </a>
               </li>
+          
+              <li class="nav-item">
+                <a class="nav-link text-white"
+                   href="{{ url_for('app_scaizen.app_configuracion.interfaz') }}"
+                   aria-current="page">
+                  <i class="fa-solid fa-plus"></i>
+                  <span class="ms-2 d-none d-sm-inline">Interfaz</span>
+                </a>
+              </li>
+          
             </ul>
           </li>
         {% endif %}

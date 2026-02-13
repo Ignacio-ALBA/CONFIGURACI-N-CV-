@@ -36,30 +36,47 @@ def registrar_evento(Componente, Descripcion, tipo_evento):
 @app_configuracion.route('/Configuracion',methods=['POST','GET'])
 @login_required
 def configuracion():
+    """
     with VerificarPermisosUsuario("ClienteAlta", current_user.RolPerms) as contexto:
         if contexto is False:  # No tiene permisos
             return redirect("/scaizen/")
+    """
     if request.method == 'POST':
-        #Mapeo del select        
+        #Mapeo del select   
+        scout_actividad = request.form.get('scout_actividad')     
         map_actividad =request.form.get('map_actividad')
+
+        scout_producto = request.form.get('scout_producto')     
         map_producto =request.form.get('map_producto')
+
+        scout_terminal = request.form.get('scout_terminal')     
         map_terminal =request.form.get('map_terminal')
+        type_terminal = request.form.get('type_terminal')
+        
+        scout_medidores = request.form.get('scout_medidores')     
         map_medidores =request.form.get('map_medidores')
+        type_medidores = request.form.get('type_medidores')
 
  
         if map_actividad == "distribuidor" or map_actividad == "comercializador": 
 
                 datos =scaizen_cv_funtions.Cv_configuration.Select_cv(map_actividad)
-                print(datos)
+                logging.info(datos)
 
                 return jsonify({'map_actividad': datos})
         elif map_producto:
-                datos =scaizen_cv_funtions.Producto_configuration.map_producto()
+                datos =scaizen_cv_funtions.Producto_configuration.map_producto(scout_actividad)
+                logging.info(datos)
                 return jsonify({'map_producto': datos})
+
         elif map_terminal:
-             pass
+
+                datos =scaizen_cv_funtions.Terminal_configuration.map_terminal(scout_producto,type_terminal)
+                logging.info(datos)
+                return jsonify({'map_terminal': datos})
         elif map_medidores:
-            pass
+                datos=scaizen_cv_funtions.Medidore_configuration.map_medidores(scout_medidores,type_medidores)
+                return jsonify({'map_medidores':datos})
 
 
         #Recuperacion de datos
@@ -67,15 +84,23 @@ def configuracion():
         actividad =request.form.get('actividad')
         producto =request.form.get('producto')
         terminal =request.form.get('terminal')
+        ##Checa esta parte
+        terminal_producto = request.form.get('terminal_producto')
         medidores =request.form.get('medidores')
-
+        medidores_terminal = request.form.get('medidores_terminal')
         if producto:
             logging.info("Entre a la actividad")
 
             datos=scaizen_cv_funtions.Producto_configuration.Select_producto(id)
             logging.info('datos recuperados'+str(datos))
             return jsonify({'producto': datos})
+        elif terminal:
 
+            terminal_config =scaizen_cv_funtions.Terminal_configuration.Select_terminal(id,terminal_producto)
+            return jsonify({'terminal': terminal_config})
+        elif medidores:##Checa bien
+            medidores_config=scaizen_cv_funtions.Medidore_configuration.Select_medidores(id,medidores_terminal)
+            return jsonify({'medidores': medidores_config})
 
 
 
@@ -135,4 +160,17 @@ def configuracion():
         logging.debug(usuarios)
         
         return render_template('scaizen/configuracion.html',endpoint='consultar_compras')
+
+@app_configuracion.route('/Interfaz',methods=['POST','GET'])
+@login_required
+def interfaz():
+        if request.method == 'POST':
+            pass
+        else:
+            session = cv.SessionLocal()
+            usuarios = session.query(cv.Usuario_Cv.Nombre).all()
+            usuarios = [u[0] for u in usuarios]
+            logging.debug(usuarios)
+            
+            return render_template('scaizen/interfaz.html',endpoint='consultar_compras')
 

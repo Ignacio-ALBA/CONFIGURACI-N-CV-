@@ -74,6 +74,11 @@ from cryptography.fernet import Fernet
 #Json manager
 from data_json.managerjson import managerjson as mngj_son
 
+#SqlAlchemy
+from sqlalchemy import Numeric
+
+
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(filename)s - line %(lineno)d : %(message)s'
