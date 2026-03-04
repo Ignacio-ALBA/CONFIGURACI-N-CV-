@@ -9,7 +9,7 @@ from config import config
 #proteccion para el login, tokken csrf_token
 from flask_wtf.csrf import CSRFProtect 
 #login manager
-from flask_login import LoginManager, login_user, logout_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required,current_user
  
 
 #Control de inactividad en sesion parte 1
@@ -69,10 +69,10 @@ csrf = CSRFProtect()
 
 login_manager_app = LoginManager(app)
 
-@login_manager_app.user_loader
-def load_user(id):
-    logging.debug("login_manager_app")
-    logging.debug(id)
+@login_manager_app.user_loader #aqui se construye el current_user ,Flask lee el ID guardado en sesión 
+def load_user(id):#Asi con un usuario loggeado ya podemos redireccionar al seleccionar el logo
+    #logging.debug("login_manager_app")
+    #logging.debug(id)
     user = cv.Usuario_Cv.select_by_id(id)
     rol = cv.Roles.select_by_IdRol(user.IdRol_fk)
     UsuarioActual = cv.UsuarioActual(user,rol)
@@ -117,10 +117,13 @@ def login():
 
                         password = None
                         username = None
-                        data_to_send = {
+                        """data_to_send = {
                                 'id':user.Id
                                 }
                         return redirect(url_for('app_scaizen.scaizen',**data_to_send))
+                        """
+                        return redirect(url_for('app_scaizen.scaizen'))
+
                     else:
                         flash("Contraseña invalida...")
 
@@ -293,6 +296,18 @@ def logout_by_timeout():
     session.clear()
     flash("Su sesión ha expirado por inactividad", "warning")
     return redirect(url_for('login'))
+
+"""
+@app.route('/scaizen')#Revisa si hay un usuario autenticado en sesión.
+@login_required
+def scaizen():
+    #current_user es el usuario que está guardado en sesión principalmente en  login_user().
+    user_id = current_user.id #Flask lee el ID guardado en sesión
+    return render_template("scaizen.html")
+"""
+
+
+
 
 
 if __name__ == '__main__':

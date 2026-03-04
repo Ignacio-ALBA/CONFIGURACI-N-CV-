@@ -1708,3 +1708,66 @@ class Medidore_configuration():
         return result
 
 
+
+
+class Complementos_configuration():
+    # cargar bajo demanda (lazy loading) o precargar todo (eager loading).
+    def Select_complemento(dato):
+        registros = cv.Complemento.select_by_tipo(dato)
+
+        if not registros:
+            return []
+
+        data = [] 
+        
+        terminal_alm_trans=cv.TerminalAlmYTransTerminalAlmYDist.select_by_id(registros.Id_TERMINAL_ALMYTRANS_ALMYDIST_fk)
+        
+        almacen= 0
+        transporte= 0
+        if terminal_alm_trans:
+            almacen= terminal_alm_trans.Almacenamiento
+            transporte=terminal_alm_trans.Transporte
+
+        if registros:
+            complementos={
+                'Id_complemento':registros.Id_complemento,
+                'Id_Almacenamiento':almacen,
+                'Id_Transporte':transporte ,
+                'Id_TRASVASE':registros.Id_TRASVASE_fk,
+                'Id_DICTAMEN':registros.Id_DICTAMEN_fk,
+                'Id_CERTIFICADO':registros.Id_CERTIFICADO_fk,
+                'List_Nac':[],
+                'List_Ext':[],
+                'Aclaracion':[]
+            }
+            id= registros.Id_complemento    
+            comp_naci_extra =cv.Complemento_nacional_extranjero.select_all_by_id_complement(id)
+            for dato in comp_naci_extra:
+                complementos['List_Nac'].append(dato.Id_NACIONAL_fk )                
+                complementos['List_Ext'].append(dato.Id_EXTRANGERO_fk )
+                complementos['Aclaracion'].append(dato.ACLARACION)
+
+            data.append(complementos)
+
+        return data
+
+
+class Complementos_almacen_configuration():
+    def Select_almacen(dato):
+        registros = cv.Almacen.select_by_id(dato)
+
+        if not registros:
+            return []
+
+        data = [] 
+        if registros:
+            almacen={
+                'terminal':registros.TerminalAlm,
+                'permiso':registros.PermisoAlmacenamiento,
+                'tarifaDeAlm':registros.TarifaDeAlmacenamiento,
+                'cargoPorCapacidad':registros.CargoPorCapacidadAlmac,
+                'cargoPorUso':registros.CargoPorUsoAlmac,
+                'cargoVolumetrico':registros.CargoVolumetricoAlmac
+            }
+            data.append(almacen)
+        return data

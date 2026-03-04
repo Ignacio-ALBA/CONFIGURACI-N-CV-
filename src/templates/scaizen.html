@@ -124,6 +124,13 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
     }
   }
 </style>
+<!--checar si corrige el error de arriba
+<script>
+  document.querySelectorAll('.loading-text span').forEach((span, i) => {
+    span.style.animationDelay = `${(i+1) * 0.1}s`;
+  });
+</script>-->
+
 {% block styles %}
 {% endblock %}
 
@@ -133,19 +140,14 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
     <div style="overflow: hidden; margin-left: 0px; display: flex; flex-direction: column; justify-content:space-between; background-color: #122b49; height: 100vh; min-width: 55px; max-width: 230px; width: 30vw;">
       <!--Barra de navegacion-->
       <div class="mt-4 sidebar">
-      <a
-      class="text-white d-none d-sm-inline text-decoration-none d-flex align-items-center ms-4"
-      role="button">
-      <span class="fs-4 d-none d-sm-inline">
-        <img
-          onclick="window.location = '{{ url_for('app_scaizen.scaizen')}}'"
-          href="{{ url_for('app_scaizen.scaizen')}}"
-          src="/static/img/favicon.png"
-          alt="scaizen"
-          class="me-2"
-          height="130"
-          width="130" />
-      </span>
+        <a href="{{ url_for('app_scaizen.scaizen') }}">
+          <img
+            src="/static/img/favicon.png"
+            alt="scaizen"
+            class="me-2"
+            height="130"
+            width="130" />
+        </a>
     </a>
         <div class="dropdown open p-3">
           <div >
@@ -177,7 +179,8 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
           </div>
         </div>
 
-        <hr class="text-white d-none d-sm-block" />
+        <hr class="text-white d-none d-sm-block my-0" />
+
         <ul class="nav nav-pills flex-column mt-2 mt-sm-0" id="menu">
           
       
@@ -244,8 +247,8 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                   {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportemensual']%}
                   <li class="nav-item">
                     <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_comercializador.control_mensual_volumetrico') }}" style="font-family: 'Arial', sans-serif; font-size: 12px;" aria-current="page">
-                      <i class="fa-solid fa-book"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reporte mensual<br> volumétrico
-                    </a></span>
+                      <i class="fa-solid fa-book"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Reporte mensual<br> volumétrico</span>
+                    </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Comercializador']['sub_permisos']['CReportes']['sub_permisos']['CReportedeeventos']%}
@@ -273,7 +276,7 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
             
               <ul class="nav collapse submenu-indented flex-column" id="facturacion" data-bs-parent="#menu">
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="{{ url_for('app_scaizen.factura_alta') }}" aria=current="page">
+                  <a class="nav-link text-white" href="{{ url_for('app_scaizen.factura_alta') }}" aria-current="page">
                     <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Nuevo Comprobante</span>
                   </a>
                 </li>
@@ -299,14 +302,14 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                 <ul class="nav collapse submenu-indented flex-column" id="subcompras_4_clientes" data-bs-parent="#perfiles">
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Cliente']['sub_permisos']['ClienteAlta']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_alta') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_alta') }}" aria-current="page">
                       <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
                     </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Cliente']['sub_permisos']['ClienteConsultar']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_consultar') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_cliente_consultar') }}" aria-current="page">
                       <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consultar</span>
                     </a>
                   </li>
@@ -323,14 +326,14 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                 <ul class="nav collapse submenu-indented flex-column" id="subcompras_7_estaciones" data-bs-parent="#perfiles">
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Proveedor']['sub_permisos']['ProveedorAlta']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_alta') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_alta') }}" aria-current="page">
                       <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
                     </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Proveedor']['sub_permisos']['ProveedorConsultar']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_consultar') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_proveedor_consultar') }}" aria-current="page">
                       <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
                     </a>
                   </li>
@@ -347,14 +350,14 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                 <ul class="nav collapse submenu-indented flex-column" id="subcompras_4_estaciones" data-bs-parent="#perfiles">
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Estacióndeservicio']['sub_permisos']['EstacióndeservicioAlta']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_alta') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_alta') }}" aria-current="page">
                       <i class="fa-solid fa-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Alta</span>
                     </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Estacióndeservicio']['sub_permisos']['EstacióndeservicioConsultar']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_consultar') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_estacion_consultar') }}" aria-current="page">
                       <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
                     </a>
                   </li>
@@ -365,21 +368,21 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
               {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']%} 
               <li class="nav-item">
                 <a href="#subcompras_5_roles" data-bs-toggle="collapse" class="nav-link text-white">
-                  <i class="fa fa-users" aria-hidden="true"></i></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Roles</span>
+                  <i class="fa fa-users" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Roles</span>
                   <i class="fa fa-caret-down"></i>
                 </a>
                 
                 <ul class="nav collapse submenu-indented flex-column" id="subcompras_5_roles" data-bs-parent="#perfiles">
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']['sub_permisos']['RolesAlta']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_alta') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_alta') }}" aria-current="page">
                       <i class="fa fa-plus" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Crear Rol</span>
                     </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Roles']['sub_permisos']['RolesConsultar']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_consultar') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.app_catalogo.roles_consultar') }}" aria-current="page">
                       <i class="fa fa-address-card" aria-hidden="true"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta Rol</span>
                     </a>
                   </li>
@@ -396,25 +399,25 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                 
                 <ul class="nav collapse submenu-indented flex-column" id="subcompras_6_usuarios" data-bs-parent="#perfiles">
                 <!--   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_perfiles') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_perfiles') }}" aria-current="page">
                       <i class="fa-solid fa-user-pen"></i>Perfiles
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_permisos') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.usuarios_permisos') }}" aria-current="page">
                       <i class="fa-solid fa-users-gear"></i>Permisos
                     </a>
                   </li>-->
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Usuarios']['sub_permisos']['UsuariosAlta']%}
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_alta') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_alta') }}" aria-current="page">
                       <i class="fa-solid fa-user-plus"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Crear usuarios</span>
                     </a>
                   </li>
                   {% endif %}
                   {% if current_user.RolPerms['Catalogo']['sub_permisos']['Usuarios']['sub_permisos']['UsuariosConsultar']%} 
                   <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}" aria=current="page">
+                    <a class="nav-link text-white" href="{{ url_for('app_scaizen.catalogo_usuarios_consultar') }}" aria-current="page">
                       <i class="fa-solid fa-clipboard-question"></i><span style="font-size: 16px;" class="ms-2 d-none d-sm-inline">Consulta</span>
                     </a>
                   </li>
@@ -428,7 +431,7 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
           
           {% if current_user.RolPerms['Configuración'] %}
           <li class="nav-item my-sm-1 my-2">
-            <a href="#" class="nav-link text-white" data-bs-toggle="collapse" 
+            <a href="#configuracion" class="nav-link text-white" data-bs-toggle="collapse" 
                data-bs-target="#configuracion_submenu" aria-expanded="false">
           
               <i class="fa-solid fa-gears"></i>
@@ -437,7 +440,7 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
             </a>
           
             <ul class="nav collapse submenu-indented flex-column"
-                id="configuracion_submenu">
+                id="configuracion_submenu" data-bs-parent="#menu">
           
               <li class="nav-item">
                 <a class="nav-link text-white"
@@ -447,7 +450,15 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
                   <span class="ms-2 d-none d-sm-inline">C.V.</span>
                 </a>
               </li>
-          
+                    
+              <li class="nav-item">
+                <a class="nav-link text-white"
+                   href="{{ url_for('app_scaizen.app_configuracion.Complementos') }}"
+                   aria-current="page">
+                  <i class="fa-solid fa-plus"></i>
+                  <span class="ms-2 d-none d-sm-inline">Complementos</span>
+                </a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link text-white"
                    href="{{ url_for('app_scaizen.app_configuracion.interfaz') }}"
@@ -459,12 +470,8 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
           
             </ul>
           </li>
-        {% endif %}
-        </ul>
-
-
-
-          <hr class="text-white d-none d-sm-block" />
+         {% endif %}
+         <hr class="text-white d-none d-sm-block" />
           <div>
             <a
               class="d-none d-sm-inline text-decoration-none d-flex align-items-center ms-4"
@@ -766,4 +773,22 @@ href="{{url_for('static', filename='css/boxicons/css/boxicons.min.css') }}" />
       resetInactivityTimer();
   });
   </script>
+<script>
+  document.addEventListener("hide.bs.collapse", function (event) {
+  
+      const collapseElement = event.target;
+  
+      // Buscar todos los collapse hijos abiertos dentro del que se está cerrando
+      const children = collapseElement.querySelectorAll(".collapse.show");
+  
+      children.forEach(function (child) {
+          bootstrap.Collapse.getInstance(child)?.hide();
+      });
+  
+  });
+  </script>
+
+
+
+
 {% endblock %}

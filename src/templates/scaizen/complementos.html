@@ -1,0 +1,823 @@
+{% extends 'scaizen.html' %}
+{% block title %}    Configuración de la interfaz
+{% endblock %}
+{% block tables %}
+
+<div class="formulario" style="width: 600px;">
+    <div style="display: flex; align-items: center;">
+        <div>
+            <label class="titulo" style="text-transform: uppercase; margin: 0;">Interfaz</label>
+            <p class="dir_vista">Configuración/Complementos</p>
+        </div>
+      </div>  
+</div>
+<hr class="text-black d-none d-sm-block" />
+<form id="cargasForm" method="POST">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+
+    <div class="formulario_alta" >
+        <div id="Control">
+            <div style="display: flex; justify-content: center;">
+                <div class="campo">
+                    <label style="display: flex; justify-content: center;" for="Complement_select">Tipo de complemento:</label>
+                    <select  class="btn options_input select-small" name="transport2" id="Complement_Select">
+                        <option value="" disabled selected>Seleccione complemento</option>
+                        <option value="distribuidor">Distribuidor</option>
+                        <option value="comercializador">Comercializador</option>
+                    </select>
+                </div>
+            </div>
+            <hr class="text-black d-none d-sm-block" />
+
+        </div>
+
+
+        <div id="Complementos">
+            <div id="Almacenamiento_Transporte">
+                <div class="row">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="almacenamiento">Almacenamiento:</label>
+                                <button type="button" class="button_color_alba button_color_alba_producto--sm" id="add_almacenamiento">+/✎</button>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="Transporte">Transporte:</label>
+                                    <button type="button" class="button_color_alba button_color_alba_producto--sm" id="add_transporte">+/✎</button>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="text-black d-none d-sm-block" />
+
+            <div id="TRASVASE_DICTAMEN">
+                <div class="row">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="Trasvase">Trasvase:</label>
+                                <button type="button" class="button_color_alba button_color_alba_producto--sm" id="add_trasvase"  >+/✎</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="Dictamen">Dictamen:</label>
+                                <button type="button" class="button_color_alba button_color_alba_producto--sm" id="add_dictamen"  >+/✎</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <hr class="text-black d-none d-sm-block" />
+
+            <div id="CERTIFICADO_NACIONAL">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="Certificado">Certificado:</label>
+                            <button type="button" class="button_color_alba button_color_alba_producto--sm" id="add_certificado"  >+/✎</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_Nacional">Nacional:</label>
+                            <input type="number" id="No_Nacional" name="nacional" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba_producto--sm"   id="add_nacional" >+/✎</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="text-black d-none d-sm-block" />
+        
+            <div id="EXTRANJERO_ACLARACION">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" for="No_Extranjero">Extranjero:</label>
+                            <input type="number" id="No_Extranjero" name="extranjero" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba_producto--sm"   id="add_extranjero" >+/✎</button>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Aclaración:</label>
+                            <input type="text" id="Aclaracion" name="aclaracion" class="form-control texto-negro" placeholder="Ej. La información del registro de volumen fue proporcionada por el transportista TraMex S.A. de C.V." required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="text-black d-none d-sm-block" />
+            <div class="d-flex justify-content-center mt-4">
+                <button type="button" class="button_color_alba me-2" id="Añadir_complemento" disabled>0/1</button>
+                <button type="button" class="button_color_alba me-2" id="Eliminar_complemento" disabled>ELIMINAR</button>
+            </div>
+        </div>
+                <!--Almacenamiento_Transporte-->
+                <div id="Almacenamiento" style="display: none;">
+                    <h3 class="text-center">Almacenamiento</h3> <!-- Título añadido -->
+
+        
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="terminalamydist">Terminal de almacenamiento y distribución:</label>
+                                <input type="text" id="TERMINALALMYDIST" name="terminal" class="form-control" placeholder="Terminal de almacenamiento Sur, ubicada en la Zona Industrial 
+                                Coatzacoalcos." required>
+                            </div>
+                            
+                        </div>
+                        <div class="col-md-6">
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="numeroPermiso">Permiso almacenamiento y distribución:</label>
+                                    <input type="text" id="PermisoAlmYDist" name="permiso_almacenamiento" class="form-control texto-negro" placeholder="Ej. PQ/ 12345 /ALM/2015" required >
+                                </div>
+                        </div>
+                    </div> 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="tarifadealmacenamiento">Tarifa de almacenamiento:</label>
+                                <input type="number" id="TARIFADEALMACENAMIENTO" name="tarifa" class="form-control" placeholder="Ej. 58.698" step="0.001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargoporcapacidadalmac">Cargo por capacidad almacenamiento:</label>
+                                <input type="number" id="CARGOPORCAPACIDADAALMA" name="cargo" class="form-control" placeholder="Ej. 15.631" step="0.001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargousoalmac">Cargo por uso de almacenamiento:</label>
+                                <input type="text" id="CargoPorUsoAlmac" name="Cargousoalmac" class="form-control" placeholder="Ej. 13.946" step="0.001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargovolumetricoalma">Cargo volumetrico almacenado:</label>
+                                <input type="text" id="" name="CargoVolumetricoAlmac" class="form-control" placeholder="Ej.29.12" step="0.01" min="0" max="1000000" required>
+        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_alm">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_almacen">0 / 1</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_almacen">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_almacen">LIMPIAR</button>
+                    </div>                
+                </div>
+
+        
+                <div id="Transporte" style="display: none;">
+                    <h3 class="text-center">Transporte</h3> <!-- Título añadido -->
+
+
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="permisotransporte">Permiso de transporte:</label>
+                                <input type="text" id="PermisoTransporte" name="permisoTransporte" class="form-control" placeholder="PL/20200/TRA/OM/2022" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                                <div class="form-group d-flex align-items-center">
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="clavedevehiculo">Clave de vehiculo:</label>
+                                    <input type="text" id="ClaveDeVehiculo" name="Clavedevehiculo" class="form-control texto-negro" placeholder="Ej. 456TRD" required >
+                                </div>
+                        </div>
+                    </div>        
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="tarifadetransporte">Tarifa de transporte:</label>
+                                <input type="text" id="TarifaDeTransporte" name="tarifaDeTransporte" class="form-control texto-negro" placeholder="Ej. 4.46500" step="0.00001" min="0" max="1000000" required >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargoporcapacidadtrans">Cargo por capacidad de transporte :</label>
+                                <input type="text" id="CargoPorCapacidadTrans" name="cargoPorCapacidadTrans" class="form-control" placeholder="Ej. 0.99200" step="0.00001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                    </div>       
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargoporusotrans">Cargo por uso de transporte:</label>
+                                <input type="text" id="CargoPorUsoTrans" name="cargoPorUsoTrans" class="form-control" placeholder="Ej. 0.03600" step="0.00001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="cargovolumetricotrans">Cargo volumetrico por transporte:</label>
+                                <input type="text" id="CargoVolumetricoTrans" name="cargoVolumetricoTrans" class="form-control" placeholder="Ej. 3.43700" step="0.00001" min="0" max="1000000" required>
+                            </div>
+                        </div>
+                    </div>    
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_tran">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_transporte">GUARDAR</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_transporte">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_transporte">LIMPIAR</button>
+                    </div>       
+                </div>
+        
+                <!--TRASVASE_DICTAMEN-->
+                <div id="Transvase" style="display: none;">
+                    <h3 class="text-center">Transvase</h3>
+
+
+                    <div class="row">
+                        <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex align-items-center">
+        
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="nombretrasvase">Nombre de trasvase:</label>
+                                    <input type="text" id="NombreTrasvase" name="nombreTrasvase" class="form-control" placeholder="Ej. Servicios de Trasvase del Noreste, S.A. de C.V." required>
+                                    </div>
+        
+                                </div>
+        
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex align-items-center">
+        
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="rfctrasvase">Rfc de trasvase:</label>
+                                    <input type="text" id="RfcTrasvase" name="rfcTrasvase" class="form-control" placeholder="Ej. STN9506184R6" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex align-items-center">
+        
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="permisotrasvase">Permiso de trasvase:</label>
+                                    <input type="text" id="PermisoTrasvase" name="permisoTrasvase" class="form-control" placeholder="Ej. SCT-DGDFM-111A/0001 " required>
+                                    </div>
+                                </div>
+        
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex align-items-center">
+        
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="descripciontrasvase">Descripcion de trasvase:</label>
+                                    <input type="text" id="DescripcionTrasvase" name="descripcionTrasvase" class="form-control" placeholder="Ej. Servicio de transbordo y trasvase de petrolíferos a través de ferrocarril, 
+                                    ubicado en Av. México 101." required>
+                                    </div>
+                                </div>           
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="form-group d-flex align-items-center">
+        
+                                    <label class="col-form-label texto-negro mb-0 me-2" for="cfditrasvase">Cfdi de trasvase:</label>
+                                    <input type="text" id="CfdiTrasvase" name="cfdiTrasvase" class="form-control" placeholder="Ej. 4QE29D07-F126-4038-AC77-C60A33646FF9" required>
+                                    </div>
+                                </div>              
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4">
+                            <button type="button" class="button_color_alba me-2" id="next_complementos_tras">ANTERIOR</button>
+                            <button type="button" class="button_color_alba me-2" id="Save_transvase">GUARDAR</button>
+                            <button type="button" class="button_color_alba me-2" id="Delete_transvase">ELIMINAR</button>
+                            <button type="reset" class="button_color_alba  me-2" id="Clear_transvase">LIMPIAR</button>
+                        </div>   
+                </div>
+        
+                <div id="Dictamen" style="display: none;">
+                    <h3 class="text-center">Dictamen</h3>
+
+                    <div style="display: flex; justify-content: center;">
+                        <div class="campo">
+                            <label style="display: flex; justify-content: center;" for="Selecttransvase">Registros:</label>
+                            <select  class="btn options_input select-small" name="selecttransvase" id="SelectTransvase">
+                                <option value="" disabled selected>Seleccione transvase</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="rfcdictamen">Rfc de dictamen:</label>
+                            <input type="text" id="RfcDictamen" name="rfcDictamen" class="form-control" placeholder="Ej. GEO9506184R6" required>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="lotedictamen">Lote de dictamen:</label>
+                            <input type="number" id="LoteDictamen" name="loteDictamen" class="form-control" placeholder="Ej. 435"   step="1" min="0" max="1000000" required>
+                            </div>
+                        </div>                
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numerofoliodictamen">Numero de folio del dictamen:</label>
+                            <input type="text" id="NumeroFolioDictamen" name="numeroFolioDictamen" class="form-control" placeholder="Ej. GEO9506184R6000232020" required>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="fechaemisiondictamen">Fecha de emision del dictamen:</label>
+                            <input type="date" id="FechaEmisionDictamen" name="fechaEmisionDictamen" class="form-control" required>
+                            </div>
+                        </div>                
+                    </div>        
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="resultadodictamen">Resultado de dictamen:</label>
+                            <input type="text" id="ResultadoDictamen" name="resultadoDictamen" class="form-control" placeholder="Ej. Se aplicó el método de muestreo ASTM D4057 al lote 435 y se determinó que 
+                            el diésel contiene 5% de biodiésel." required>
+                            </div>
+                        </div>     
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_dic">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_dictamen">GUARDAR</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_dictamen">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_dictamen">LIMPIAR</button>
+                    </div>   
+                </div>
+        
+                <!--CERTIFICADO_NACIONAL-->
+                <div id="Certificado" style="display: none;">
+                    <h3 class="text-center">Certificado</h3>
+ 
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="rfccertificado">Rfc Certificado:</label>
+                            <input type="text" id="RfcCertificado" name="rfccertificado" class="form-control" placeholder="Ej. EVA9612104R6" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="numerofoliocertificado">Numero de folio certificado:</label>
+                            <input type="text" id="NumeroFolioCertificado" name="numeroFolioCertificado" class="form-control" placeholder="Ej. EVA9612104R6000232020" required>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row mb-3">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-group d-flex align-items-center">
+        
+                                <label class="col-form-label texto-negro mb-0 me-2" for="fechaemisioncertificado">Fecha de emision del certificado:</label>
+                                <input type="date" id="FechaEmisionCertificado" name="fechaEmisionCertificado" class="form-control" required>                    
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group d-flex align-items-center">
+        
+                                <label class="col-form-label texto-negro mb-0 me-2" for="resultadocertificado">Resultado del certificado:</label>
+                                <input type="text" id="ResultadoCertificado" name="resultado" class="form-control" laceholder="Ej. Se acredita la correcta operación y funcionamiento de programas 
+                                informáticos para llevar controles volumétricos. "required>                    
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_cer">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_certificado">GUARDAR</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_certificado">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_certificado">LIMPIAR</button>
+                    </div>   
+                </div>
+                <div id="Nacional" style="display: none;">
+                    <h3 class="text-center">Nacional</h3>
+                    <div style="display: flex; justify-content: center;">
+                        <div class="campo">
+                            <label style="display: flex; justify-content: center;" for="Selectnacional">Registros:</label>
+                            <select  class="btn options_input select-small" name="selectnacional" id="SelectNacional">
+                                <option value="" disabled selected>Seleccione nacional</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="rfcclienteOproveedor">Rfc del cliente o proveedor:</label>
+                            <input type="text" id="RfcClienteOProveedor" name="rfcClienteOProveedor" class="form-control" placeholder="Ej.PAL7202161U0 " required>
+                            </div>
+                        </div>
+        
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="nombreclienteoproveedor">Nombre cliente o proveedor:</label>
+                            <input type="text" id="NombreClienteOProveedor" name="nombreClienteOProveedor" class="form-control" placeholder="Ej. Petromexico S.A. de C.V. " required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="permisoproveedor">Permiso del cliente o Proveedor:</label>
+                            <input type="text" id="PermisoProveedor" name="permisoProveedor" class="form-control" placeholder="Ej. H/88888/COM/2021 " required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="">CFDIs:</label>
+                            <input type="number" id="No_CFDIS" name="cfdis" min="0" max="100" value="0">
+                            <button type="button" class="button_color_alba button_color_alba_producto--sm"   id="add_cfdis" >+/✎</button>
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_nac">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_nacional">0 / 1</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_nacional">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_nacional">LIMPIAR</button>
+                    </div>   
+                </div>
+                <div id="CFDIs" style="display: none;">
+                    <h3 class="text-center">CFDIs</h3> <!-- Título añadido -->
+                    <div style="display: flex; justify-content: center;">
+                        <div class="campo">
+                            <label style="display: flex; justify-content: center;" for="Selectcfdi">Registros:</label>
+                            <select  class="btn options_input select-small" name="selectcdfis" id="SelectCFDI">
+                                <option value="" disabled selected>Seleccione CFDI</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="cfdi">CFDI:</label>
+                            <input type="text" id="CFDI" name="cFDI" class="form-control" placeholder="Ej.4FE29D07-F126-4038-AC77-C60A33646FF9" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="tipocfdi">Tipo de CFDI:</label>
+                            <select  class="btn options_input select-small" name="tipoCFDI" id="TipoCFDI">
+                                <option value="ingreso">Ingreso</option>
+                                <option value="egreso">Egreso</option>
+                                <option value="traslado">Traslado</option>
+                            </select>                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="precioventaocompraocontrap">Precio de venta/compra/contrap:</label>
+                            <input type="number" id="PrecioVentaOCompraOContrap" name="precioVentaOCompraocontrap"  class="form-control" placeholder="Ej. 17000.34" step="0.01" min="0" max="1000000" required>        
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="">Fecha y hora de transaccion:</label>
+                            <input type="datetime-local" id="FechaYHoraTransaccion" name="fechayhoratransaccion"  class="form-control" placeholder="Ej. 2020-10-31T11:59:45-0100"  required>        
+                            </div>
+                        </div>            
+                    </div>
+        
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+        
+                            <label class="col-form-label texto-negro mb-0 me-2" for="volumendocumentado">Volumen documentado:</label>
+                            <input type="number" id="VolumenDocumentado" name="volumenDocumentado"  class="form-control" placeholder="Ej. 20000.00000" step="0.00001" min="0" max="1000000" required>        
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_cfdi">0 / 1</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_cfdi">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_cfdi">LIMPIAR</button>
+                    </div>   
+                </div>
+        
+                <!--EXTRANJERO_ACLARACION-->
+                <div id="Extranjero" style="display:none;">
+                    <h3 class="text-center">Extranjero</h3> <!-- Título añadido -->
+                    <div style="display: flex; justify-content: center;">
+                        <div class="campo">
+                            <label style="display: flex; justify-content: center;" for="Selectextranjero">Registros:</label>
+                            <select  class="btn options_input select-small" name="selectextranjero" id="SelectExtranjero">
+                                <option value="" disabled selected>Seleccione extranjero</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="permisoimportacionoexportacion">Permiso de importacion o de exportacion:</label>
+                                <input type="text" id="PermisoImportacionOExportacion" name="permisoImportacionOExportacion" class="form-control texto-negro" placeholder="Ej.1234C123456789" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" for="No_Pedimentos">Pedimentos:</label>
+                                <input type="number" id="No_Pedimentos" name="pedimentos" min="0" max="100" value="0">
+                                <button type="button" class="button_color_alba button_color_alba_producto--sm"   id="add_pedimentos" >+/✎</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="next_complementos_ext">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_extranjero">0 / 1</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_extranjero">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_extranjero">LIMPIAR</button>
+                    </div>   
+                </div>
+                <div id="Pedimentos" style="display: none;">
+                    <h3 class="text-center">Pedimentos</h3> <!-- Título añadido -->
+                    <div style="display: flex; justify-content: center;">
+                        <div class="campo">
+                            <label style="display: flex; justify-content: center;" for="Selectpedimentos">Registros:</label>
+                            <select  class="btn options_input select-small" name="selectpedimentos" id="SelectPedimentos">
+                                <option value="" disabled selected>Seleccione pedimentos</option>
+
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" >Punto de internacion o extraccion:</label>
+                                <input type="text" id="PuntoDeInternacionOExtraccion" name="puntodeinternacionoextraccion" class="form-control texto-negro" placeholder="Ej.280" required>
+                            </div>                    
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group d-flex align-items-center">
+                                <label class="col-form-label texto-negro mb-0 me-2" >PaisOrigenODestino:</label>
+                                <input type="text" id="PaisOrigenODestino" name="paisorigenodestino" class="form-control texto-negro" placeholder="Ej.USA" required>
+                            </div>                    
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Medio de transporte de entra o salida de aduana:</label>
+                            <input type="text" id="MedioDeTransEntraOSaleAduana" name="mediofetransentraosaleaduana" class="form-control texto-negro" placeholder="Ej. 1" required>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Pedimento de aduanal:</label>
+                            <input type="text" id="PedimentoAduanal" name="pedimentoaduanal" class="form-control texto-negro" placeholder="Ej. 20  28  3454  0123456" required>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Incoterms:</label>
+                            <input type="text" id="Incoterms" name="Incoterms" class="form-control texto-negro" placeholder="Ej. DAP" required>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Precio de importacion o exportacion:</label>
+                            <input type="number" id="PrecioDeImportacionOExportacion" name="PrecioDeImportacionOExportacion" class="form-control texto-negro" placeholder="Ej. 1000432.34000" step="0.00001" min="0" inputmode="decimal" required>                
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+        
+                        <div class="form-group d-flex align-items-center">
+                            <label class="col-form-label texto-negro mb-0 me-2" >Volumen documentado:</label>
+                            <input type="number" id="VolumenDocumentado" name="volumendocumentado" class="form-control texto-negro" placeholder="Ej. 1500000.00000" step="0.00001" min="0" inputmode="decimal" required>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-4">
+                        <button type="button" class="button_color_alba me-2" id="">ANTERIOR</button>
+                        <button type="button" class="button_color_alba me-2" id="Save_pedimentos">0 / 1</button>
+                        <button type="button" class="button_color_alba me-2" id="Delete_pedimentos">ELIMINAR</button>
+                        <button type="reset" class="button_color_alba  me-2" id="Clear_pedimentos">LIMPIAR</button>
+                    </div>   
+                </div>
+        
+
+    </div>
+
+</form>
+<script>
+(function(){
+
+
+    const csrfToken = $('input[name="csrf_token"]').val();
+    let proceso = null;
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const botones = {
+
+            add_almacenamiento: 'Almacenamiento',
+            add_transporte: 'Transporte',
+            add_trasvase: 'Transvase',
+            add_dictamen: 'Dictamen',
+            add_certificado: 'Certificado',
+            add_nacional: 'Nacional',
+            add_extranjero: 'Extranjero',
+            add_cfdis: 'CFDIs',
+            add_pedimentos: 'Pedimentos',
+            next_complementos_alm:'Complementos',
+            next_complementos_tran:'Complementos',
+            next_complementos_tras:'Complementos',
+            next_complementos_dic:'Complementos',
+            next_complementos_cer:'Complementos',
+            next_complementos_nac:'Complementos',
+            next_complementos_ext:'COmplementos',
+
+        };
+
+        Object.keys(botones).forEach(id => {
+            const btn = document.getElementById(id);
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    showSection(botones[id]);
+                });
+            }
+        });
+
+    });
+    function showSection(sectionToShow, options = {}) {
+            const sections = ['Complementos','Almacenamiento','Transporte', 'Transvase' ,'Dictamen','Certificado','Nacional','Extranjero','CFDIs','Pedimentos'];
+
+            sections.forEach(sectionId => {
+                const sectionElement = document.getElementById(sectionId);
+                if (sectionElement) {
+                    sectionElement.style.display = (sectionId === sectionToShow) ? 'block' : 'none';
+
+                }
+            });
+    
+            // Cambiar título si se pasa como opción
+            if (options.titulo) {
+                const sectionElement = document.getElementById(sectionToShow);
+                if (sectionElement) {
+                    const h3 = sectionElement.querySelector('h3.text-center');
+                    if (h3) {
+                        h3.textContent = options.titulo;
+                    }
+                }
+            }
+            
+    
+        }
+
+
+    function send_map_complemento(method,actividad){
+        return $.ajax({
+            url:"{{url_for('app_scaizen.app_configuracion.Complementos')}}",
+            type:method,
+            headers:{'X-CSRFToken':csrfToken},
+            data:{
+                scout:actividad
+            },
+            beforeSend:function(){
+                $("#loader-now").show();
+
+            }
+        }).always(()=>{
+            $("#loader-row").hide();
+        });
+    }
+
+
+
+    const select_complementos = document.getElementById("Complement_Select");
+    let complementoData = {};
+
+    select_complementos.addEventListener("change",function(){
+        var actividad= this.value;
+
+        send_map_complemento("POST",actividad)
+        .done(response=>{
+            if(response.scout_actividad){
+                alert(`Se recuperaron datos asociados al complemento ${actividad}.`);
+                const scout = response.scout_actividad[0];
+                const listNac = scout.List_Nac || [];
+                const listExt = scout.List_Ext || [];
+
+
+                complementoData = {
+                    complemento: scout.Id_complemento,
+                    almacenamiento: scout.Id_Almacenamiento,
+                    transporte:scout.Id_Transporte,
+                    trasvase: scout.Id_TRASVASE,
+                    dictamen: scout.Id_DICTAMEN,
+                    certificado: scout.Id_CERTIFICADO,
+                    nacional: scout.List_Nac,
+                    extranjero: scout.List_Ext
+                };
+                $("#No_Nacional").val(scout.List_Nac.length);
+                $("#No_Extranjero").val(scout.List_Ext.length);
+                $("#Aclaracion").val(scout.Aclaracion);
+
+            }else{
+                alert(`No se encontraron registros para el complemento de ${actividad}. Favor de registrar datos para el complemento de ${actividad}.`)
+            }
+        })
+        .fail(() => {
+            alert("Error de comunicación con el servidor.");
+        });
+    })
+
+    function send_scout_add_update_delete(method,send,proceso){
+        const mapKeys = {
+            Almacenamiento: "almacenamiento",
+            Transporte: "transporte",
+            Trasvase: "trasvase",
+            Dictamen: "dictamen",
+            Certificado: "certificado",
+            Nacional: "nacional",
+            Extranjero: "extranjero"
+        };
+        console.log('ingrese');
+
+        let val = complementoData[mapKeys[send]] || null;
+
+        return $.ajax({
+            url:"{{url_for('app_scaizen.app_configuracion.Complementos')}}",
+            type:method,
+            headers:{'X-CSRFToken':csrfToken},
+            data:{
+                pestaña:send,
+                CRUD:proceso,
+                valor:val
+            },
+            beforeSend:function(){
+                $("#loader-now").show();
+
+            }
+        }).always(()=>{
+            $("#loader-row").hide();
+        });
+    }
+    
+    const almacenamiento = document.getElementById("add_almacenamiento");
+    almacenamiento.addEventListener("click",function(){
+        proceso = "Read";
+        send_scout_add_update_delete("POST","Almacenamiento",proceso).done(response=>{
+            if(response.read){
+                const leer = response.read[0];
+                $("#TERMINALALMYDIST").val(leer.terminal);
+                $("#PermisoAlmYDist").val(leer.permiso);
+                $("#TARIFADEALMACENAMIENTO").val(leer.tarifaDeAlm);
+                $("#CARGOPORCAPACIDADAALMA").val(leer.cargoPorCapacidad);
+                $("#CargoPorUsoAlmac").val(leer.cargoPorUso);
+                $("#CargoVolumetricoAlmac").val(leer.cargoVolumetrico);
+                //$("#").val(leer.);
+
+
+                alert(`Se recuperaron datos asociados al elemento almacenamiento.`);
+                console.log(leer);
+
+            }else{
+                alert(`No se encontraron registros al elemento almacenamiento. Favor de registrar datos para el complemento de ${actividad}.`)
+            }
+        })
+        .fail(()=>{
+            alert("Error de comunicación con el servidor")
+        });
+    })
+
+
+
+})();
+
+</script>
+{% endblock %}

@@ -12,9 +12,9 @@ config = GlobalConfig()
 
 app_scaizen = Blueprint('app_scaizen', __name__, url_prefix='/scaizen')
 
-
-login_manager_app = LoginManager()
-login_manager_app.login_view = 'app_scaizen.login'
+#No repetir
+#login_manager_app = LoginManager()
+#login_manager_app.login_view = 'app_scaizen.login'
 app_scaizen.register_blueprint(app_comercializador)
 app_scaizen.register_blueprint(app_distribuidor)
 app_scaizen.register_blueprint(app_catalogo)
@@ -31,7 +31,7 @@ def context_variables():
     }
 
 @app_scaizen.route('/',methods=['GET','POST'])
-@fresh_login_required 
+##@fresh_login_required login reciente ,se usa para cambiar contraseña,eliminar cuenta y operaciones bancarias y cambiar email
 @login_required
 def scaizen():
 

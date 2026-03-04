@@ -36,11 +36,11 @@ def registrar_evento(Componente, Descripcion, tipo_evento):
 @app_configuracion.route('/Configuracion',methods=['POST','GET'])
 @login_required
 def configuracion():
-    """
+
     with VerificarPermisosUsuario("ClienteAlta", current_user.RolPerms) as contexto:
         if contexto is False:  # No tiene permisos
             return redirect("/scaizen/")
-    """
+
     if request.method == 'POST':
         #Mapeo del select   
         scout_actividad = request.form.get('scout_actividad')     
@@ -159,11 +159,16 @@ def configuracion():
         usuarios = [u[0] for u in usuarios]
         logging.debug(usuarios)
         
-        return render_template('scaizen/configuracion.html',endpoint='consultar_compras')
+        return render_template('scaizen/configuracion.html',endpoint='configuraciones')
 
 @app_configuracion.route('/Interfaz',methods=['POST','GET'])
 @login_required
 def interfaz():
+        with VerificarPermisosUsuario("ClienteAlta", current_user.RolPerms) as contexto:
+            if contexto is False:  # No tiene permisos
+                return redirect("/scaizen/")        
+
+
         if request.method == 'POST':
             pass
         else:
@@ -172,5 +177,56 @@ def interfaz():
             usuarios = [u[0] for u in usuarios]
             logging.debug(usuarios)
             
-            return render_template('scaizen/interfaz.html',endpoint='consultar_compras')
+            return render_template('scaizen/interfaz.html',endpoint='Interfaz')
 
+@app_configuracion.route('/Complementos',methods=['POST','GET'])
+@login_required
+def Complementos():
+    with VerificarPermisosUsuario("ClienteAlta", current_user.RolPerms) as contexto:
+        if contexto is False:  # No tiene permisos
+            return redirect("/scaizen/")
+
+
+    if request.method=='POST':
+        #Mapeo del select   
+        scout_actividad=request.form.get('scout')
+        if scout_actividad == "distribuidor" or scout_actividad == "comercializador": 
+            datos=scaizen_cv_funtions.Complementos_configuration.Select_complemento(scout_actividad)
+            return jsonify({'scout_actividad':datos})
+
+        send=request.form.get('pestaña')
+        crud=request.form.get('CRUD')
+        id=request.form.get('valor')
+
+        if send=="almacenamiento":
+            if crud=="Create":
+                pass
+            elif crud=="Read":
+                datos=scaizen_cv_funtions.Complementos_almacen_configuration.Select_complemento(id)
+                logging.info(datos)
+                return jsonify({'read':datos})
+            elif crud=="Update":
+                pass
+            elif crud=="Delete":
+                 pass
+            pass
+        elif send=="transporte":
+             pass
+        elif send=="trasvase":
+             pass
+        elif send=="dictamen":
+             pass
+        elif send=="certificado":
+             pass
+        elif send=="nacional":
+             pass
+        elif send=="extranjero":
+             pass
+
+    else:
+        session = cv.SessionLocal()
+        usuarios = session.query(cv.Usuario_Cv.Nombre).all()
+        usuarios = [u[0] for u in usuarios]
+        logging.debug(usuarios)
+            
+        return render_template('scaizen/complementos.html',endpoint='Complementos')

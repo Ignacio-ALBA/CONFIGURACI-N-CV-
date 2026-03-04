@@ -1830,10 +1830,10 @@ class Complemento(Base):
         return consulta
 
     @classmethod
-    def select_by_id_tipo(cls, Id_complemento,Tipo):
+    def select_by_tipo(cls, Tipo):
         consulta = None
         session = SessionLocal()
-        consulta = session.query(cls).filter_by(Id_complemento=Id_complemento,Tipo=Tipo).first()
+        consulta = session.query(cls).filter_by(Tipo=Tipo).first()
         session.close()
         return consulta
 
@@ -1876,6 +1876,15 @@ class Complemento_nacional_extranjero(Base):
         session.close()
         return consulta
     
+    @classmethod
+    def select_all_by_id_complement(cls, Id_complemento_nacional_extranjero):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_COMPLEMENTO_fk=Id_complemento_nacional_extranjero).all()
+        session.close()
+        return consulta
+
+
 
 
     @classmethod
@@ -4372,5 +4381,46 @@ class Configuraciones(Base):
             raise e
         finally:
             session.close()
+
+class Interfaz(Base):
+    __tablename__='interfaz'
+    Id_INTERFAZ= Column(Integer,primary_key=True, autoincrement=True)
+    RUTA_LOGO_EMPRESA_GEN=Column(String(150), nullable=False)
+    RUTA_FONDO_GEN=Column(String(150), nullable=False)
+    RUTA_LOGO_ORI_SUP_SCAIZEN=Column(String(150), nullable=False)
+    RUTA_LOGO_ORI_INF_EMPRESA=Column(String(150), nullable=False)
+    BARRA_COLOR_RGB=Column(String(150), nullable=False)
+
+    def __repr__(self):
+        return(f"<Interfaz(Id_INTERFAZ={self.ID_INTERFAZ})>")
+
+    def add(cls,rutalogo_empresa_gen,ruta_fondo_gen,ruta_logo_ori_sup_scaizen,
+            ruta_logo_ori_inf_empresa,barra_color_rgb):
+        nueva_configuracion_interfaz=cls(
+            RUTA_LOGO_EMPRESA_GEN=rutalogo_empresa_gen,
+            RUTA_FONDO_GEN=ruta_fondo_gen,
+            RUTA_LOGO_ORI_SUP_SCAIZEN=ruta_logo_ori_sup_scaizen,
+            RUTA_LOGO_ORI_INF_EMPRESA= ruta_logo_ori_inf_empresa,
+            BARRA_COLOR_RGB=barra_color_rgb
+        )
+        result_data = add_to_table(nueva_configuracion_interfaz)  # Asegúrate de implementar esta función
+        return result_data if result_data else None
+
+    @classmethod
+    def select_by_id(cls, id):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).filter_by(Id_INTERFAZ=id).first()
+        session.close()
+        return consulta
+
+    @classmethod
+    def select_all(cls):
+        consulta = None
+        session = SessionLocal()
+        consulta = session.query(cls).all()
+        session.close()
+        return consulta
+
 
 
